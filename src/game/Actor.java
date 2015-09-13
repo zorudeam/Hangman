@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 
 /**
@@ -77,6 +78,15 @@ public enum Actor {
                     + ".png");
         }
         return images;
+    }
+    
+    /**
+     * Accessor method for {@code imageArray} field.
+     *
+     * @return  Returns the {@code imageArray} field of this instance.
+     */
+    public ImageIcon[] getImageArray() {
+        return Arrays.copyOf(imageArray, imageArray.length);
     }
     
     /**

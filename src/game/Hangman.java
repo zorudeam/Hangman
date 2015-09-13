@@ -4,96 +4,77 @@ import language.Dictionary;
 import utilities.functions.StringUtilities;
 
 /**
- * The {@code Hangman} class contains the logic for a game of "Hangman". There 
- * are multiple game operations, such as updating the game board, that are
- * executed through methods contained within this class. It contains a 
- * dictionary that holds words of varying difficulty.
+ * The {@code Hangman} class contains the logic for a game of "Hangman." Game 
+ * operations, such as updating the game board, are executed through methods 
+ * contained within this class.
+ * 
+ * <p> This class allows for the selection of word difficulty during 
+ * construction.
  * 
  * @author Oliver Abdulrahim
  */
 public class Hangman {
     
     /**
-     * Field that stores words for this Hangman game. This object can perform
-     * various operations on words and has lists of easy, medium, and hard
-     * words.
+     * Stores words for this instance.
      */
     private Dictionary words;
     
     /**
-     * Field that stores the current word that is being guessed by the user.
+     * Stores the current word that is being guessed by the player.
      */
     private String currentWord;
     
     /**
-     * Field that stores the characters that the user has already guessed. This
-     * should be relayed to the user interface.
+     * Stores the characters that the player has already guessed for relaying to
+     * a user interface.
      */
     private String alreadyGuessed;
     
     /**
-     * Field that stores the characters that the user has correctly guessed,
-     * i.e. they exist in {@code currentWord}. This should be relayed to the
+     * Stores the characters that the player has already correctly guessed, 
+     * (i.e. they exist in {@link #currentWord}). This should be relayed to the
      * user interface.
      */
     private String correctGuesses;
     
     /**
-     * Field that stores the amount of times the user can guess another 
-     * character.
+     * Stores the amount of character guesses the player has already made.
      */
-    private int guessesMade;
+    private int guessesRemaining;
     
     /**
-     * Field that stores the maximum amount of guesses a user can make before
-     * the only "loss" state of the game.
-     */
-    private int maxGuesses;
-    
-    /**
-     * Field that stores the image repository for a hangman user interface.
+     * Stores the current image repository for use in a graphical interface.
      */
     private Actor actor;
     
     /**
-     * Field that defines a standard for the word difficulty setting of "easy".
+     * Defines the default word difficulty setting, which includes all words.
      */
-    public final static int EASY_DIFFICULTY = 0;
+    public final static int DEFAULT_DIFFICULTY = 0;
     
     /**
-     * Field that defines a standard for the word difficulty setting of
-     * "medium".
+     * Defines the word difficulty setting of "easy."
      */
-    public final static int MEDIUM_DIFFICULTY = 1;
+    public final static int EASY_DIFFICULTY = 1;
     
     /**
-     * Field that defines a standard for the word difficulty setting of
-     * "hard".
+     * Defines the word difficulty setting of "medium."
      */
-    public final static int HARD_DIFFICULTY = 2;
+    public final static int MEDIUM_DIFFICULTY = 2;
     
     /**
-     * Field that defines a standard for the word difficulty setting of
-     * any, which includes all words in the dictionary.
+     * Defines the word difficulty setting of "hard."
      */
-    public final static int ANY_DIFFICULTY = 3;
+    public final static int HARD_DIFFICULTY = 3;
     
     /**
-     * Field that defines the default word difficulty setting of that is equal
-     * to "medium".
-     */
-    public final static int DEFAULT_DIFFICULTY = 3;
-    
-    /**
-     * Default constructor - initializes a new game with the default difficulty
-     * setting.
+     * Initializes a new game with the default difficulty setting.
      */
     public Hangman() {
         words = new Dictionary();
         actor = Actor.HUMAN;
-        //Subtract 1 to avoid ArrayIndexOutOfBoundsException when working with 
-        //arrays
-        maxGuesses = actor.getImageArray().length - 1;
+        guessesRemaining = actor.getImageArray().length;
         initGame(DEFAULT_DIFFICULTY);
     }
     
