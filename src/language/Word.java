@@ -1,6 +1,3 @@
-/*
- * A fancy license header.
- */
 package language;
 
 import utilities.functions.StringUtilities;
@@ -14,6 +11,45 @@ import utilities.functions.StringUtilities;
 public final class Word 
     implements Comparable<Word>
 {
+    /**
+     * Supplies a default word length argument in the case that no length is 
+     * provided during construction.
+     */
+    public static final int DEFAULT_WORD_LENGTH = 5;
+    
+    /**
+     * Property that defines a {@code Word} that is a regular word with no 
+     * special formatting requirements.
+     */
+    public static final int DEFAULT_WORD = 0;
+    
+    /**
+     * Property that defines a {@code Word} that is a proper noun.
+     */
+    public static final int PROPER_NOUN = 1;
+    
+    /**
+     * Property that defines a {@code Word} that is the first in its sentence.
+     * This has the same effect as the {@link #PROPER_NOUN} property.
+     * 
+     * @see #PROPER_NOUN
+     */
+    public static final int LEADING_WORD = 1;
+    
+    /**
+     * Property that defines a {@code Word} that is the last in its sentence.
+     */
+    public static final int TRAILING_WORD = 2;
+    
+    /**
+     * Property that defines a {@code Word} that is followed by a comma.
+     */
+    public static final int DELINEATED_WORD = 3;
+    
+    /**
+     * Null object that provides predictable behavior.
+     */
+    Word NULL_WORD = new Word("hello", DEFAULT_WORD);
     
     /**
      * Stores the characters represented by this {@code Word}.
@@ -34,7 +70,7 @@ public final class Word
      * @see #DEFAULT_WORD_LENGTH The length argument used by this constructor.
      */
     public Word() {
-        characters = generateRandomWord(SentenceConstants.DEFAULT_WORD_LENGTH);
+        characters = generateRandomWord(DEFAULT_WORD_LENGTH);
         property = 0;
     }
     
@@ -99,7 +135,7 @@ public final class Word
      *         {@code false} otherwise.
      */
     public static boolean isProperNoun(Word w) {
-        return w.getProperty() == SentenceConstants.PROPER_NOUN;
+        return w.getProperty() == PROPER_NOUN;
     }
     
     /**
@@ -111,7 +147,7 @@ public final class Word
      *         {@code false} otherwise.
      */
     public static boolean isTrailingWord(Word w) {
-        return w.getProperty() == SentenceConstants.TRAILING_WORD;
+        return w.getProperty() == TRAILING_WORD;
     }
     
     /**
@@ -123,20 +159,20 @@ public final class Word
      *         characters.
      */
     public static Word constructWord(String characters) {
-        int property = SentenceConstants.DEFAULT_WORD;
+        int property = DEFAULT_WORD;
         if (characters.length() > 1) {
             char c = characters.charAt(0);
             if (Character.isUpperCase(c)) {
-                property = SentenceConstants.PROPER_NOUN;
+                property = PROPER_NOUN;
             }
             else {
                 String punctuation = ".!?";
                 if (punctuation.contains(Character.toString(c))) {
-                    property = SentenceConstants.TRAILING_WORD;
+                    property = TRAILING_WORD;
                 }
                 punctuation = ",;:-";
                 if (punctuation.contains(Character.toString(c))) {
-                    property = SentenceConstants.COMMA_DELINEATED_WORD;
+                    property = DELINEATED_WORD;
                 }
             }
         }
