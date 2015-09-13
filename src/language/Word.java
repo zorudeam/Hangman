@@ -45,7 +45,7 @@ public final class Word
      * @param length The length of the {@code Word}.
      */
     public Word(int length) {
-        this(getRandomWord(length));
+        this(randomAlphaString(length));
     }
     
     /**
@@ -84,7 +84,7 @@ public final class Word
      * @param length The amount of characters in the word to generate.
      * @return A {@code String} with random characters of the specified length.
      */
-    private static String getRandomWord(int length) {
+    private static String randomAlphaString(int length) {
         return StringUtilities.random('a', 'z', length);
     }
     
@@ -107,6 +107,55 @@ public final class Word
     @Override
     public String toString() {
         return characters();
+    }
+    
+    /**
+     * Calculates the amount of consonants contained in this {@code Word}. 
+     * Returns a number from {@code 0} (no consonants) to the length of this 
+     * word (no vowels).
+     * 
+     * @return The amount of consonants in this {@code Word}.
+     */
+    public int consonantCount() {
+        return characters.length() - vowelCount();
+    }
+    
+    /**
+     * Calculates the amount of vowels contained in this {@code Word}. Returns a
+     * number from {@code 0} (no vowels) to the length of this word 
+     * (no consonants) depending on the occurrences of the characters 
+     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
+     * 
+     * @return The amount of vowels in this {@code Word}.
+     */
+    public int vowelCount() {
+        int amount = 0;
+        for (int i = 0; i < characters.length(); i++) {
+            if (isVowel(characters.charAt(i))) {
+                amount++;
+            }
+        }
+        return amount;
+    }
+
+    /**
+     * Checks if a given character is a vowel. Vowels include the letters 
+     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
+     * 
+     * @param key The {@code char} to test.
+     * @return {@code true} if the argument provided is a vowel, {@code false}
+     *         otherwise.
+     */
+    private boolean isVowel(char key) {
+        char[] vowels = {
+            'a', 'e', 'i', 'o', 'u'
+        };
+        for (int i = 0; i < vowels.length; i++) {
+            if (key == vowels[i]) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
