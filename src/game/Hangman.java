@@ -1,14 +1,7 @@
-/**
- * TODO - Get a job.
- */
 package game;
 
-//<editor-fold defaultstate="collapsed" desc="Imports">
-
-import java.util.Objects;
-
-
-//</editor-fold>
+import language.Dictionary;
+import utilities.functions.StringUtilities;
 
 /**
  * The {@code Hangman} class contains the logic for a game of "Hangman". There 
@@ -19,8 +12,6 @@ import java.util.Objects;
  * @author Oliver Abdulrahim
  */
 public class Hangman {
-    
-    //<editor-fold defaultstate="collapsed" desc="Attributes and Constants">
     
     /**
      * Field that stores words for this Hangman game. This object can perform
@@ -93,17 +84,13 @@ public class Hangman {
      */
     public final static int DEFAULT_DIFFICULTY = 3;
     
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Constructor Code">
-    
     /**
      * Default constructor - initializes a new game with the default difficulty
      * setting.
      */
     public Hangman() {
         words = new Dictionary();
-        actor = Actor.STICK_FIGURE;
+        actor = Actor.HUMAN;
         //Subtract 1 to avoid ArrayIndexOutOfBoundsException when working with 
         //arrays
         maxGuesses = actor.getImageArray().length - 1;
@@ -118,7 +105,7 @@ public class Hangman {
      */
     public Hangman(int difficulty) {
         words = new Dictionary();
-        actor = Actor.STICK_FIGURE;
+        actor = Actor.HUMAN;
         //Subtract 1 to avoid ArrayIndexOutOfBoundsException when working with 
         //arrays
         maxGuesses = actor.getImageArray().length - 1;
@@ -159,10 +146,6 @@ public class Hangman {
         alreadyGuessed = "";
         guessesMade = 0;
     }
-    
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Accessor and Mutator Code">
     
     /**
      * Accessor method for {@code maxGuesses} field.
@@ -296,7 +279,6 @@ public class Hangman {
         actor = a;
         setMaxGuesses(actor.getImageArray().length - 1);
     }
-    //</editor-fold>
 
     /**
      * Method that delegates a guess operation to the {@code isValidGuess(char)} 
@@ -374,59 +356,6 @@ public class Hangman {
     public boolean hasWon() {
         return correctGuesses.equalsIgnoreCase(currentWord) 
                 && guessesMade <= maxGuesses;
-    }
-
-    /**
-     * Returns a hash code value for the object using the {@code playerName} and
-     * {@code playerSymbol} fields of the instance.
-     * 
-     * @return  A hash code value for this object.
-     */
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(currentWord);
-        return hash;
-    }
-
-    /**
-     * Indicates whether some other object is "equal to" this one. The method 
-     * implements an equivalence relation on non-null object references.
-     *
-     * @param obj   The reference object with which to compare.
-     * @return      Returns {@code true} if this object is the same as the 
-     *              {@code obj} argument, {@code false} otherwise.
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Hangman other = (Hangman) obj;
-        return Objects.equals(currentWord, other.currentWord);
-    }
-
-    /**
-     * Returns a {@code String} representation of the object. In general, the
-     * {@code toString} method returns a {@code String} that "textually 
-     * represents" this object.
-     * 
-     * @return  Returns a formatted {@code String} that represents this object.
-     */
-    @Override
-    public String toString() {
-        return "Hangman{" 
-             + "words= "          + words
-             + ", currentWord="    + currentWord 
-             + ", alreadyGuessed=" + alreadyGuessed 
-             + ", correctGuesses=" + correctGuesses 
-             + ", guessesMade="    + guessesMade 
-             + ", maxGuesses="     + maxGuesses 
-             + ", actor="          + actor 
-             + '}';
     }
     
 }

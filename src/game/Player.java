@@ -1,7 +1,4 @@
-/*
- * A fancy license header.
- */
-package incremental;
+package game;
 
 import javax.swing.ImageIcon;
 

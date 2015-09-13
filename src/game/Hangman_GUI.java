@@ -1,11 +1,5 @@
-/**
- * TODO - Get a job.
- */
 package game;
 
-//<editor-fold defaultstate="collapsed" desc="Imports">
-
-import hangman.Actor;
 import java.awt.Container;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -18,8 +12,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import language.Dictionary;
 import utilities.functions.StringUtilities;
-
-//</editor-fold>
 
 /**
  * The {@code Hangman_GUI} class provides for a user interface framework for the

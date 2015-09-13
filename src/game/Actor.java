@@ -1,14 +1,6 @@
-/**
- * TODO - Get a job.
- */
-package hangman;
+package game;
 
-//<editor-fold defaultstate="collapsed" desc="Imports">
-
-import java.util.Arrays;
 import javax.swing.ImageIcon;
-
-//</editor-fold>
 
 /**
  * The {@code Actor} enumeration is a structure for constant values relating to 
@@ -19,27 +11,19 @@ import javax.swing.ImageIcon;
  */
 public enum Actor {
     
-    //<editor-fold defaultstate="collapsed" desc="Enumeration Types">
-    
     /**
      * Enumeration that represents a classic Stick Figure. This enumeration
      * should have {@code 8} images in total.
      */
-    STICK_FIGURE("Stick Figure",
-            getImages("Human", 8)
+    HUMAN("Stick Figure", getImages("Human", 8)
     ),
     
     /**
      * Enumeration that represents a Snowman. This enumeration should have 
      * {@code 8} images in total.
      */
-    SNOWMAN("Snowman",
-            getImages("Snowman", 8)
+    SNOWMAN("Snowman", getImages("Snowman", 8)
     );
-    
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Attributes and Constants">
     
     /**
      * Field used for identifying the object and for ease of display purposes in
@@ -54,10 +38,6 @@ public enum Actor {
      */
     private final ImageIcon[] imageArray;
     
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Accessor Code">
-    
     /**
      * Accessor method for {@code actorName} field.
      *
@@ -66,18 +46,7 @@ public enum Actor {
     public String getActorName() {
         return actorName;
     }
-    
-    /**
-     * Accessor method for {@code imageArray} field.
-     *
-     * @return  Returns the {@code imageArray} field of this instance.
-     */
-    public ImageIcon[] getImageArray() {
-        return imageArray;
-    }
 
-    //</editor-fold>
-    
     /**
      * Default and only constructor, instantiates all fields relating to the 
      * {@code Actor} class with the given arguments.
@@ -122,21 +91,6 @@ public enum Actor {
             names[i] = Actor.values()[i].getActorName();
         }
         return names;
-    }
-    
-    /**
-     * Returns a {@code String} representation of the object. In general, the
-     * {@code toString} method returns a string that "textually represents" this 
-     * object.
-     * 
-     * @return  Returns a formatted {@code String} that represents this object.
-     */
-    @Override
-    public String toString() {
-        return "Actor{" 
-             + "actorName = "    + actorName 
-             + ", imageArray = " + Arrays.deepToString(imageArray)
-             + '}';
     }
     
 }
