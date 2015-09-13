@@ -4,10 +4,14 @@ import java.util.EnumSet;
 import utilities.functions.StringUtilities;
 
 /**
- * The {@code Word} class provides for a framework for a very rudimentarily
- * structure for words in  context.
+ * The {@code Word} class provides for a structure for words in the context of a
+ * playable word game.
+ * 
+ * <p> This implementation allows for the use of word difficulty settings,
+ * including easy, medium, and hard.
  * 
  * @author Oliver Abdulrahim
+ * @see WordProperties Stores properties that can be used to construct words.
  */
 public final class Word 
     implements Comparable<Word>
