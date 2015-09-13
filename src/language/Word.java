@@ -1,16 +1,18 @@
 package language;
 
+import java.util.EnumSet;
 import utilities.functions.StringUtilities;
 
 /**
  * The {@code Word} class provides for a framework for a very rudimentarily
- * structure for words in a grammatical context.
+ * structure for words in  context.
  * 
  * @author Oliver Abdulrahim
  */
 public final class Word 
     implements Comparable<Word>
 {
+
     /**
      * Supplies a default word length argument in the case that no length is 
      * provided during construction.
@@ -18,38 +20,10 @@ public final class Word
     public static final int DEFAULT_WORD_LENGTH = 5;
     
     /**
-     * Property that defines a {@code Word} that is a regular word with no 
-     * special formatting requirements.
-     */
-    public static final int DEFAULT_WORD = 0;
-    
-    /**
-     * Property that defines a {@code Word} that is a proper noun.
-     */
-    public static final int PROPER_NOUN = 1;
-    
-    /**
-     * Property that defines a {@code Word} that is the first in its sentence.
-     * This has the same effect as the {@link #PROPER_NOUN} property.
-     * 
-     * @see #PROPER_NOUN
-     */
-    public static final int LEADING_WORD = 1;
-    
-    /**
-     * Property that defines a {@code Word} that is the last in its sentence.
-     */
-    public static final int TRAILING_WORD = 2;
-    
-    /**
-     * Property that defines a {@code Word} that is followed by a comma.
-     */
-    public static final int DELINEATED_WORD = 3;
-    
-    /**
      * Null object that provides predictable behavior.
      */
-    public static final Word NULL_WORD = new Word("hello", DEFAULT_WORD);
+    public static final Word NULL_WORD = new Word("Hello World!", 
+            EnumSet.of(WordProperties.MEDIUM_WORD));
     
     /**
      * Stores the characters represented by this {@code Word}.
@@ -61,7 +35,7 @@ public final class Word
      * capitalization of the characters in the characters contained by this 
      * object.
      */
-    private final int property;
+    private final EnumSet<WordProperties> property;
     
     /**
      * Constructs a {@code Word} with random characters and the default length,
@@ -70,8 +44,18 @@ public final class Word
      * @see #DEFAULT_WORD_LENGTH The length argument used by this constructor.
      */
     public Word() {
-        characters = generateRandomWord(DEFAULT_WORD_LENGTH);
-        property = 0;
+        this(DEFAULT_WORD_LENGTH, EnumSet.of(WordProperties.MEDIUM_WORD));
+    }
+    
+    /**
+     * Constructs a {@code Word} with random characters and the specified 
+     * length.
+     * 
+     * @param length The length of the {@code Word}.
+     * @param property The property to create this {@code Word} with.
+     */
+    public Word(int length, EnumSet<WordProperties> property) {
+        this(getRandomWord(length), property);
     }
     
     /**
@@ -80,29 +64,18 @@ public final class Word
      * @param characters The characters to use to create this {@code Word}.
      * @param property The property to create this {@code Word} with.
      */
-    public Word(String characters, int property) {
+    public Word(String characters, EnumSet<WordProperties> property) {
         this.characters = sanitizeWord(characters);
         this.property = property;
     }
     
     /**
-     * Constructs a {@code Word} with random characters and the specified 
-     * length.
-     * 
-     * @param property
-     * @param length The length of the {@code Word}.
-     */
-    public Word(int property, int length) {
-        this(generateRandomWord(length), property);
-    }
-
-    /**
      * Constructs an exact copy of the given {@code Word}.
      * 
-     * @param other The word to copy.
+     * @param other The word whose attributes to copy.
      */
     public Word(Word other) {
-        this(other.characters(), other.getProperty());
+        this(other.characters, other.property);
     }
     
     /**
@@ -113,7 +86,7 @@ public final class Word
      * @return A sanitized version of the given {@code String}.
      */
     private static String sanitizeWord(String str) {
-        return str.trim().replaceAll("\\s+", "").toLowerCase();
+        return str.replaceAll("\\s+", "").toLowerCase();
     }
     
     /**
@@ -123,65 +96,8 @@ public final class Word
      * @param length The amount of characters in the word to generate.
      * @return A {@code String} with random characters of the specified length.
      */
-    private static String generateRandomWord(int length) {
-        StringBuilder word = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            word.append(StringUtilities.randomChar('A', 'Z'));
-        }
-        return word.toString().toLowerCase();
-    }
-    
-    /**
-     * Returns {@code true} if the word at the given index position {@code i}
-     * is a proper noun, {@code false} otherwise.
-     * 
-     * @param w The word to test.
-     * @return {@code true} if the word at the given index is a proper noun,
-     *         {@code false} otherwise.
-     */
-    public static boolean isProperNoun(Word w) {
-        return w.getProperty() == PROPER_NOUN;
-    }
-    
-    /**
-     * Returns {@code true} if the word at the given index position {@code i}
-     * is a trailing word, {@code false} otherwise.
-     * 
-     * @param w The word to test.
-     * @return {@code true} if the word at the given index is a trailing word,
-     *         {@code false} otherwise.
-     */
-    public static boolean isTrailingWord(Word w) {
-        return w.getProperty() == TRAILING_WORD;
-    }
-    
-    /**
-     * Returns a {@code Word} object from the given {@code String} of 
-     * characters.
-     * 
-     * @param characters The characters to construct the {@code Word} with.
-     * @return A {@code Word} object from the given {@code String} of 
-     *         characters.
-     */
-    public static Word constructWord(String characters) {
-        int property = DEFAULT_WORD;
-        if (characters.length() > 1) {
-            char c = characters.charAt(0);
-            if (Character.isUpperCase(c)) {
-                property = PROPER_NOUN;
-            }
-            else {
-                String punctuation = ".!?";
-                if (punctuation.contains(Character.toString(c))) {
-                    property = TRAILING_WORD;
-                }
-                punctuation = ",;:-";
-                if (punctuation.contains(Character.toString(c))) {
-                    property = DELINEATED_WORD;
-                }
-            }
-        }
-        return new Word(characters, property);
+    private static String getRandomWord(int length) {
+        return StringUtilities.random('a', 'z', length);
     }
     
     /**
@@ -195,62 +111,142 @@ public final class Word
     }
     
     /**
-     * Returns the property of this {@code Word}.
+     * Returns {@code true} if this word is considered to be easy in difficulty,
+     * {@code false} otherwise.
      * 
-     * @return The property of this word.
-     */
-    public int getProperty() {
-        return property;
-    }
-    
-    /**
-     * Calculates the amount of consonants contained in this {@code Word}. 
-     * Returns a number from {@code 0} (no consonants) to the length of this 
-     * word (no vowels).
-     * 
-     * @return The amount of consonants in this {@code Word}.
-     */
-    public int consonantCount() {
-        return characters.length() - vowelCount();
-    }
-    
-    /**
-     * Calculates the amount of vowels contained in this {@code Word}. Returns a
-     * number from {@code 0} (no vowels) to the length of this word 
-     * (no consonants) depending on the occurrences of the characters 
-     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
-     * 
-     * @return The amount of vowels in this {@code Word}.
-     */
-    public int vowelCount() {
-        int amount = 0;
-        for (int i = 0; i < characters.length(); i++) {
-            if (isVowel(characters.charAt(i))) {
-                amount++;
-            }
-        }
-        return amount;
-    }
-
-    /**
-     * Checks if a given character is a vowel. Vowels include the letters 
-     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
-     * 
-     * @param key The {@code char} to test.
-     * @return {@code true} if the argument provided is a vowel, {@code false}
+     * @return {@code true} if this word is an easy word, {@code false} 
      *         otherwise.
      */
-    private boolean isVowel(char key) {
-        char[] vowels = {
-            'a', 'e', 'i', 'o', 'u'
-        };
-        for (int i = 0; i < vowels.length; i++) {
-            if (key == vowels[i]) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isEasyDifficulty() {
+        return property.contains(WordProperties.EASY_WORD);
     }
+    
+    /**
+     * Returns {@code true} if this word is considered to be medium in 
+     * difficulty, {@code false} otherwise.
+     * 
+     * @return {@code true} if this word is an medium word, {@code false} 
+     *         otherwise.
+     */
+    public boolean isMediumDifficulty() {
+        return property.contains(WordProperties.MEDIUM_WORD);
+    }
+    
+    /**
+     * Returns {@code true} if this word is considered to be hard in difficulty,
+     * {@code false} otherwise.
+     * 
+     * @return {@code true} if this word is an hard word, {@code false} 
+     *         otherwise.
+     */
+    public boolean isHardDifficulty() {
+        return property.contains(WordProperties.HARD_WORD);
+    }
+    
+// // Old grammar functionality - will need to be updated to EnumSet implementation
+// // if in the future.
+//
+//    /**
+//     * Calculates the amount of consonants contained in this {@code Word}. 
+//     * Returns a number from {@code 0} (no consonants) to the length of this 
+//     * word (no vowels).
+//     * 
+//     * @return The amount of consonants in this {@code Word}.
+//     */
+//    public int consonantCount() {
+//        return characters.length() - vowelCount();
+//    }
+//    
+//    /**
+//     * Returns {@code true} if the word at the given index position {@code i}
+//     * is a proper noun, {@code false} otherwise.
+//     * 
+//     * @param w The word to test.
+//     * @return {@code true} if the word at the given index is a proper noun,
+//     *         {@code false} otherwise.
+//     */
+//    public static boolean isProperNoun(Word w) {
+//        return w.property.contains(WordProperties.PROPER_NOUN);
+//    }
+//    
+//    /**
+//     * Returns {@code true} if the word at the given index position {@code i}
+//     * is a trailing word, {@code false} otherwise.
+//     * 
+//     * @param w The word to test.
+//     * @return {@code true} if the word at the given index is a trailing word,
+//     *         {@code false} otherwise.
+//     */
+//    public static boolean isTrailingWord(Word w) {
+//        return w.property.contains(WordProperties.TRAILING_WORD);
+//    }
+//    
+//    /**
+//     * Returns a {@code Word} object from the given {@code String} of 
+//     * characters.
+//     * 
+//     * @param characters The characters to construct the {@code Word} with.
+//     * @return A {@code Word} object from the given {@code String} of 
+//     *         characters.
+//     */
+//    public static Word constructWord(String characters) {
+//        int property = DEFAULT_WORD;
+//        if (characters.length() > 1) {
+//            char c = characters.charAt(0);
+//            if (Character.isUpperCase(c)) {
+//                property = PROPER_NOUN;
+//            }
+//            else {
+//                String punctuation = ".!?";
+//                if (punctuation.contains(Character.toString(c))) {
+//                    property = TRAILING_WORD;
+//                }
+//                punctuation = ",;:-";
+//                if (punctuation.contains(Character.toString(c))) {
+//                    property = DELINEATED_WORD;
+//                }
+//            }
+//        }
+//        return new Word(characters, property);
+//    }
+//    
+//    /**
+//     * Calculates the amount of vowels contained in this {@code Word}. Returns a
+//     * number from {@code 0} (no vowels) to the length of this word 
+//     * (no consonants) depending on the occurrences of the characters 
+//     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
+//     * 
+//     * @return The amount of vowels in this {@code Word}.
+//     */
+//    public int vowelCount() {
+//        int amount = 0;
+//        for (int i = 0; i < characters.length(); i++) {
+//            if (isVowel(characters.charAt(i))) {
+//                amount++;
+//            }
+//        }
+//        return amount;
+//    }
+//
+//    /**
+//     * Checks if a given character is a vowel. Vowels include the letters 
+//     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
+//     * 
+//     * @param key The {@code char} to test.
+//     * @return {@code true} if the argument provided is a vowel, {@code false}
+//     *         otherwise.
+//     */
+//    private boolean isVowel(char key) {
+//        char[] vowels = {
+//            'a', 'e', 'i', 'o', 'u'
+//        };
+//        for (int i = 0; i < vowels.length; i++) {
+//            if (key == vowels[i]) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
     
     /**
      * Returns a {@code String} representation of this {@code Word}.
