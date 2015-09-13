@@ -49,7 +49,7 @@ public final class Word
     /**
      * Null object that provides predictable behavior.
      */
-    Word NULL_WORD = new Word("hello", DEFAULT_WORD);
+    public static final Word NULL_WORD = new Word("hello", DEFAULT_WORD);
     
     /**
      * Stores the characters represented by this {@code Word}.
@@ -95,9 +95,14 @@ public final class Word
     public Word(int property, int length) {
         this(generateRandomWord(length), property);
     }
-    
+
+    /**
+     * Constructs an exact copy of the given {@code Word}.
+     * 
+     * @param other The word to copy.
+     */
     public Word(Word other) {
-        this(other.characters, other.property);
+        this(other.characters(), other.getProperty());
     }
     
     /**
@@ -190,6 +195,15 @@ public final class Word
     }
     
     /**
+     * Returns the property of this {@code Word}.
+     * 
+     * @return The property of this word.
+     */
+    public int getProperty() {
+        return property;
+    }
+    
+    /**
      * Calculates the amount of consonants contained in this {@code Word}. 
      * Returns a number from {@code 0} (no consonants) to the length of this 
      * word (no vowels).
@@ -198,15 +212,6 @@ public final class Word
      */
     public int consonantCount() {
         return characters.length() - vowelCount();
-    }
-    
-    /**
-     * Returns the property of this {@code Word}.
-     * 
-     * @return The property of this word.
-     */
-    public int getProperty() {
-        return property;
     }
     
     /**
@@ -275,7 +280,7 @@ public final class Word
      */
     @Override
     public int compareTo(Word other) {
-        return this.characters.compareTo(other.characters);
+        return this.characters().compareTo(other.characters());
     }
     
 }
