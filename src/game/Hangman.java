@@ -101,6 +101,18 @@ public class Hangman {
     }
     
     /**
+     * Returns a "sanitized" version a given character guess. This 
+     * implementation changes the given character to lowercase and assumes that
+     * is it alphabetic.
+     * 
+     * @param guess The character to sanitize.
+     * @return A sanitized version of the given character.
+     */
+    private char sanitizeGuess(char guess) {
+        return Character.toLowerCase(guess);
+    }
+    
+    /**
      * Returns the current word for this game instance.
      *
      * @return The current word of this instance.
@@ -126,7 +138,8 @@ public class Hangman {
      * @param guess The character guess to append.
      */
     public void appendAlreadyGuessed(char guess) {
-        alreadyGuessed += guess;
+        char g = sanitizeGuess(guess);
+        alreadyGuessed += g;
     }
     
     /**
@@ -149,6 +162,7 @@ public class Hangman {
      * @param guess The character guess to append.
      */
     public void appendCorrectGuesses(char guess) {
+        char g = sanitizeGuess(guess);
         correctGuesses += guess;
     }
     
@@ -161,58 +175,67 @@ public class Hangman {
         return actor;
     }
     
-    /**
-     * Method that delegates a guess operation to the {@code isValidGuess(char)} 
-     * method in this class. Returns {@code true} if the guess is valid, 
-     * {@code false} if not.
-     * 
-     * @param guess The character to attempt to guess for.
-     * @return      Returns {@code true} if the guess is valid, {@code false} if
-     *              not.
-     */
-    public boolean guessLetter(char guess) {
-        guess = Character.toLowerCase(guess);
-        boolean validFlag = isValidGuess(guess);
-        alreadyGuessed = StringUtilities.sortString(alreadyGuessed);
-        return validFlag;
-    }
+// Gameplay methods   
     
     /**
-     * Method that attempts to add a guess character to the appropriate words.
-     * If the character has already been guessed, do nothing. If the character
-     * has not already been guessed but is not in the current word, increment
-     * the amount of guesses made and add the letter to the list of guessed 
-     * letters. Otherwise update the correct guess display appropriately.
+     * The entry point for game guesses. Returns {@code true} if the guess was 
+     * made, {@code false} otherwise.
+     * 
+     * <p> In order to correctly process the given character, this method takes 
+     * a formulaic approach to either reject or accept the guess. Guesses are 
+     * processed in the following way: 
+     *   <ol> 
+     *     <li> Sanitizes the guess to ensure that it is uniform in case with 
+     *          this instance's current word. 
+     *     <li> Tests if the guess has already been made. Returns {@code false}
+     *          if it has.
+     *     <li> Tests if the guess is in the current word. Adds the word to the
+     *          set of already guessed characters.
+     *       <ul>
+     *          <li> If the given character is in the current word, updates the 
+     *               set of already guessed characters and returns {@code true}.
+     *          <li> If the given character is not in the current word, returns
+     *               {@code false}.
+     *       </ul>
+     *   </ol>
+     *
+     * <p> In other words, this method will return {@code true} if and only if 
+     * the guess satisfies all of the following conditions, {@code false} 
+     * otherwise:
+     *   <ul>
+     *     <li> The guess is in the current word.
+     *     <li> The guess is not in the set of already guessed characters.
+     *   </ul>
      * 
      * @param guess The character to attempt to guess for.
-     * @return      Returns {@code true} if the guess is valid, {@code false} if
-     *              not.
+     * @return {@code true} if the guess was completed, {@code false} otherwise.
      */
-    private boolean isValidGuess(char guess) {
-        guess = Character.toLowerCase(guess);
-        if (alreadyGuessed.contains(String.valueOf(guess))) {
-            return false;
-        }
-        if (!currentWord.contains(String.valueOf(guess))) {
-            alreadyGuessed += guess;
-            guessesMade++;
-            return false;
+    public boolean makeGuess(char guess) {
+        char g = sanitizeGuess(guess);
+        if (contains(currentWord, guess)) {
+            if (!contains(alreadyGuessed, g)) {
+                alreadyGuessed += g;
+                insertCorrectGuess(g);
+                return true;
+            }
+            // This case should never happen if insertCorrectGuess(char) is 
+            // working properly.
         }
         else {
-            alreadyGuessed += guess;
-            correctGuess(guess);
+            alreadyGuessed += g;
         }
-        return true;
+        return false;
     }
     
     /**
-     * Method that updates the correct guess display. For each time the given
-     * argument appears in the current word, add it to the correct guesses.
+     * Places the given guess in the set of correct guesses at any and all index
+     * values that it occurs in the current word, all while maintaining these
+     * index values between the two {@code String}s.
      * 
-     * @param guess The character to add to the correct display.
+     * @param guess The character to add to the set of correct guesses based on 
+     *        its index occurrence in the current word.
      */
-    private void correctGuess(char guess) {
-        guess = Character.toLowerCase(guess);
+    private void insertCorrectGuess(char guess) {
         for (int i = 0; i < currentWord.length(); i++) {
             if (currentWord.charAt(i) == guess) {
                 correctGuesses = correctGuesses.substring(0, i) 
@@ -223,20 +246,39 @@ public class Hangman {
     }
     
     /**
-     * Method that checks for the win state of Hangman, or, in other words, when 
-     * the user's guesses are equal to the actual word. 
+     * Tests if a given {@code char} occurs at least once in a given 
+     * {@code String}.
      * 
-     * While this method does take into account the amount of guesses the user 
-     * has already made, implementations of this class should ensure that the 
-     * amount of guesses that a user may make are kept concurrent with the 
-     * maximum amount of guesses that are possible for this instance.
+     * @param str The {@code String} to test.
+     * @param key The character to look for in the given {@code String}.
+     * @return {@code true} if the given character is contained in the given 
+     *         {@code String}.
+     */
+    private static boolean contains(String str, char key) {
+        for (char c : str.toCharArray()) {
+            if (key == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Tests the state of the game, returning {@code true} if the the user's 
+     * correct guesses are the same as the actual word and there are greater 
+     * than zero guesses remaining, {@code false} otherwise.
      * 
-     * @return  Returns {@code true} if the user's correct guesses are the same 
-     *          as the actual word, otherwise returns {@code false}.
+     * <p> While this method does take into account the amount of guesses the 
+     * user has already made, ensure that the user is blocked from making 
+     * guesses within the individual context after the amount of guesses 
+     * remaining reaches zero.
+     * 
+     * @return {@code true} if the user's correct guesses are the same as the 
+     *         actual word and there are greater than zero guesses remaining, 
+     *         {@code false} otherwise.
      */
     public boolean hasWon() {
-        return correctGuesses.equalsIgnoreCase(currentWord) 
-                && guessesMade <= maxGuesses;
+        return correctGuesses.equals(currentWord) && guessesRemaining > 0;
     }
     
 }
