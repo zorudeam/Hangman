@@ -1,6 +1,7 @@
 package game;
 
 import language.Dictionary;
+import language.WordProperties;
 import utilities.functions.StringUtilities;
 
 /**
@@ -49,218 +50,117 @@ public class Hangman {
     private Actor actor;
     
     /**
-     * Defines the default word difficulty setting, which includes all words.
-     */
-    public final static int DEFAULT_DIFFICULTY = 0;
-    
-    /**
-     * Defines the word difficulty setting of "easy."
-     */
-    public final static int EASY_DIFFICULTY = 1;
-    
-    /**
-     * Defines the word difficulty setting of "medium."
-     */
-    public final static int MEDIUM_DIFFICULTY = 2;
-    
-    /**
-     * Defines the word difficulty setting of "hard."
-     */
-    public final static int HARD_DIFFICULTY = 3;
-    
-    /**
-     * Initializes a new game with the default difficulty setting.
+     * Initializes a new game with medium difficulty 
+     * ({@link WordProperties#MEDIUM_WORD}).
      */
     public Hangman() {
+        this(WordProperties.MEDIUM_WORD);
+    }
+    
+    /**
+     * Initializes a new game with the difficulty setting given.
+     *
+     * @param difficulty The difficulty for this game.
+     */
+    public Hangman(WordProperties difficulty) {
         words = new Dictionary();
         actor = Actor.HUMAN;
         guessesRemaining = actor.getImageArray().length;
-        initGame(DEFAULT_DIFFICULTY);
+        resetGame(difficulty);
     }
     
     /**
-     * Default constructor - initializes a new game with the difficulty setting
-     * given.
+     * Initializes a new game with the given difficulty.
+     * 
+     * <p> If the given difficulty is invalid, defaults to medium difficulty.
      *
-     * @param difficulty    The difficulty setting to use.
+     * @param difficulty The difficulty setting to use for this game. If this
+     *        is either {@code null} or an invalid property, defaults to 
+     *        {@link WordProperties#MEDIUM_WORD}.
      */
-    public Hangman(int difficulty) {
-        words = new Dictionary();
-        actor = Actor.HUMAN;
-        //Subtract 1 to avoid ArrayIndexOutOfBoundsException when working with 
-        //arrays
-        maxGuesses = actor.getImageArray().length - 1;
-        initGame(difficulty);
-    }
-    
-    /**
-     * Method that initializes a new game.
-     *
-     * @param difficulty    The difficulty setting to use for this game. If this
-     *                      is too small or too large, default to medium
-     *                      difficulty.
-     */
-    public final void initGame(int difficulty) {
+    public final void resetGame(WordProperties difficulty) {
         switch(difficulty) {
-            case EASY_DIFFICULTY: {
-                currentWord = words.getEasyWord();
+            case EASY_WORD: {
+                currentWord = words.getEasyWord().characters();
                 break;
             }
-            case MEDIUM_DIFFICULTY: {
-                currentWord = words.getMediumWord();
+            case MEDIUM_WORD: {
+                currentWord = words.getMediumWord().characters();
                 break;
             }
-            case HARD_DIFFICULTY: {
-                currentWord = words.getHardWord();
-                break;
-            }
-            case ANY_DIFFICULTY: {
-                currentWord = words.getWord();
+            case HARD_WORD: {
+                currentWord = words.getHardWord().characters();
                 break;
             }
             default: {
-                currentWord = words.getMediumWord();
+                currentWord = words.getMediumWord().characters();
             }
         }
-        correctGuesses = StringUtilities
-                .createRepeatingString(currentWord.length(), '_');
+        correctGuesses = StringUtilities.createRepeating(currentWord.length(), '_');
         alreadyGuessed = "";
-        guessesMade = 0;
     }
     
     /**
-     * Accessor method for {@code maxGuesses} field.
+     * Returns the current word for this game instance.
      *
-     * @return  Returns the {@code maxGuesses} field of this instance.
-     */
-    public int getMaxGuesses() {
-        return maxGuesses;
-    }
-    
-    /**
-     * Mutator method for {@code maxGuesses} field.
-     *
-     * @param guesses   The value to assign to {@code maxGuesses} field of this
-     *                  instance.
-     */
-    public void setMaxGuesses(int guesses) {
-        maxGuesses = guesses;
-    }
-    
-    /**
-     * Accessor method for {@code words} field.
-     *
-     * @return  Returns the {@code words} field of this instance.
-     */
-    public Dictionary getWords() {
-        return words;
-    }
-    
-    /**
-     * Mutator method for {@code words} field.
-     *
-     * @param d The value to assign to {@code words} field of this instance.
-     */
-    public void setWords(Dictionary d) {
-        words = d;
-    }
-    
-    /**
-     * Accessor method for {@code currentWord} field.
-     *
-     * @return  Returns the {@code currentWord} field of this instance.
+     * @return The current word of this instance.
      */
     public String getCurrentWord() {
         return currentWord;
     }
     
     /**
-     * Mutator method for {@code currentWord} field.
+     * Returns a {@code String} containing all the characters that have already
+     * been guessed in this game.
      *
-     * @param word  The value to assign to {@code currentWord} field of this 
-     *              instance.
-     */
-    public void setCurrentWord(String word) {
-        currentWord = word;
-    }
-    
-    /**
-     * Accessor method for {@code alreadyGuessed} field.
-     *
-     * @return  Returns the {@code alreadyGuessed} field of this instance.
+     * @return The characters that have already been guessed.
      */
     public String getAlreadyGuessed() {
         return alreadyGuessed;
     }
     
     /**
-     * Mutator method for {@code alreadyGuessed} field.
+     * Appends the given character to the end of the {@code String} containing
+     * the other characters that have been guessed.
      *
-     * @param guessed   The value to assign to {@code alreadyGuessed} field of
-     *                  this instance.
+     * @param guess The character guess to append.
      */
-    public void setAlreadyGuessed(String guessed) {
-        alreadyGuessed = guessed;
+    public void appendAlreadyGuessed(char guess) {
+        alreadyGuessed += guess;
     }
     
     /**
-     * Accessor method for {@code correctGuesses} field.
+     * Returns a {@code String} containing all the characters that have been
+     * guessed correctly in this game instance.
+     * 
+     * <p> This returns, in other words, the union between the current word and
+     * the characters that have already been guessed.
      *
-     * @return  Returns the {@code correctGuesses} field of this instance.
+     * @return The characters that have already been guessed correctly.
      */
     public String getCorrectGuesses() {
         return correctGuesses;
     }
     
     /**
-     * Mutator method for {@code correctGuesses} field.
+     * Appends the given character to the end of the {@code String} containing
+     * the other characters that have been guessed.
      *
-     * @param guesses   The value to assign to {@code correctGuesses} field of
-     *                  this instance.
+     * @param guess The character guess to append.
      */
-    public void setCorrectGuesses(String guesses) {
-        correctGuesses = guesses;
+    public void appendCorrectGuesses(char guess) {
+        correctGuesses += guess;
     }
     
     /**
-     * Accessor method for {@code guessesMade} field.
+     * Returns the actor for this game instance.
      *
-     * @return  Returns the {@code guessesMade} field of this instance.
-     */
-    public int getGuessesMade() {
-        return guessesMade;
-    }
-    
-    /**
-     * Mutator method for {@code guessesMade} field.
-     *
-     * @param guesses   The value to assign to {@code guessesMade} field of this
-     *                  instance.
-     */
-    public void setGuessesMade(int guesses) {
-        guessesMade = guesses;
-    }
-    
-    /**
-     * Accessor method for {@code actor} field.
-     *
-     * @return  Returns the {@code actor} field of this instance.
+     * @return The actor for this instance.
      */
     public Actor getActor() {
         return actor;
     }
     
-    /**
-     * Mutator method for {@code guessesMade} field.
-     *
-     * @param a The value to assign to {@code guessesMade} field of this 
-                instance.
-     */
-    public void setActor(Actor a) {
-        actor = a;
-        setMaxGuesses(actor.getImageArray().length - 1);
-    }
-
     /**
      * Method that delegates a guess operation to the {@code isValidGuess(char)} 
      * method in this class. Returns {@code true} if the guess is valid, 
