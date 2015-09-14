@@ -323,7 +323,28 @@ public final class StringUtilities {
         }
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            sb.append(String.valueOf(randomChar()));
+            sb.append(randomChar());
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Generates a pseudorandom {@code String} object. May include {@code char}
+     * values from {@code lower} to {@code upper} inclusive.
+     * 
+     * @param lower Lower bound, inclusive.
+     * @param upper Upper bound, inclusive.
+     * @param length The length of the {@code String} to generate.
+     * @return A random {@code String} object with the given length.
+     * @see #randomChar()
+     */
+    public static String random(char lower, char upper, int length) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("length : " + length + " < 0 !");
+        }
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(randomChar(lower, upper));
         }
         return sb.toString();
     }
