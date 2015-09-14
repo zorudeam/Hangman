@@ -108,17 +108,6 @@ public final class Word
     }
     
     /**
-     * Returns a {@code String} representation of this {@code Word}.
-     * 
-     * @return A {@code String} that represents the characters contained in this
-     *         {@code Word}.
-     */
-    @Override
-    public String toString() {
-        return characters();
-    }
-    
-    /**
      * Calculates the amount of consonants contained in this {@code Word}. 
      * Returns a number from {@code 0} (no consonants) to the length of this 
      * word (no vowels).
@@ -165,6 +154,17 @@ public final class Word
             }
         }
         return false;
+    }
+    
+    /**
+     * Returns a {@code String} representation of this {@code Word}.
+     * 
+     * @return A {@code String} that represents the characters contained in this
+     *         {@code Word}.
+     */
+    @Override
+    public String toString() {
+        return characters();
     }
     
     /**
