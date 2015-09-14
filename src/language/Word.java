@@ -99,6 +99,15 @@ public final class Word
     }
     
     /**
+     * Returns the length of this word.
+     * 
+     * @return The length of this word.
+     */
+    public int length() {
+        return characters.length();
+    }
+    
+    /**
      * Returns a {@code String} representation of this {@code Word}.
      * 
      * @return A {@code String} that represents the characters contained in this
@@ -122,9 +131,9 @@ public final class Word
     
     /**
      * Calculates the amount of vowels contained in this {@code Word}. Returns a
-     * number from {@code 0} (no vowels) to the length of this word 
-     * (no consonants) depending on the occurrences of the characters 
-     * {@code 'a'}, {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
+     * number from {@code 0} (no vowels) to the length of this word (no 
+     * consonants) depending on the occurrences of the characters {@code 'a'}, 
+     * {@code 'e'}, {@code i'}, {@code 'o'}, and {@code 'u'}.
      * 
      * @return The amount of vowels in this {@code Word}.
      */
@@ -161,7 +170,7 @@ public final class Word
     /**
      * Compares a given {@code Word} with this one for order.
      * 
-     * <p> This implementation simply compares that characters of this word with
+     * <p> This implementation simply compares the characters of this word with
      * the given one, returning a negative integer if this object is less than 
      * {@code other}, zero if they are equal (in other words, 
      * {@code this.equals(other)} evaluates to {@code true}), or a positive 
