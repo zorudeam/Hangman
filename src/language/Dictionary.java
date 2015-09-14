@@ -1,6 +1,3 @@
-/*
- * A fancy license header.
- */
 package language;
 
 import java.io.File;
@@ -263,7 +260,7 @@ public final class Dictionary {
     @Override
     public String toString() {
         return "Dictionary{"
-                + "map = " + words
+                + "Words in this dictionary = " + words
                 + '}';
     }
 
