@@ -49,6 +49,9 @@ public final class Dictionary {
      */
     public Dictionary(File target) {
         words = new TreeMap<>();
+        easyWords = new ArrayList<>();
+        mediumWords = new ArrayList<>();
+        hardWords = new ArrayList<>();
         if (target != null) {
             constructDictionary(target);
         }
@@ -115,6 +118,21 @@ public final class Dictionary {
      * Minimum length for a medium word.
      */
     private static final int MEDIUM_LENGTH_THRESHOLD = 5;
+    
+    /**
+     * Caches the easy words contained within this object.
+     */
+    private List<Word> easyWords;
+    
+    /**
+     * Caches the medium words contained within this object.
+     */
+    private List<Word> mediumWords;
+    
+    /**
+     * Caches the hard words contained within this object.
+     */
+    private List<Word> hardWords;
     
     /**
      * Determines if a given word is "easy" in difficulty. Words that are longer
@@ -188,19 +206,21 @@ public final class Dictionary {
     }
     
     /**
-     * Returns a randomly selected word of the given difficulty from this 
-     * object's list.
+     * Returns a randomly selected word of the given difficulty from the given 
+     * list, or from this object's set of words if the specified list is empty.
      * 
+     * @param list The list to populate with elements, if it is empty.
      * @param difficulty The difficulty of the word to return.
      * @return A randomly selected word of the given difficulty.
      */
-    protected Word getWordOf(WordProperties difficulty) {
-        List<Word> list = new ArrayList<>();
-        words.forEach((Word key, WordProperties value) -> {
+    protected Word getWordOf(List<Word> list, WordProperties difficulty) {
+        if (list.isEmpty()) {
+            words.forEach((Word key, WordProperties value) -> {
             if (value == difficulty) {
                 list.add(key);
             }
-        });
+            });
+        }
         return list.get(Utilities.r.nextInt(list.size()));
     }
     
@@ -211,7 +231,7 @@ public final class Dictionary {
      * @return A randomly selected word of easy difficulty.
      */
     public Word getEasyWord() {
-        return getWordOf(WordProperties.EASY_WORD);
+        return getWordOf(easyWords, WordProperties.EASY_WORD);
     }
     
     /**
@@ -221,7 +241,7 @@ public final class Dictionary {
      * @return A randomly selected word of medium difficulty.
      */
     public Word getMediumWord() {
-        return getWordOf(WordProperties.MEDIUM_WORD);
+        return getWordOf(mediumWords, WordProperties.MEDIUM_WORD);
     }
     
     /**
@@ -231,7 +251,7 @@ public final class Dictionary {
      * @return A randomly selected word of hard difficulty.
      */
     public Word getHardWord() {
-        return getWordOf(WordProperties.HARD_WORD);
+        return getWordOf(hardWords, WordProperties.HARD_WORD);
     }
     
     /**
