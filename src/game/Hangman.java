@@ -63,10 +63,15 @@ public class Hangman {
      * @param difficulty The difficulty for this game.
      */
     public Hangman(WordProperties difficulty) {
-        words = new Dictionary();
-        actor = Actor.HUMAN;
-        guessesRemaining = actor.getImageArray().length;
+        this(difficulty, Actor.HUMAN);
+    }
+    
+    public Hangman(WordProperties difficulty, Actor actor) {
+        this.words = new Dictionary();
+        this.actor = actor;
+        this.guessesRemaining = actor.getImageArray().length;
         resetGame(difficulty);
+        
     }
     
     /**
