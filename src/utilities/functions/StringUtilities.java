@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import javax.accessibility.AccessibleText;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -274,7 +275,7 @@ public final class StringUtilities {
      * @return A random {@code char}.
      */
     public static char randomChar() {
-        return (char) Utilities.r.nextInt(Character.MAX_VALUE + 1);
+        return randomChar(Character.MIN_VALUE, Character.MAX_VALUE);
     }
     
     /**
@@ -318,14 +319,7 @@ public final class StringUtilities {
      * @see #randomChar()
      */
     public static String random(int length) {
-        if (length <= 0) {
-            throw new IllegalArgumentException("length : " + length + " < 0 !");
-        }
-        StringBuilder sb = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            sb.append(randomChar());
-        }
-        return sb.toString();
+        return random(Character.MIN_VALUE, Character.MAX_VALUE, length);
     }
     
     /**
@@ -381,6 +375,35 @@ public final class StringUtilities {
             }
         }
         return sb.toString();
+    }    
+    
+    /**
+     * Returns a formatted version of the given {@code String}, delimiting each
+     * character with a comma and space, and the final character with a period.
+     * 
+     * <p> As an example, the following call to this method
+     * 
+     * <blockquote><pre>
+     * toFormattedCharArray("Hello World"</pre>
+     * </blockquote>
+     * 
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "H, e, l, l, o, W, o, r, l, d.".</pre>
+     * </blockquote>
+     * 
+     * @param str The {@code String} to format.
+     * @return A formatted version of the given {@code String}.
+     */
+    public static String toFormattedCharArray(String str) {
+        String sanitized = str.replace(" ", "");
+        StringBuilder formatted = new StringBuilder(sanitized.length() * 3);
+        for (int i = 0; i < sanitized.length(); i++) {
+            formatted.append(sanitized.charAt(i))
+                     .append((i < sanitized.length() - 1) ? ", " : '.');
+        }
+        return formatted.toString();
     }
     
 }
