@@ -28,6 +28,13 @@ import utilities.functions.Utilities;
 public final class Dictionary {
     
     /**
+     * Stores the default testing file. Contains 234,371 words - good for 
+     * difficulty distribution testing.
+     */
+    public static final Dictionary NULL_DICTIONARY = 
+            new Dictionary(new File("resources/dictionary.txt"));
+    
+    /**
      * Contains this object's word dictionary. This map is sorted by word 
      * difficulty
      */
@@ -216,9 +223,9 @@ public final class Dictionary {
     protected Word getWordOf(List<Word> list, WordProperties difficulty) {
         if (list.isEmpty()) {
             words.forEach((Word key, WordProperties value) -> {
-            if (value == difficulty) {
-                list.add(key);
-            }
+                if (value == difficulty) {
+                    list.add(key);
+                }
             });
         }
         return list.get(Utilities.r.nextInt(list.size()));
@@ -273,7 +280,7 @@ public final class Dictionary {
     }
     
     /**
-     * Returns a formatted {@code String} containing this object's map.
+     * Returns a formatted {@code String} containing this object's map of words.
      * 
      * @return A formatted {@code String} containing this object's map.
      */
