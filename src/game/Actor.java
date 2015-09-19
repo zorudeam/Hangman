@@ -1,6 +1,5 @@
 package game;
 
-import java.net.URL;
 import java.util.Arrays;
 import javax.swing.ImageIcon;
 
@@ -43,7 +42,7 @@ public enum Actor {
      *
      * @return The name of this actor.
      */
-    public String getActorName() {
+    public String getName() {
         return name;
     }
 
@@ -76,11 +75,10 @@ public enum Actor {
      *        enumeration.
      * @return An array containing the individual images of the given enum.
      */
-    public static final ImageIcon[] getImages(String name, int imageCount) {
+    private static ImageIcon[] getImages(String name, int imageCount) {
         ImageIcon[] images = new ImageIcon[imageCount];
         for (int i = 0; i < images.length; i++) {
-            URL path = Actor.class.getResource("/resources/actors/" 
-                    + name + '/' + i + ".png");
+            String path = "resources/actors/" + name + '/' + i + ".png";
             images[i] = new ImageIcon(path);
         }
         return images;
@@ -95,7 +93,7 @@ public enum Actor {
     public static final String[] allNames() {
         String[] names = new String[Actor.values().length];
         for (int i = 0; i < names.length; i++) {
-            names[i] = Actor.values()[i].getActorName();
+            names[i] = Actor.values()[i].getName();
         }
         return names;
     }
