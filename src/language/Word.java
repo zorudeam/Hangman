@@ -73,8 +73,19 @@ public final class Word
      * @param str The {@code String} to sanitize.
      * @return A sanitized version of the given {@code String}.
      */
-    private static String sanitizeWord(String str) {
+    public static String sanitizeWord(String str) {
         return str.replaceAll("\\s+", "").toLowerCase();
+    }
+    
+    /**
+     * "Sanitizes" and returns a given {@code char} by converting it to 
+     * lowercase.
+     * 
+     * @param c The {@code char} to sanitize.
+     * @return A sanitized version of the given {@code char}.
+     */
+    public static char sanitizeWord(char c) {
+        return Character.toLowerCase(c);
     }
     
     /**

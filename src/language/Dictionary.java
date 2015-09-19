@@ -142,6 +142,11 @@ public final class Dictionary {
     private List<Word> hardWords;
     
     /**
+     * Stores a cache of the previously used list.
+     */
+    private List<Word> cacheList;
+    
+    /**
      * Determines if a given word is "easy" in difficulty. Words that are longer
      * in length and have more vowels are generally considered easy words.
      * 
@@ -203,6 +208,42 @@ public final class Dictionary {
     }
     
     /**
+     * Returns the amount of words currently contained within this object.
+     * 
+     * @return The amount of words currently contained within this object.
+     */
+    public int size() {
+        return words.size();
+    }
+    
+    /**
+     * Returns a set containing all entries mapped to this object.
+     * 
+     * @return A set of all entries in this object.
+     */
+    public Set<Map.Entry<Word, WordProperties>> entrySet() {
+        return words.entrySet();
+    }
+    
+    /**
+     * Returns a set containing all keys mapped to this object.
+     * 
+     * @return A set of all keys in this object.
+     */
+    public Set<Word> keySet() {
+        return words.keySet();
+    }
+    
+    /**
+     * Returns a list containing all words of the previously used difficulty.
+     * 
+     * @return A cache of the previously used difficulty list.
+     */
+    public List<Word> cacheList() {
+        return cacheList;
+    }
+    
+    /**
      * Returns a random {@code Word} from this object's {@code map}.
      * 
      * @return A random {@code String} from this object's {@code map}.
@@ -228,6 +269,7 @@ public final class Dictionary {
                 }
             });
         }
+        cacheList = new ArrayList<>(list);
         return list.get(Utilities.r.nextInt(list.size()));
     }
     
@@ -259,24 +301,6 @@ public final class Dictionary {
      */
     public Word getHardWord() {
         return getWordOf(hardWords, WordProperties.HARD_WORD);
-    }
-    
-    /**
-     * Returns a set containing all entries mapped to this object.
-     * 
-     * @return A set of all entries in this object.
-     */
-    public Set<Map.Entry<Word, WordProperties>> entrySet() {
-        return words.entrySet();
-    }
-    
-    /**
-     * Returns a set containing all keys mapped to this object.
-     * 
-     * @return A set of all keys in this object.
-     */
-    public Set<Word> keySet() {
-        return words.keySet();
     }
     
     /**
