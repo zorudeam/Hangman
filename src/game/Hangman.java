@@ -54,24 +54,21 @@ public class Hangman {
      * ({@link WordProperties#MEDIUM_WORD}).
      */
     public Hangman() {
-        this(WordProperties.MEDIUM_WORD);
+        this(WordProperties.MEDIUM_WORD, Actor.HUMAN, Dictionary.NULL_DICTIONARY);
     }
     
     /**
-     * Initializes a new game with the difficulty setting given.
-     *
+     * Initializes a new game with the difficulty setting and actor given.
+     * 
      * @param difficulty The difficulty for this game.
+     * @param actor The actor for this game.
+     * @param words The dictionary for this game.
      */
-    public Hangman(WordProperties difficulty) {
-        this(difficulty, Actor.HUMAN);
-    }
-    
-    public Hangman(WordProperties difficulty, Actor actor) {
-        this.words = new Dictionary();
+    public Hangman(WordProperties difficulty, Actor actor, Dictionary words) {
+        this.words = words;
         this.actor = actor;
         this.guessesRemaining = actor.getImageArray().length;
         resetGame(difficulty);
-        
     }
     
     /**
@@ -103,6 +100,7 @@ public class Hangman {
         }
         correctGuesses = StringUtilities.createRepeating(currentWord.length(), '_');
         alreadyGuessed = "";
+        
     }
     
     /**
@@ -113,7 +111,7 @@ public class Hangman {
      * @param guess The character to sanitize.
      * @return A sanitized version of the given character.
      */
-    private char sanitizeGuess(char guess) {
+    private static char sanitizeGuess(char guess) {
         return Character.toLowerCase(guess);
     }
     
@@ -161,23 +159,50 @@ public class Hangman {
     }
     
     /**
-     * Appends the given character to the end of the {@code String} containing
-     * the other characters that have been guessed.
-     *
-     * @param guess The character guess to append.
-     */
-    public void appendCorrectGuesses(char guess) {
-        char g = sanitizeGuess(guess);
-        correctGuesses += guess;
-    }
-    
-    /**
      * Returns the actor for this game instance.
      *
      * @return The actor for this instance.
      */
     public Actor getActor() {
         return actor;
+    }
+    
+    /**
+     * Returns the dictionary for this game instance.
+     * 
+     * @return The dictionary for this instance.
+     */
+    public Dictionary getWords() {
+        return words;
+    }
+    
+    /**
+     * Returns the amount of incorrect guesses remaining for this game.
+     * 
+     * @return The amount of incorrect guesses remaining for this game.
+     */
+    public int getGuessesRemaining() {
+        return guessesRemaining;
+    }
+    
+    /**
+     * Returns {@code true} if this game allows guesses at this point in time,
+     * {@code false} otherwise.
+     * 
+     * @return {@code true} if this game allows guesses at this point in time,
+     *         {@code false} otherwise.
+     */
+    public boolean canGuess() {
+        return guessesRemaining > 0;
+    }
+    
+    /**
+     * Returns the maximum amount of guesses allowed to this game instance.
+     * 
+     * @return The maximum amount of guesses allowed to this game instance.
+     */
+    public int maxGuesses() {
+        return actor.getImageArray().length;
     }
     
 // Gameplay methods   
@@ -203,7 +228,7 @@ public class Hangman {
      *               {@code false}.
      *       </ul>
      *   </ol>
-     *
+     * 
      * <p> In other words, this method will return {@code true} if and only if 
      * the guess satisfies all of the following conditions, {@code false} 
      * otherwise:
@@ -217,17 +242,47 @@ public class Hangman {
      */
     public boolean makeGuess(char guess) {
         char g = sanitizeGuess(guess);
-        if (contains(currentWord, guess)) {
-            if (!contains(alreadyGuessed, g)) {
-                alreadyGuessed += g;
+        if (!contains(alreadyGuessed, g)) {
+            if (contains(currentWord, g)) {
+                appendAlreadyGuessed(g);
                 insertCorrectGuess(g);
                 return true;
             }
-            // This case should never happen if insertCorrectGuess(char) is 
-            // working properly.
+            else {
+                appendAlreadyGuessed(g);
+                guessesRemaining--;
+            }
         }
-        else {
-            alreadyGuessed += g;
+        return false;
+    }
+    
+    /**
+     * Returns {@code true} if the given character has already been guessed, 
+     * {@code false} otherwise.
+     * 
+     * @param guess The character to test.
+     * @return {@code true} if the given character has already been guessed, 
+     *         {@code false} otherwise
+     */
+    public boolean hasAlreadyGuessed(char guess) {
+        sanitizeGuess(guess);
+        return contains(alreadyGuessed, guess);
+    }
+    
+    /**
+     * Tests if a given {@code char} occurs at least once in a given 
+     * {@code String}.
+     * 
+     * @param str The {@code String} to test.
+     * @param key The character to look for in the given {@code String}.
+     * @return {@code true} if the given character is contained in the given 
+     *         {@code String}.
+     */
+    private static boolean contains(String str, char key) {
+        for (char c : str.toCharArray()) {
+            if (key == c) {
+                return true;
+            }
         }
         return false;
     }
@@ -248,24 +303,6 @@ public class Hangman {
                                + correctGuesses.substring(i + 1);
             }
         }
-    }
-    
-    /**
-     * Tests if a given {@code char} occurs at least once in a given 
-     * {@code String}.
-     * 
-     * @param str The {@code String} to test.
-     * @param key The character to look for in the given {@code String}.
-     * @return {@code true} if the given character is contained in the given 
-     *         {@code String}.
-     */
-    private static boolean contains(String str, char key) {
-        for (char c : str.toCharArray()) {
-            if (key == c) {
-                return true;
-            }
-        }
-        return false;
     }
     
     /**
