@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import javax.accessibility.AccessibleText;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -214,7 +213,7 @@ public final class StringUtilities {
      * 
      * <blockquote><pre>
      * String s = "abc";
-     * s = delimit(s);</pre>
+     * s = delimit(s, " ");</pre>
      * </blockquote>
      * 
      * would produce the result {@code "a b c"}.
@@ -226,6 +225,28 @@ public final class StringUtilities {
      */
     public static String delimit(String str, String delimiter) {
         return str.replace("", delimiter).trim();
+    }
+    
+    /**
+     * formats a {@code String} with a given delimiter in between each 
+     * individual character. 
+     * 
+     * <p> As an example, the following call to this method
+     * 
+     * <blockquote><pre>
+     * String s = "abc";
+     * s = delimit(s, ' ');</pre>
+     * </blockquote>
+     * 
+     * would produce the result {@code "a b c"}.
+     * 
+     * @param str The {@code String} to format.
+     * @param delimiter The {@code char} to insert after each character.
+     * @return A formatted version of the given {@code String} with the 
+     *         {@code delimiter} argument placed after each character.
+     */
+    public static String delimit(String str, char delimiter) {
+        return delimit(str, String.valueOf(delimiter));
     }
     
     /**
