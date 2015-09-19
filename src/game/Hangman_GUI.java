@@ -81,11 +81,11 @@ public class Hangman_GUI extends JFrame {
      * Recursively returns all components within a given container, including
      * any children who are also {@code Container}s.
      * 
-     * @param comp The component whose components to retrieve.
+     * @param container The component whose components to retrieve.
      * @return All components within a given container.
      */
-    public static List<Component> getAllComponents(Container comp) {
-        Component[] components = comp.getComponents();
+    public static List<Component> getAllComponents(Container container) {
+        Component[] components = container.getComponents();
         List<Component> compList = new ArrayList<>();
         for (Component c : components) {
             compList.add(c);
@@ -1089,7 +1089,7 @@ public class Hangman_GUI extends JFrame {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void defaultRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultRadioButtonActionPerformed
-        updateWordList("bin/default.txt");
+        updateWordList("bin/default.txt"); // TODO
     }//GEN-LAST:event_defaultRadioButtonActionPerformed
 
     private void newWordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newWordButtonActionPerformed
@@ -1236,9 +1236,28 @@ public class Hangman_GUI extends JFrame {
             guess = ((KeyEvent) evt).getKeyChar();
             if (Character.isAlphabetic(guess)) {
                 makeMove(guess);
+                disableButton(guess);
             }
             else {
                 Toolkit.getDefaultToolkit().beep();
+            }
+        }
+    }
+    
+    /**
+     * Finds the {@code JButton} in the {@code keyboardPanel} that represents 
+     * the given character parameter and disables it.
+     * 
+     * @param guess The character guess.
+     */
+    private void disableButton(char guess) {
+        char sanitizedGuess = Word.sanitizeWord(guess);
+        for (int i = 0; i < keyboardPanel.getComponentCount(); i++) {
+            AbstractButton button = (AbstractButton) keyboardPanel.getComponent(i);
+            char buttonText = Word.sanitizeWord(button.getText().charAt(0));
+            if (sanitizedGuess == buttonText) {
+                button.setEnabled(false);
+                break; // Only one button for each character, so okay to break
             }
         }
     }
@@ -1248,9 +1267,6 @@ public class Hangman_GUI extends JFrame {
      * board appropriately depending on the validity of the guess.
      * 
      * @param guess The character to attempt to guess.
-     * @see #correctGuess() Called by this method if the given guess is correct.
-     * @see #incorrectGuess() Called by this method if the given guess is not
-     *      correct.
      */
     private void makeMove(char guess) {
         boolean valid = game.makeGuess(guess);
@@ -1273,6 +1289,8 @@ public class Hangman_GUI extends JFrame {
         updateImages();
         updateStatistics();
         setStateOfAll(true);
+        String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
+        currentLabel.setToolTipText(cheaterWord);
     }
     
     /**
@@ -1301,10 +1319,9 @@ public class Hangman_GUI extends JFrame {
      */
     private void updateImages() {
         int index = game.getActor().getImageArray().length - game.getGuessesRemaining();
-        if (index <= game.maxGuesses()) {
-// TODO            
+        if (index < game.maxGuesses()) {
+            imageLabel.setIcon(game.getActor().getImageArray()[index]);
         }
-        imageLabel.setIcon(game.getActor().getImageArray()[index]);
     }
     
     /**
