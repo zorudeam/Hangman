@@ -48,7 +48,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import language.Dictionary;
 import language.Word;
 import language.WordProperties;
 import utilities.functions.StringUtilities;
@@ -129,7 +128,7 @@ public class Hangman_GUI extends JFrame {
     private JButton xButton;
     private JButton yButton;
     private JButton zButton;
-    private Hangman game;
+    private final Hangman game;
     private int gamesPlayed;
     private int gamesWon;
     
@@ -1146,10 +1145,10 @@ public class Hangman_GUI extends JFrame {
      * Updates the game with the currently given set of user settings.
      */
     private void updateGameSettings() {
-        Actor actor = getUserSelectedActor();
-        Dictionary dictionary = Dictionary.NULL_DICTIONARY; // TODO
         WordProperties difficulty = getUserSelectedDifficulty();
-        game = new Hangman(difficulty, actor, dictionary);
+        Actor actor = getUserSelectedActor();
+        game.resetGame(difficulty);
+        game.setActor(actor);
         dictionaryList.updateUI();
     }
     
