@@ -17,32 +17,43 @@ import utilities.functions.StringUtilities;
 public class Hangman {
     
     /**
+     * The delimiter for the {@code String} that stores correct guesses.
+     * 
+     * @see #correctGuesses
+     */
+    private static final char CORRECT_GUESS_DELIMITER = '_';
+    
+    /**
      * Stores words for this instance.
      */
     private Dictionary words;
     
     /**
-     * Stores the current word that is being guessed by the player.
+     * Stores the current word that is being guessed.
      */
     private String currentWord;
     
     /**
-     * Stores the characters that the player has already guessed for relaying to
-     * a user interface.
+     * Stores the characters have already been guessed.
      */
     private String alreadyGuessed;
     
     /**
-     * Stores the characters that the player has already correctly guessed, 
-     * (i.e. they exist in {@link #currentWord}). This should be relayed to the
-     * user interface.
+     * Stores the characters have already been guessed correctly, (i.e. they 
+     * exist in {@link #currentWord}).
      */
     private String correctGuesses;
     
     /**
-     * Stores the amount of character guesses the player has already made.
+     * Stores the amount of character guesses that are left in this game.
      */
     private int guessesRemaining;
+    
+    /**
+     * Stores the amount of hints remaining in this game. This value is defined
+     * by half of the length of the current word.
+     */
+    private int hintsRemaining;
     
     /**
      * Stores the current image repository for use in a graphical interface.
@@ -67,8 +78,9 @@ public class Hangman {
     public Hangman(WordProperties difficulty, Actor actor, Dictionary words) {
         this.words = words;
         this.actor = actor;
-        this.guessesRemaining = actor.getImageArray().length;
+        this.guessesRemaining = actor.getImageArray().length - 1;
         resetGame(difficulty);
+        this.hintsRemaining = currentWord.length() / 2;
     }
     
     /**
@@ -98,7 +110,8 @@ public class Hangman {
                 currentWord = words.getMediumWord().characters();
             }
         }
-        correctGuesses = StringUtilities.createRepeating(currentWord.length(), '_');
+        correctGuesses = StringUtilities
+                .createRepeating(currentWord.length(), CORRECT_GUESS_DELIMITER);
         alreadyGuessed = "";
         
     }
@@ -186,6 +199,16 @@ public class Hangman {
     }
     
     /**
+     * Returns the amount of hints remaining for this game. This value is 
+     * defined by half of the length of the current word.
+     * 
+     * @return The amount of hints remaining for this game.
+     */
+    public int getHintsRemaining() {
+        return hintsRemaining;
+    }
+    
+    /**
      * Returns {@code true} if this game allows guesses at this point in time,
      * {@code false} otherwise.
      * 
@@ -201,8 +224,34 @@ public class Hangman {
      * 
      * @return The maximum amount of guesses allowed to this game instance.
      */
-    public int maxGuesses() {
+    public final int maxGuesses() {
         return actor.getImageArray().length;
+    }
+    
+    /**
+     * Returns the last character guess for this game.
+     * 
+     * @return The last character guess for this game.
+     */
+    public char lastGuess() {
+        return alreadyGuessed.charAt(alreadyGuessed.length() - 1);
+    }
+    
+    /**
+     * Tests the state of the game, returning {@code true} if the correct 
+     * guesses are the same as the actual word and there are greater than zero 
+     * guesses remaining, {@code false} otherwise.
+     * 
+     * <p> While this method does take into account the amount of guesses that 
+     * have already been made, it is up to the implementor to ensure that guess 
+     * input is blocked when the remaining guesses reaches zero.
+     * 
+     * @return {@code true} if the user's correct guesses are the same as the 
+     *         actual word and there are greater than zero guesses remaining, 
+     *         {@code false} otherwise.
+     */
+    public boolean hasWon() {
+        return correctGuesses.equals(currentWord) && guessesRemaining > 0;
     }
     
 // Gameplay methods   
@@ -243,13 +292,12 @@ public class Hangman {
     public boolean makeGuess(char guess) {
         char g = sanitizeGuess(guess);
         if (!contains(alreadyGuessed, g)) {
+            appendAlreadyGuessed(g);
             if (contains(currentWord, g)) {
-                appendAlreadyGuessed(g);
                 insertCorrectGuess(g);
                 return true;
             }
             else {
-                appendAlreadyGuessed(g);
                 guessesRemaining--;
             }
         }
@@ -267,6 +315,71 @@ public class Hangman {
     public boolean hasAlreadyGuessed(char guess) {
         sanitizeGuess(guess);
         return contains(alreadyGuessed, guess);
+    }
+    
+    /**
+     * Returns {@code true} if a guess has been made this game, {@code false} 
+     * otherwise.
+     * 
+     * @return {@code true} if a guess has been made this game{@code false} 
+     *         otherwise.
+     */
+    public boolean hasAlreadyGuessed() {
+        return !alreadyGuessed.isEmpty();
+    }
+    
+    /**
+     * Gives a hint at the expense of a move (if one is available), returning 
+     * {@code true} if a hint was given, {@code false} otherwise. This method 
+     * will guess from the first character in the current word that has not 
+     * already been guessed.
+     * 
+     * <p> The formal requirements for this method are delineated as follows:
+     *   <ol>
+     *     <li> The game has not already been won.
+     *     <li> There is at least one or more hint remaining.
+     *   </ol>
+     * 
+     * <p> In other words, this method will return {@code true} if and only if 
+     * the current state of the game satisfies all of the following conditions,
+     * {@code false} otherwise:
+     *   <ul>
+     *     <li> All letters of the current word have not been guessed.
+     *     <li> The amount of hints available to the game have not already been 
+     *          used.
+     *   </ul>
+     * 
+     * @return {@code true} if a hint was given, {@code false} otherwise.
+     */
+    public boolean giveHint() {
+        if (canGuess() && !hasWon()) {
+            if (hintsRemaining > 0) {
+                char guess = getTheHint();
+                insertCorrectGuess(guess);
+                appendAlreadyGuessed(guess);
+                guessesRemaining--;
+                hintsRemaining--;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Returns a {@code char} representing the first character in the current 
+     * word that has not already been guessed.
+     * 
+     * @return A character hint.
+     * @throws IllegalStateException If this method is called after the game has
+     *         already ended.
+     */
+    private char getTheHint() {
+        for (int i = 0; i < correctGuesses.length(); i++) {
+            if (correctGuesses.charAt(i) == CORRECT_GUESS_DELIMITER) {
+                return currentWord.charAt(i);
+            }
+        }
+        throw new IllegalStateException("Called getTheHint() after game ended.");
     }
     
     /**
@@ -303,24 +416,6 @@ public class Hangman {
                                + correctGuesses.substring(i + 1);
             }
         }
-    }
-    
-    /**
-     * Tests the state of the game, returning {@code true} if the the user's 
-     * correct guesses are the same as the actual word and there are greater 
-     * than zero guesses remaining, {@code false} otherwise.
-     * 
-     * <p> While this method does take into account the amount of guesses the 
-     * user has already made, ensure that the user is blocked from making 
-     * guesses within the individual context after the amount of guesses 
-     * remaining reaches zero.
-     * 
-     * @return {@code true} if the user's correct guesses are the same as the 
-     *         actual word and there are greater than zero guesses remaining, 
-     *         {@code false} otherwise.
-     */
-    public boolean hasWon() {
-        return correctGuesses.equals(currentWord) && guessesRemaining > 0;
     }
     
 }
