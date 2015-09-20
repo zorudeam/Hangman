@@ -1,6 +1,5 @@
 package unit;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import language.Dictionary;
@@ -13,12 +12,6 @@ import language.WordProperties;
  * @author Oliver Abdulrahim
  */
 public class DictionaryUnitTest {
-    
-    /**
-     * Stores the default testing file. Contains 234,371 words - good for 
-     * difficulty distribution testing.
-     */
-    static final File TARGET_FILE = new File("resources/dictionary.txt");
     
     private int easyCount = 0, mediumCount = 0, hardCount = 0;
     
@@ -33,7 +26,7 @@ public class DictionaryUnitTest {
      * Tests the instantiation process of the dictionary.
      */
     void instantiate() {
-        dictionary = new Dictionary(TARGET_FILE);
+        dictionary = new Dictionary();
     }
     
     /**
