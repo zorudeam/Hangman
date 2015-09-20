@@ -4,7 +4,9 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -455,6 +457,55 @@ public final class StringUtilities {
             return "0%";
         }
         return NumberFormat.getPercentInstance().format(fraction);
+    }
+    
+    /**
+     * Reduces a given {@code String} to its unique characters, returning an
+     * order-preserved resultant {@code String}.
+     * 
+     * <p> As an example, the following call to this method
+     * 
+     * <blockquote><pre>
+     * reduceToUniques("Hello World")</pre>
+     * </blockquote>
+     * 
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * Helo Wrd</pre>
+     * </blockquote>
+     * 
+     * @param str The {@code String} to reduce.
+     * @return A reduced version of the given {@code String}.
+     */
+    public static String reduceToUniques(String str) {
+        Set<Character> uniques = new LinkedHashSet<>();
+        for (char c : str.toCharArray()) {
+            uniques.add(c);
+        }
+        StringBuilder sb = new StringBuilder();
+        uniques.stream().forEach((character) -> {
+            sb.append(character);
+        });
+        return sb.toString();
+    }
+    
+    /**
+     * Tests if a given {@code char} occurs at least once in a given 
+     * {@code String}.
+     * 
+     * @param str The {@code String} to test.
+     * @param key The character to look for in the given {@code String}.
+     * @return {@code true} if the given character is contained in the given 
+     *         {@code String}.
+     */
+    public static boolean contains(String str, char key) {
+        for (char c : str.toCharArray()) {
+            if (key == c) {
+                return true;
+            }
+        }
+        return false;
     }
     
 }
