@@ -21,13 +21,13 @@ public enum Actor {
      * Represents a classic Stick Figure. This enumeration should have {@code 8}
      * images in total.
      */
-    HUMAN("Stick Figure", getImages("Human", 8)),
+    HUMAN("Stick Figure", getImages("human", 8)),
     
     /**
      * Represents a Snowman. This enumeration should have {@code 8} images in 
      * total.
      */
-    SNOWMAN("Snowman", getImages("Snowman", 8));
+    SNOWMAN("Snowman", getImages("snowman", 8));
     
     /**
      * Used for identifying the object and for display purposes in graphical 
@@ -94,7 +94,6 @@ public enum Actor {
                       + "\" on image number + " + i + '.', ex);
             }
         }
-        System.out.println(images.length);
         return images;
     }
     
