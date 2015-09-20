@@ -78,9 +78,7 @@ public class Hangman {
     public Hangman(WordProperties difficulty, Actor actor, Dictionary words) {
         this.words = words;
         this.actor = actor;
-        this.guessesRemaining = actor.getImageArray().length - 1;
         resetGame(difficulty);
-        this.hintsRemaining = currentWord.length() / 2;
     }
     
     /**
@@ -110,9 +108,11 @@ public class Hangman {
                 currentWord = words.getMediumWord().characters();
             }
         }
-        correctGuesses = StringUtilities
-                .createRepeating(currentWord.length(), CORRECT_GUESS_DELIMITER);
+        correctGuesses = StringUtilities.createRepeating(currentWord.length(), 
+                CORRECT_GUESS_DELIMITER);
         alreadyGuessed = "";
+        hintsRemaining = currentWord.length() / 2;
+        guessesRemaining = actor.getImageArray().length - 1;
         
     }
     
