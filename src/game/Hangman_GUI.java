@@ -1189,8 +1189,9 @@ public class Hangman_GUI extends JFrame {
         String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
         currentWordLabel.setToolTipText(cheaterWord);
         
-        String hintText = "Hint";
-        if (game.correctGuessesToWin() == 1 || game.getGuessesRemaining() == 1) {
+        String hintText = hintButton.getText();
+        if ((game.correctGuessesToWin() == 1 || game.getGuessesRemaining() == 1)
+                && hintButton.isEnabled()) {
             hintText = "No hints on the last move!";
             hintButton.setEnabled(false);
         }
@@ -1198,6 +1199,10 @@ public class Hangman_GUI extends JFrame {
             int hintsRemaining = game.getHintsRemaining();
             if (hintsRemaining > 0) {
                 hintText = "Hint (" + hintsRemaining + ")";
+            }
+            else {
+                hintText = "Out of hints!";
+                hintButton.setEnabled(false);
             }
         }
         hintButton.setText(hintText);
