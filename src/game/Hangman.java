@@ -65,7 +65,7 @@ public class Hangman {
      * ({@link WordProperties#MEDIUM_WORD}).
      */
     public Hangman() {
-        this(WordProperties.MEDIUM_WORD, Actor.HUMAN, Dictionary.NULL_DICTIONARY);
+        this(WordProperties.MEDIUM_WORD, Actor.HUMAN, new Dictionary());
     }
     
     /**
@@ -252,6 +252,15 @@ public class Hangman {
      */
     public boolean hasWon() {
         return correctGuesses.equals(currentWord) && guessesRemaining > 0;
+    }
+    
+    /**
+     * Sets the actor for this game instance.
+     * 
+     * @param actor The actor for this game.
+     */
+    public void setActor(Actor actor) {
+        this.actor = actor;
     }
     
 // Gameplay methods   
