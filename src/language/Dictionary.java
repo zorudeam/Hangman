@@ -3,6 +3,7 @@ package language;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,11 +29,15 @@ import utilities.functions.Utilities;
 public final class Dictionary {
     
     /**
+     * Points to the location of the file containing the default dictionary.
+     */
+    public static final File DEFAULT_FILE = new File("resources/dictionary.txt");
+    
+    /**
      * Stores the default testing file. Contains 234,371 words - good for 
      * difficulty distribution testing.
      */
-    public static final Dictionary NULL_DICTIONARY = 
-            new Dictionary(new File("resources/dictionary.txt"));
+    public static final Dictionary NULL_DICTIONARY = new Dictionary(DEFAULT_FILE);
     
     /**
      * Contains this object's word dictionary. This map is sorted by word 
@@ -77,6 +82,7 @@ public final class Dictionary {
                 Word w = new Word(input.nextLine());
                 words.put(w, judgeDifficulty(w));
             }
+            input.close();
         } 
         catch (FileNotFoundException ex) {
             Logger.getLogger(Dictionary.class.getName()).log(Level.SEVERE, 
@@ -240,7 +246,7 @@ public final class Dictionary {
      * @return A cache of the previously used difficulty list.
      */
     public List<Word> cacheList() {
-        return cacheList;
+        return Collections.unmodifiableList(cacheList);
     }
     
     /**
@@ -254,12 +260,18 @@ public final class Dictionary {
     }
     
     /**
-     * Returns a randomly selected word of the given difficulty from the given 
-     * list, or from this object's set of words if the specified list is empty.
+     * Returns a randomly selected word of the given difficulty.
+     * 
+     * <p> This method populates the given list if it is empty. Then it 
+     * retrieves a randomly selected element from it. in the case that there are
+     * no elements of the specified difficulty contained within this object, 
+     * this method throws an {@code IllegalStateExecption}.
      * 
      * @param list The list to populate with elements, if it is empty.
      * @param difficulty The difficulty of the word to return.
      * @return A randomly selected word of the given difficulty.
+     * @throws IllegalStateException If there are no words of the given 
+     *         difficulty
      */
     protected Word getWordOf(List<Word> list, WordProperties difficulty) {
         if (list.isEmpty()) {
@@ -269,8 +281,15 @@ public final class Dictionary {
                 }
             });
         }
-        cacheList = new ArrayList<>(list);
-        return list.get(Utilities.r.nextInt(list.size()));
+        if (!list.isEmpty()) {
+            cacheList = new ArrayList<>(list);
+            return list.get(Utilities.r.nextInt(list.size()));
+        }
+        // If the list is still empty, then there are no words of the given
+        // difficulty.
+        throw new IllegalStateException("There are no words of the given "
+                + "difficulty \"" + difficulty + "\" contained within this "
+                + "dictionary.");
     }
     
     /**
