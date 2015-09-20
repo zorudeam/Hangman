@@ -255,6 +255,22 @@ public class Hangman {
     }
     
     /**
+     * Returns the amount of correct guesses required to win this game.
+     * 
+     * @return The amount of correct guesses required to win this game.
+     */
+    public int correctGuessesToWin() {
+        int guesses = 0;
+        String uniques = StringUtilities.reduceToUniques(currentWord);
+        for (int i = 0; i < uniques.length(); i++) {
+            if (!StringUtilities.contains(correctGuesses, uniques.charAt(i))) {
+                guesses++;
+            }
+        }
+        return guesses;
+    }
+    
+    /**
      * Sets the actor for this game instance.
      * 
      * @param actor The actor for this game.
@@ -300,9 +316,9 @@ public class Hangman {
      */
     public boolean makeGuess(char guess) {
         char g = sanitizeGuess(guess);
-        if (!contains(alreadyGuessed, g)) {
+        if (!StringUtilities.contains(alreadyGuessed, g)) {
             appendAlreadyGuessed(g);
-            if (contains(currentWord, g)) {
+            if (StringUtilities.contains(currentWord, g)) {
                 insertCorrectGuess(g);
                 return true;
             }
@@ -323,7 +339,7 @@ public class Hangman {
      */
     public boolean hasAlreadyGuessed(char guess) {
         sanitizeGuess(guess);
-        return contains(alreadyGuessed, guess);
+        return StringUtilities.contains(alreadyGuessed, guess);
     }
     
     /**
@@ -346,7 +362,8 @@ public class Hangman {
      * <p> The formal requirements for this method are delineated as follows:
      *   <ol>
      *     <li> The game has not already been won.
-     *     <li> There is at least one or more hint remaining.
+     *     <li> There is at least one or more hints remaining.
+     *     <li> There is at least two or more guesses remaining.
      *   </ol>
      * 
      * <p> In other words, this method will return {@code true} if and only if 
@@ -362,7 +379,7 @@ public class Hangman {
      */
     public boolean giveHint() {
         if (canGuess() && !hasWon()) {
-            if (hintsRemaining > 0) {
+            if (hintsRemaining > 0 && guessesRemaining > 1) {
                 char guess = getTheHint();
                 insertCorrectGuess(guess);
                 appendAlreadyGuessed(guess);
@@ -389,24 +406,6 @@ public class Hangman {
             }
         }
         throw new IllegalStateException("Called getTheHint() after game ended.");
-    }
-    
-    /**
-     * Tests if a given {@code char} occurs at least once in a given 
-     * {@code String}.
-     * 
-     * @param str The {@code String} to test.
-     * @param key The character to look for in the given {@code String}.
-     * @return {@code true} if the given character is contained in the given 
-     *         {@code String}.
-     */
-    private static boolean contains(String str, char key) {
-        for (char c : str.toCharArray()) {
-            if (key == c) {
-                return true;
-            }
-        }
-        return false;
     }
     
     /**
