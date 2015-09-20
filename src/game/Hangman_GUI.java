@@ -1166,7 +1166,7 @@ public class Hangman_GUI extends JFrame {
      * Updates the current set of images on the game panel.
      */
     private void updateImages() {
-        int index = game.getActor().getImageArray().length - game.getGuessesRemaining() - 1;
+        int index = game.maxGuesses() - game.getGuessesRemaining() - 1;
         if (index < game.maxGuesses()) {
             imageLabel.setIcon(game.getActor().getImageArray()[index]);
         }
