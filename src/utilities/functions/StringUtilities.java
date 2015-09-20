@@ -1,8 +1,6 @@
-/*
- * A fancy license header.
- */
 package utilities.functions;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -14,7 +12,6 @@ import javax.xml.bind.DatatypeConverter;
  * {@code String}s that are small, efficient, and commonly used.
  *
  * @author Oliver Abdulrahim
- * @see String
  */
 public final class StringUtilities {
     
@@ -116,12 +113,12 @@ public final class StringUtilities {
      * @return The expanded form of the {@code String} argument.
      */
     public static String expand(String str) {
-        str = normalize(str);
+        String result = normalize(str);
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < str.length(); i++) {
-            sb.append('\n').append(str.charAt(i));
+        for (int i = 1; i < result.length(); i++) {
+            sb.append('\n').append(result.charAt(i));
         }
-        return str.replace("", " ").trim() + sb.toString();
+        return result.replace("", " ").trim() + sb.toString();
     }
     
     /**
@@ -132,18 +129,20 @@ public final class StringUtilities {
      * <p> As an example, the following call to this method
      * 
      * <blockquote><pre>
-     * String s = "A b CD";
-     * s = normalize(s);</pre>
+     * normalize("A b CD");</pre>
      * </blockquote>
      * 
-     * would produce the result {@code "ABCD"}.
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "ABCD"</pre>
+     * </blockquote>
      * 
      * @param str The {@code String} to normalize.
      * @return The normalized form of {@code str}.
      */
     public static String normalize(String str) {
         return str.replace("\\s+", "") // \s+ regex matches all spaces
-                  .trim()
                   .toUpperCase();
     }
     
@@ -192,7 +191,7 @@ public final class StringUtilities {
     }
     
     /**
-     * creates and returns a {@code String} with a single repeating character 
+     * Creates and returns a {@code String} with a single repeating character 
      * based on the specified arguments.
      * 
      * @param length The length of the {@code String} to create.
@@ -206,17 +205,20 @@ public final class StringUtilities {
     }
     
     /**
-     * formats a {@code String} with a given delimiter in between each 
+     * Formats a {@code String} with a given delimiter in between each 
      * individual character. 
      * 
      * <p> As an example, the following call to this method
      * 
      * <blockquote><pre>
-     * String s = "abc";
-     * s = delimit(s, " ");</pre>
+     * delimit("abc", " ");</pre>
      * </blockquote>
      * 
-     * would produce the result {@code "a b c"}.
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "a b c"</pre>
+     * </blockquote>
      * 
      * @param str The {@code String} to format.
      * @param delimiter The {@code String} to insert after each character.
@@ -228,17 +230,20 @@ public final class StringUtilities {
     }
     
     /**
-     * formats a {@code String} with a given delimiter in between each 
+     * Formats a {@code String} with a given delimiter in between each 
      * individual character. 
      * 
      * <p> As an example, the following call to this method
      * 
      * <blockquote><pre>
-     * String s = "abc";
-     * s = delimit(s, ' ');</pre>
+     * delimit("abc", ' ');</pre>
      * </blockquote>
      * 
-     * would produce the result {@code "a b c"}.
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "a b c"</pre>
+     * </blockquote>
      * 
      * @param str The {@code String} to format.
      * @param delimiter The {@code char} to insert after each character.
@@ -250,8 +255,7 @@ public final class StringUtilities {
     }
     
     /**
-     * Method that sorts the characters of a given {@code String} in ascending 
-     * order.
+     * Sorts the characters of a given {@code String} in ascending order.
      * 
      * @param str The {@code String} to sort.
      * @return A sorted version of the given {@code String}.
@@ -263,18 +267,19 @@ public final class StringUtilities {
     }
     
     /**
-     * Method that formats a {@code String} as if it were the first word in a
-     * sentence.
+     * Formats a {@code String} as if it were the first word in a sentence.
      * 
      * <p> As an example, the following call to this method
      * 
      * <blockquote><pre>
-     * String s = "a bC";
-     * s = asSentence(s);</pre>
+     * asSentence("a bC");</pre>
      * </blockquote>
      * 
-     * would produce the result {@code "A bc"}.
-     * 
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "A bc"</pre>
+     * </blockquote>
      * 
      * @param str The {@code String} to format.
      * @return The formatted {@code String} argument.    
@@ -283,10 +288,10 @@ public final class StringUtilities {
         if (str.isEmpty()) {
             return "";
         }
-        str = str.toLowerCase().trim();
-        str = Character.toUpperCase(str.charAt(0))
-                + str.substring(1, str.length());
-        return str;
+        String result = str.toLowerCase().trim();
+        result = Character.toUpperCase(result.charAt(0)) 
+               + result.substring(1, result.length());
+        return result;
     }
     
     /**
@@ -405,19 +410,19 @@ public final class StringUtilities {
      * <p> As an example, the following call to this method
      * 
      * <blockquote><pre>
-     * toFormattedCharArray("Hello World"</pre>
+     * formattedToString("Hello World");</pre>
      * </blockquote>
      * 
      * would produce the following result: 
      *   
      * <blockquote><pre>
-     * "H, e, l, l, o, W, o, r, l, d.".</pre>
+     * "H, e, l, l, o, W, o, r, l, d."</pre>
      * </blockquote>
      * 
      * @param str The {@code String} to format.
      * @return A formatted version of the given {@code String}.
      */
-    public static String toFormattedCharArray(String str) {
+    public static String formattedToString(String str) {
         String sanitized = str.replace(" ", "");
         StringBuilder formatted = new StringBuilder(sanitized.length() * 3);
         for (int i = 0; i < sanitized.length(); i++) {
@@ -425,6 +430,31 @@ public final class StringUtilities {
                      .append((i < sanitized.length() - 1) ? ", " : '.');
         }
         return formatted.toString();
+    }
+    
+    /**
+     * Returns a percent-formatted {@code String} of the given fractional value.
+     * 
+     * <p> As an example, the following call to this method
+     * 
+     * <blockquote><pre>
+     * doubleAsPercent(3 / 4.0d)</pre>
+     * </blockquote>
+     * 
+     * would produce the following result: 
+     *   
+     * <blockquote><pre>
+     * "75%"</pre>
+     * </blockquote>
+     * 
+     * @param fraction
+     * @return 
+     */
+    public static String doubleAsPercent(double fraction) {
+        if (Double.isNaN(fraction)) {
+            return "0%";
+        }
+        return NumberFormat.getPercentInstance().format(fraction);
     }
     
 }
