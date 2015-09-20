@@ -29,13 +29,16 @@ import language.WordProperties;
 import utilities.functions.StringUtilities;
 
 /**
- * The {@code Hangman_GUI} class provides for a user interface framework for the
+ * The {@code Hangman_GUI} class provides for a user interface for the 
  * {@code hangman} package.
  * 
  * @author Oliver Abdulrahim
  */
 public class Hangman_GUI extends JFrame {
     
+    /**
+     * The cerealVersionUID for this class.
+     */
     private static final long serialVersionUID = -4227892083846427803L;
 
     /**
@@ -79,7 +82,7 @@ public class Hangman_GUI extends JFrame {
     
     /**
      * Recursively returns all components within a given container, including
-     * any children who are also {@code Container}s.
+     * any children that are also {@code Container}s.
      * 
      * @param container The component whose components to retrieve.
      * @return All components within a given container.
@@ -236,55 +239,53 @@ public class Hangman_GUI extends JFrame {
         loadButtonGroup = new javax.swing.ButtonGroup();
         difficultyButtonGroup = new javax.swing.ButtonGroup();
         keyboardPanel = new javax.swing.JPanel();
-        aButton = new javax.swing.JButton();
-        bButton = new javax.swing.JButton();
-        cButton = new javax.swing.JButton();
-        dButton = new javax.swing.JButton();
+        qButton = new javax.swing.JButton();
+        wButton = new javax.swing.JButton();
         eButton = new javax.swing.JButton();
+        rButton = new javax.swing.JButton();
+        tButton = new javax.swing.JButton();
+        yButton = new javax.swing.JButton();
+        uButton = new javax.swing.JButton();
+        iButton = new javax.swing.JButton();
+        oButton = new javax.swing.JButton();
+        pButton = new javax.swing.JButton();
+        aButton = new javax.swing.JButton();
+        sButton = new javax.swing.JButton();
+        dButton = new javax.swing.JButton();
         fButton = new javax.swing.JButton();
         gButton = new javax.swing.JButton();
         hButton = new javax.swing.JButton();
-        iButton = new javax.swing.JButton();
         jButton = new javax.swing.JButton();
         kButton = new javax.swing.JButton();
         lButton = new javax.swing.JButton();
-        mButton = new javax.swing.JButton();
-        nButton = new javax.swing.JButton();
-        oButton = new javax.swing.JButton();
-        pButton = new javax.swing.JButton();
-        qButton = new javax.swing.JButton();
-        rButton = new javax.swing.JButton();
-        sButton = new javax.swing.JButton();
-        tButton = new javax.swing.JButton();
-        uButton = new javax.swing.JButton();
-        vButton = new javax.swing.JButton();
-        wButton = new javax.swing.JButton();
-        xButton = new javax.swing.JButton();
-        yButton = new javax.swing.JButton();
         zButton = new javax.swing.JButton();
+        xButton = new javax.swing.JButton();
+        cButton = new javax.swing.JButton();
+        vButton = new javax.swing.JButton();
+        bButton = new javax.swing.JButton();
+        nButton = new javax.swing.JButton();
+        mButton = new javax.swing.JButton();
         gamePanel = new javax.swing.JPanel();
         imageLabel = new javax.swing.JLabel();
         currentPanel = new javax.swing.JPanel();
         currentLabel = new javax.swing.JLabel();
         statisticsPanel = new javax.swing.JPanel();
-        guessedLabel = new javax.swing.JLabel();
-        guessedField = new javax.swing.JTextField();
-        remainingLabel = new javax.swing.JLabel();
-        remainingField = new javax.swing.JTextField();
-        gamesWonLabel = new javax.swing.JLabel();
-        gamesWonField = new javax.swing.JTextField();
-        gamesPlayedLabel = new javax.swing.JLabel();
-        gamesPlayedField = new javax.swing.JTextField();
-        gameOptionsPanel = new javax.swing.JPanel();
+        guessesLeftLabel = new javax.swing.JLabel();
+        guessesLeftField = new javax.swing.JTextField();
+        winRateLabel = new javax.swing.JLabel();
+        winRateField = new javax.swing.JTextField();
         giveUpButton = new javax.swing.JButton();
+        guessedField = new javax.swing.JTextField();
+        guessedLabel = new javax.swing.JLabel();
+        hintButton = new javax.swing.JButton();
         newWordButton = new javax.swing.JButton();
-        resetButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         newMenuItem = new javax.swing.JMenuItem();
+        resetGameMenuItem = new javax.swing.JMenuItem();
         fileSeparator = new javax.swing.JPopupMenu.Separator();
         fileMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
+        settingsMenu = new javax.swing.JMenu();
         settingsMenuItem = new javax.swing.JMenuItem();
 
         fileChooser.setCurrentDirectory(new java.io.File("C:\\Users\\Ali\\Documents\\Papers\\11th Grade\\Computer Science\\Dictionary\\dist\\bin"));
@@ -292,7 +293,10 @@ public class Hangman_GUI extends JFrame {
         settingsFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         settingsFrame.setTitle("Settings");
         settingsFrame.setLocationByPlatform(true);
+        settingsFrame.setMaximumSize(new java.awt.Dimension(453, 430));
+        settingsFrame.setMinimumSize(new java.awt.Dimension(453, 430));
         settingsFrame.setResizable(false);
+        settingsFrame.setType(java.awt.Window.Type.POPUP);
 
         wordDisplayPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Dictionary Words"));
         wordDisplayPanel.setToolTipText("");
@@ -511,7 +515,7 @@ public class Hangman_GUI extends JFrame {
         settingsFrameLayout.setVerticalGroup(
             settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsFrameLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(settingsFrameLayout.createSequentialGroup()
                         .addComponent(loadPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -520,7 +524,7 @@ public class Hangman_GUI extends JFrame {
                     .addComponent(wordDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(updatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         addFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -614,177 +618,235 @@ public class Hangman_GUI extends JFrame {
         keyboardPanel.setEnabled(false);
         keyboardPanel.setLayout(new java.awt.GridBagLayout());
 
-        aButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        aButton.setText("A");
-        aButton.setEnabled(false);
-        keyboardPanel.add(aButton, new java.awt.GridBagConstraints());
+        qButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        qButton.setText("Q");
+        qButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(qButton, gridBagConstraints);
 
-        bButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        bButton.setText("B");
-        bButton.setEnabled(false);
-        keyboardPanel.add(bButton, new java.awt.GridBagConstraints());
-
-        cButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        cButton.setText("C");
-        cButton.setEnabled(false);
-        keyboardPanel.add(cButton, new java.awt.GridBagConstraints());
-
-        dButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        dButton.setText("D");
-        dButton.setEnabled(false);
-        keyboardPanel.add(dButton, new java.awt.GridBagConstraints());
+        wButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        wButton.setText("W");
+        wButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(wButton, gridBagConstraints);
 
         eButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         eButton.setText("E");
         eButton.setEnabled(false);
-        keyboardPanel.add(eButton, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(eButton, gridBagConstraints);
 
-        fButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        fButton.setText("F");
-        fButton.setEnabled(false);
-        keyboardPanel.add(fButton, new java.awt.GridBagConstraints());
+        rButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        rButton.setText("R");
+        rButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(rButton, gridBagConstraints);
 
-        gButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        gButton.setText("G");
-        gButton.setEnabled(false);
-        keyboardPanel.add(gButton, new java.awt.GridBagConstraints());
+        tButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        tButton.setText("T");
+        tButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(tButton, gridBagConstraints);
 
-        hButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        hButton.setText("H");
-        hButton.setEnabled(false);
-        keyboardPanel.add(hButton, new java.awt.GridBagConstraints());
+        yButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        yButton.setText("Y");
+        yButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(yButton, gridBagConstraints);
+
+        uButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        uButton.setText("U");
+        uButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(uButton, gridBagConstraints);
 
         iButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         iButton.setText("I");
         iButton.setEnabled(false);
-        keyboardPanel.add(iButton, new java.awt.GridBagConstraints());
-
-        jButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        jButton.setText("J");
-        jButton.setEnabled(false);
-        keyboardPanel.add(jButton, new java.awt.GridBagConstraints());
-
-        kButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        kButton.setText("K");
-        kButton.setEnabled(false);
-        keyboardPanel.add(kButton, new java.awt.GridBagConstraints());
-
-        lButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        lButton.setText("L");
-        lButton.setEnabled(false);
-        keyboardPanel.add(lButton, new java.awt.GridBagConstraints());
-
-        mButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        mButton.setText("M");
-        mButton.setEnabled(false);
-        keyboardPanel.add(mButton, new java.awt.GridBagConstraints());
-
-        nButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        nButton.setText("N");
-        nButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        keyboardPanel.add(nButton, gridBagConstraints);
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 0;
+        keyboardPanel.add(iButton, gridBagConstraints);
 
         oButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         oButton.setText("O");
         oButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
         keyboardPanel.add(oButton, gridBagConstraints);
 
         pButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         pButton.setText("P");
         pButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 9;
+        gridBagConstraints.gridy = 0;
         keyboardPanel.add(pButton, gridBagConstraints);
 
-        qButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        qButton.setText("Q");
-        qButton.setEnabled(false);
+        aButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        aButton.setText("A");
+        aButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        keyboardPanel.add(qButton, gridBagConstraints);
-
-        rButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        rButton.setText("R");
-        rButton.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 1;
-        keyboardPanel.add(rButton, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(aButton, gridBagConstraints);
 
         sButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         sButton.setText("S");
         sButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
         keyboardPanel.add(sButton, gridBagConstraints);
 
-        tButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        tButton.setText("T");
-        tButton.setEnabled(false);
+        dButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        dButton.setText("D");
+        dButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(dButton, gridBagConstraints);
+
+        fButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        fButton.setText("F");
+        fButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(fButton, gridBagConstraints);
+
+        gButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        gButton.setText("G");
+        gButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(gButton, gridBagConstraints);
+
+        hButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        hButton.setText("H");
+        hButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 1;
-        keyboardPanel.add(tButton, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(hButton, gridBagConstraints);
 
-        uButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        uButton.setText("U");
-        uButton.setEnabled(false);
+        jButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        jButton.setText("J");
+        jButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 1;
-        keyboardPanel.add(uButton, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(jButton, gridBagConstraints);
 
-        vButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        vButton.setText("V");
-        vButton.setEnabled(false);
+        kButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        kButton.setText("K");
+        kButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 1;
-        keyboardPanel.add(vButton, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(kButton, gridBagConstraints);
 
-        wButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        wButton.setText("W");
-        wButton.setEnabled(false);
+        lButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        lButton.setText("L");
+        lButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 9;
         gridBagConstraints.gridy = 1;
-        keyboardPanel.add(wButton, gridBagConstraints);
-
-        xButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        xButton.setText("X");
-        xButton.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 10;
-        gridBagConstraints.gridy = 1;
-        keyboardPanel.add(xButton, gridBagConstraints);
-
-        yButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
-        yButton.setText("Y");
-        yButton.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 11;
-        gridBagConstraints.gridy = 1;
-        keyboardPanel.add(yButton, gridBagConstraints);
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(lButton, gridBagConstraints);
 
         zButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
         zButton.setText("Z");
         zButton.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
         keyboardPanel.add(zButton, gridBagConstraints);
+
+        xButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        xButton.setText("X");
+        xButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(xButton, gridBagConstraints);
+
+        cButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        cButton.setText("C");
+        cButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(cButton, gridBagConstraints);
+
+        vButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        vButton.setText("V");
+        vButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(vButton, gridBagConstraints);
+
+        bButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        bButton.setText("B");
+        bButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 6;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(bButton, gridBagConstraints);
+
+        nButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        nButton.setText("N");
+        nButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 7;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(nButton, gridBagConstraints);
+
+        mButton.setFont(new java.awt.Font("Consolas", 0, 12)); // NOI18N
+        mButton.setText("M");
+        mButton.setEnabled(false);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.insets = new java.awt.Insets(0, -35, 0, 0);
+        keyboardPanel.add(mButton, gridBagConstraints);
 
         gamePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Hangman"));
         gamePanel.setEnabled(false);
+        gamePanel.setPreferredSize(new java.awt.Dimension(248, 180));
+
+        imageLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout gamePanelLayout = new javax.swing.GroupLayout(gamePanel);
         gamePanel.setLayout(gamePanelLayout);
@@ -792,8 +854,8 @@ public class Hangman_GUI extends JFrame {
             gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gamePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                .addContainerGap())
         );
         gamePanelLayout.setVerticalGroup(
             gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -817,104 +879,62 @@ public class Hangman_GUI extends JFrame {
             currentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(currentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(currentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(currentLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         currentPanelLayout.setVerticalGroup(
             currentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(currentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+            .addGroup(currentPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(currentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        statisticsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Game Statistics"));
+        statisticsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Statistics and Options"));
         statisticsPanel.setEnabled(false);
 
-        guessedLabel.setText("Guessed Letters");
-        guessedLabel.setEnabled(false);
+        guessesLeftLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        guessesLeftLabel.setText("Guesses Left");
+        guessesLeftLabel.setEnabled(false);
 
-        guessedField.setEditable(false);
-        guessedField.setBackground(new java.awt.Color(255, 255, 255));
-        guessedField.setText("None.");
-        guessedField.setEnabled(false);
+        guessesLeftField.setEditable(false);
+        guessesLeftField.setBackground(new java.awt.Color(255, 255, 255));
+        guessesLeftField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        guessesLeftField.setText("0");
+        guessesLeftField.setEnabled(false);
 
-        remainingLabel.setText("Guesses Remaining");
-        remainingLabel.setEnabled(false);
+        winRateLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        winRateLabel.setText("Win Rate");
+        winRateLabel.setEnabled(false);
 
-        remainingField.setEditable(false);
-        remainingField.setBackground(new java.awt.Color(255, 255, 255));
-        remainingField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        remainingField.setText("0");
-        remainingField.setEnabled(false);
-
-        gamesWonLabel.setText("Games Won");
-        gamesWonLabel.setEnabled(false);
-
-        gamesWonField.setEditable(false);
-        gamesWonField.setBackground(new java.awt.Color(255, 255, 255));
-        gamesWonField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        gamesWonField.setText("0");
-        gamesWonField.setEnabled(false);
-
-        gamesPlayedLabel.setText("Games Played");
-        gamesPlayedLabel.setEnabled(false);
-
-        gamesPlayedField.setEditable(false);
-        gamesPlayedField.setBackground(new java.awt.Color(255, 255, 255));
-        gamesPlayedField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        gamesPlayedField.setText("0");
-        gamesPlayedField.setEnabled(false);
-
-        javax.swing.GroupLayout statisticsPanelLayout = new javax.swing.GroupLayout(statisticsPanel);
-        statisticsPanel.setLayout(statisticsPanelLayout);
-        statisticsPanelLayout.setHorizontalGroup(
-            statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statisticsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(guessedField, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(guessedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(remainingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(remainingField)
-                    .addComponent(gamesPlayedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(gamesWonLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(gamesWonField)
-                    .addComponent(gamesPlayedField))
-                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
-        statisticsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {gamesPlayedField, gamesPlayedLabel, gamesWonField, gamesWonLabel, guessedField, guessedLabel, remainingField, remainingLabel});
-
-        statisticsPanelLayout.setVerticalGroup(
-            statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statisticsPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(guessedLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(guessedField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(remainingLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(remainingField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gamesWonLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gamesWonField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(gamesPlayedLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(gamesPlayedField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        statisticsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {gamesPlayedField, gamesPlayedLabel, gamesWonField, gamesWonLabel, guessedField, guessedLabel, remainingField, remainingLabel});
-
-        gameOptionsPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Game Options"));
-        gameOptionsPanel.setEnabled(false);
+        winRateField.setEditable(false);
+        winRateField.setBackground(new java.awt.Color(255, 255, 255));
+        winRateField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        winRateField.setText("0");
+        winRateField.setEnabled(false);
 
         giveUpButton.setText("Give Up");
         giveUpButton.setEnabled(false);
         giveUpButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 giveUpButtonActionPerformed(evt);
+            }
+        });
+
+        guessedField.setEditable(false);
+        guessedField.setBackground(new java.awt.Color(255, 255, 255));
+        guessedField.setText("None.");
+        guessedField.setEnabled(false);
+
+        guessedLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        guessedLabel.setText("Guessed Letters");
+        guessedLabel.setEnabled(false);
+
+        hintButton.setText("Hint");
+        hintButton.setEnabled(false);
+        hintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hintButtonActionPerformed(evt);
             }
         });
 
@@ -926,42 +946,65 @@ public class Hangman_GUI extends JFrame {
             }
         });
 
-        resetButton.setText("Reset");
-        resetButton.setEnabled(false);
-        resetButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout gameOptionsPanelLayout = new javax.swing.GroupLayout(gameOptionsPanel);
-        gameOptionsPanel.setLayout(gameOptionsPanelLayout);
-        gameOptionsPanelLayout.setHorizontalGroup(
-            gameOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(gameOptionsPanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout statisticsPanelLayout = new javax.swing.GroupLayout(statisticsPanel);
+        statisticsPanel.setLayout(statisticsPanelLayout);
+        statisticsPanelLayout.setHorizontalGroup(
+            statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statisticsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(gameOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(giveUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(resetButton, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newWordButton, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        gameOptionsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {giveUpButton, newWordButton, resetButton});
-
-        gameOptionsPanelLayout.setVerticalGroup(
-            gameOptionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(gameOptionsPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(giveUpButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(newWordButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetButton)
+                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(statisticsPanelLayout.createSequentialGroup()
+                        .addComponent(newWordButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(giveUpButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(statisticsPanelLayout.createSequentialGroup()
+                        .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(statisticsPanelLayout.createSequentialGroup()
+                                .addComponent(winRateLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(winRateField, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(statisticsPanelLayout.createSequentialGroup()
+                                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(guessesLeftLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(guessedLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(guessedField, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(guessesLeftField, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(hintButton, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        gameOptionsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {giveUpButton, newWordButton, resetButton});
+        statisticsPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {guessedLabel, guessesLeftLabel, winRateLabel});
+
+        statisticsPanelLayout.setVerticalGroup(
+            statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statisticsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guessedLabel)
+                    .addComponent(guessedField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guessesLeftLabel)
+                    .addComponent(guessesLeftField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(winRateLabel)
+                    .addComponent(winRateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(hintButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(statisticsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(newWordButton)
+                    .addComponent(giveUpButton))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        statisticsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {guessedLabel, guessesLeftLabel, winRateLabel});
+
+        statisticsPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {giveUpButton, hintButton, newWordButton});
 
         fileMenu.setText("File");
 
@@ -972,6 +1015,14 @@ public class Hangman_GUI extends JFrame {
             }
         });
         fileMenu.add(newMenuItem);
+
+        resetGameMenuItem.setText("Reset Game");
+        resetGameMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetGameMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(resetGameMenuItem);
         fileMenu.add(fileSeparator);
 
         fileMenuItem.setText("Exit");
@@ -984,7 +1035,7 @@ public class Hangman_GUI extends JFrame {
 
         menuBar.add(fileMenu);
 
-        editMenu.setText("Edit");
+        settingsMenu.setText("Options");
 
         settingsMenuItem.setText("Settings");
         settingsMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -992,9 +1043,9 @@ public class Hangman_GUI extends JFrame {
                 settingsMenuItemActionPerformed(evt);
             }
         });
-        editMenu.add(settingsMenuItem);
+        settingsMenu.add(settingsMenuItem);
 
-        menuBar.add(editMenu);
+        menuBar.add(settingsMenu);
 
         setJMenuBar(menuBar);
 
@@ -1004,45 +1055,38 @@ public class Hangman_GUI extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(keyboardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(gamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(gamePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statisticsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(currentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gameOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(statisticsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {currentPanel, gameOptionsPanel, statisticsPanel});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(currentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(currentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statisticsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(gameOptionsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(statisticsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(gamePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(keyboardPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(keyboardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {currentPanel, keyboardPanel});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void customRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customRadioButtonActionPerformed
         fileChooser();
-        updateWordList(fileChooser.getSelectedFile().getAbsolutePath());
+        String path = fileChooser.getSelectedFile().getAbsolutePath();
+        updateWordList(path);
     }//GEN-LAST:event_customRadioButtonActionPerformed
 
     private void fileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuItemActionPerformed
@@ -1089,16 +1133,13 @@ public class Hangman_GUI extends JFrame {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void defaultRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultRadioButtonActionPerformed
-        updateWordList("bin/default.txt"); // TODO
+        System.out.println(Dictionary.DEFAULT_FILE.getAbsolutePath());
+        updateWordList(Dictionary.DEFAULT_FILE.getAbsolutePath());
     }//GEN-LAST:event_defaultRadioButtonActionPerformed
 
     private void newWordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newWordButtonActionPerformed
         initGame();
     }//GEN-LAST:event_newWordButtonActionPerformed
-
-    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
-        tryResetGame();
-    }//GEN-LAST:event_resetButtonActionPerformed
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
         parseGuess(evt);
@@ -1123,6 +1164,27 @@ public class Hangman_GUI extends JFrame {
     private void hardRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hardRadioButtonActionPerformed
         updateGameSettings();
     }//GEN-LAST:event_hardRadioButtonActionPerformed
+
+    private void hintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hintButtonActionPerformed
+        doHint();
+    }//GEN-LAST:event_hintButtonActionPerformed
+
+    private void resetGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetGameMenuItemActionPerformed
+        tryResetGame();
+    }//GEN-LAST:event_resetGameMenuItemActionPerformed
+    
+    private void doHint() {
+        if (game.giveHint()) {
+            if (game.getHintsRemaining() <= 0) {
+                hintButton.setEnabled(false);
+            }
+            disableButton(game.lastGuess());
+            updateCurrentLabel();
+            updateImages();
+            updateStatistics();
+            checkGameState();
+        }
+    }
     
     /**
      * Asks for user input to reset the game.
@@ -1147,7 +1209,7 @@ public class Hangman_GUI extends JFrame {
     private void attemptGiveUp() {
         int response = showConfirmPane("Really give up and show the word?", "Give Up?");
         if (response == JOptionPane.YES_OPTION) {
-            lostGame();
+            lostGame(false);
         }
     }
     
@@ -1284,13 +1346,16 @@ public class Hangman_GUI extends JFrame {
      * Initializes all game variables.
      */
     private void initGame() {
+        // Special clase for when "New Word" is requested when the user has 
+        // already guessed characters.
+        if (game.hasAlreadyGuessed() && !game.hasWon()) {
+            lostGame(true);
+        }
         updateGameSettings();
         updateCurrentLabel();
         updateImages();
         updateStatistics();
         setStateOfAll(true);
-        String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
-        currentLabel.setToolTipText(cheaterWord);
     }
     
     /**
@@ -1318,7 +1383,7 @@ public class Hangman_GUI extends JFrame {
      * Updates the current set of images on the game panel.
      */
     private void updateImages() {
-        int index = game.getActor().getImageArray().length - game.getGuessesRemaining();
+        int index = game.getActor().getImageArray().length - game.getGuessesRemaining() - 1;
         if (index < game.maxGuesses()) {
             imageLabel.setIcon(game.getActor().getImageArray()[index]);
         }
@@ -1328,15 +1393,25 @@ public class Hangman_GUI extends JFrame {
      * Updates the statistics display panel.
      */
     private void updateStatistics() {
-        String guessed = game.getAlreadyGuessed().toUpperCase();
-        guessed = StringUtilities.toFormattedCharArray(guessed);
+        String guessed = StringUtilities.sort(game.getAlreadyGuessed().toUpperCase());
+        guessed = StringUtilities.formattedToString(guessed);
         guessedField.setText(guessed);
         
         int remaining = game.getGuessesRemaining();
-        remainingField.setText(remaining + "");
+        guessesLeftField.setText(remaining + "");
         
-        gamesWonField.setText(gamesWon + "");
-        gamesPlayedField.setText(gamesPlayed + "");
+        String winRate = StringUtilities.doubleAsPercent((double) gamesWon / gamesPlayed);
+        winRateField.setText(winRate);
+        
+        String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
+        currentLabel.setToolTipText(cheaterWord);
+        
+        int hintsRemaining = game.getHintsRemaining();
+        String hintText = "Hint";
+        if (hintsRemaining > 0) {
+            hintText = "Hint (" + hintsRemaining + ")";
+        }
+        hintButton.setText(hintText);
     }
     
     /**
@@ -1344,30 +1419,40 @@ public class Hangman_GUI extends JFrame {
      */
     private void checkGameState() {
         if (game.hasWon()) {
-            wonGame();
+            wonGame(false);
         } 
         else if (!game.canGuess()) {
-            lostGame();
+            lostGame(false);
         }
     }
 
     /**
-     * Method that handles the winner state of the game.
+     * Handles the winner state of the game, making the necessary increments to
+     * the games won and played.
+     * 
+     * @param quietMode Flag for displaying a message pane.
      */
-    private void wonGame() {
+    private void wonGame(boolean quietMode) {
         gamesWon++;
         gamesPlayed++;
-        gameEnded("Nice guessing! \"" + StringUtilities.asSentence(game.getCurrentWord())
-                + "\" was the correct word!", "Winner!");
+        if (!quietMode) {
+            gameEnded("Nice guessing! \"" + StringUtilities.asSentence(game.getCurrentWord())
+                    + "\" was the correct word!", "Winner!");
+        }
     }
     
     /**
-     * Method that handles the loser state of the game.
+     * Handles the loser state of the game, making the necessary increments to
+     * the games played.
+     * 
+     * @param quietMode Flag for displaying a message pane.
      */
-    private void lostGame() {
+    private void lostGame(boolean quietMode) {
         gamesPlayed++;
+        if (!quietMode) {
         gameEnded("Sorry! \"" + StringUtilities.asSentence(game.getCurrentWord())
                 + "\" was the correct word!", "Loser!");
+        }
     }
     
     /**
@@ -1378,10 +1463,11 @@ public class Hangman_GUI extends JFrame {
      */
     private void gameEnded(String message, String title) {
         String actual = StringUtilities.delimit(game.getCurrentWord(), ' ');
-        currentLabel.setText(actual);
         updateStatistics();
+        currentLabel.setText(actual);
         setStateOf(keyboardPanel, false);
         giveUpButton.setEnabled(false);
+        hintButton.setEnabled(false);
         showMessagePane(message, title);
     }
     
@@ -1412,6 +1498,7 @@ public class Hangman_GUI extends JFrame {
         }
         else {
             Dictionary list = new Dictionary(new File(path));
+            System.out.println(list);
             game = new Hangman(getUserSelectedDifficulty(), getUserSelectedActor(), list);
             dictionaryList.updateUI();
         }
@@ -1507,14 +1594,10 @@ public class Hangman_GUI extends JFrame {
      * @param args The command-line arguments.
      */
     public static void main(String args[]) {
-        // Sets the Windows look and feel
+        // Sets the system look and feel
         try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        
         } catch (ClassNotFoundException | InstantiationException 
                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(ColorPicker.class.getName())
@@ -1552,7 +1635,6 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JLabel difficultyLabel;
     private javax.swing.JButton eButton;
     private javax.swing.JRadioButton easyRadioButton;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JPanel editPanel;
     private javax.swing.JButton fButton;
     private javax.swing.JFileChooser fileChooser;
@@ -1560,17 +1642,15 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JMenuItem fileMenuItem;
     private javax.swing.JPopupMenu.Separator fileSeparator;
     private javax.swing.JButton gButton;
-    private javax.swing.JPanel gameOptionsPanel;
     private javax.swing.JPanel gamePanel;
-    private javax.swing.JTextField gamesPlayedField;
-    private javax.swing.JLabel gamesPlayedLabel;
-    private javax.swing.JTextField gamesWonField;
-    private javax.swing.JLabel gamesWonLabel;
     private javax.swing.JButton giveUpButton;
     private javax.swing.JTextField guessedField;
     private javax.swing.JLabel guessedLabel;
+    private javax.swing.JTextField guessesLeftField;
+    private javax.swing.JLabel guessesLeftLabel;
     private javax.swing.JButton hButton;
     private javax.swing.JRadioButton hardRadioButton;
+    private javax.swing.JButton hintButton;
     private javax.swing.JButton iButton;
     private javax.swing.JLabel imageLabel;
     private javax.swing.JButton jButton;
@@ -1591,12 +1671,11 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JButton pButton;
     private javax.swing.JButton qButton;
     private javax.swing.JButton rButton;
-    private javax.swing.JTextField remainingField;
-    private javax.swing.JLabel remainingLabel;
     private javax.swing.JButton removeButton;
-    private javax.swing.JButton resetButton;
+    private javax.swing.JMenuItem resetGameMenuItem;
     private javax.swing.JButton sButton;
     private javax.swing.JFrame settingsFrame;
+    private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenuItem settingsMenuItem;
     private javax.swing.JPanel statisticsPanel;
     private javax.swing.JButton tButton;
@@ -1604,6 +1683,8 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JPanel updatePanel;
     private javax.swing.JButton vButton;
     private javax.swing.JButton wButton;
+    private javax.swing.JTextField winRateField;
+    private javax.swing.JLabel winRateLabel;
     private javax.swing.JPanel wordDisplayPanel;
     private javax.swing.JTextField wordField;
     private javax.swing.JLabel wordLabel;
