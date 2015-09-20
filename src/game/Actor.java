@@ -1,6 +1,11 @@
 package game;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
@@ -78,9 +83,18 @@ public enum Actor {
     private static ImageIcon[] getImages(String name, int imageCount) {
         ImageIcon[] images = new ImageIcon[imageCount];
         for (int i = 0; i < images.length; i++) {
-            String path = "resources/actors/" + name + '/' + i + ".png";
-            images[i] = new ImageIcon(path);
+            try {
+                InputStream is = Actor.class.getResourceAsStream(
+                        "/resources/actors/" + name + '/' + i + ".png");
+                images[i] = new ImageIcon(ImageIO.read(is));
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(Actor.class.getName()).log(Level.SEVERE, 
+                        "Could not read images for name \"" + name 
+                      + "\" on image number + " + i + '.', ex);
+            }
         }
+        System.out.println(images.length);
         return images;
     }
     
