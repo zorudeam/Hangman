@@ -6,18 +6,17 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EventObject;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javafx.scene.control.ColorPicker;
 import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -121,8 +120,7 @@ public class Hangman_GUI extends JFrame {
     private static void applyTo(Container container, 
             Consumer<? super Component> action)
     {
-        List<Component> allComponents = Arrays.asList(container.getComponents());
-        allComponents.stream().forEach(action);
+        Stream.of(container.getComponents()).forEach(action);
     }
     
     /**
@@ -212,6 +210,8 @@ public class Hangman_GUI extends JFrame {
 
         fileChooser = new javax.swing.JFileChooser();
         settingsFrame = new javax.swing.JFrame();
+        okPanel = new javax.swing.JPanel();
+        okButton = new javax.swing.JButton();
         wordDisplayPanel = new javax.swing.JPanel();
         wordScrollPane = new javax.swing.JScrollPane();
         dictionaryList = new javax.swing.JList();
@@ -222,20 +222,6 @@ public class Hangman_GUI extends JFrame {
         hardRadioButton = new javax.swing.JRadioButton();
         actorLabel = new javax.swing.JLabel();
         actorComboBox = new javax.swing.JComboBox();
-        loadPanel = new javax.swing.JPanel();
-        loadLabel = new javax.swing.JLabel();
-        customRadioButton = new javax.swing.JRadioButton();
-        defaultRadioButton = new javax.swing.JRadioButton();
-        addButton = new javax.swing.JButton();
-        removeButton = new javax.swing.JButton();
-        updatePanel = new javax.swing.JPanel();
-        okButton = new javax.swing.JButton();
-        addFrame = new javax.swing.JFrame();
-        addPanel = new javax.swing.JPanel();
-        wordField = new javax.swing.JTextField();
-        wordLabel = new javax.swing.JLabel();
-        cancelAddButton = new javax.swing.JButton();
-        confirmAddButton = new javax.swing.JButton();
         loadButtonGroup = new javax.swing.ButtonGroup();
         difficultyButtonGroup = new javax.swing.ButtonGroup();
         keyboardPanel = new javax.swing.JPanel();
@@ -293,15 +279,43 @@ public class Hangman_GUI extends JFrame {
         settingsFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         settingsFrame.setTitle("Settings");
         settingsFrame.setLocationByPlatform(true);
-        settingsFrame.setMaximumSize(new java.awt.Dimension(453, 430));
-        settingsFrame.setMinimumSize(new java.awt.Dimension(453, 430));
+        settingsFrame.setMaximumSize(new java.awt.Dimension(374, 309));
+        settingsFrame.setMinimumSize(new java.awt.Dimension(374, 309));
+        settingsFrame.setPreferredSize(new java.awt.Dimension(374, 309));
         settingsFrame.setResizable(false);
         settingsFrame.setType(java.awt.Window.Type.POPUP);
+
+        okPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        okButton.setText("OK");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout okPanelLayout = new javax.swing.GroupLayout(okPanel);
+        okPanel.setLayout(okPanelLayout);
+        okPanelLayout.setHorizontalGroup(
+            okPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(okPanelLayout.createSequentialGroup()
+                .addGap(113, 113, 113)
+                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        okPanelLayout.setVerticalGroup(
+            okPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(okPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(okButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         wordDisplayPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Dictionary Words"));
         wordDisplayPanel.setToolTipText("");
 
         dictionaryList.setFont(new java.awt.Font("Consolas", 0, 11)); // NOI18N
+        dictionaryList.setToolTipText(NumberFormat.getInstance().format(game.getWords().size()) + " words in this dictionary.");
         wordScrollPane.setViewportView(dictionaryList);
 
         javax.swing.GroupLayout wordDisplayPanelLayout = new javax.swing.GroupLayout(wordDisplayPanel);
@@ -310,7 +324,7 @@ public class Hangman_GUI extends JFrame {
             wordDisplayPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(wordDisplayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(wordScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                .addComponent(wordScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                 .addContainerGap())
         );
         wordDisplayPanelLayout.setVerticalGroup(
@@ -351,7 +365,7 @@ public class Hangman_GUI extends JFrame {
             }
         });
 
-        actorLabel.setText("Choose an actor.");
+        actorLabel.setText("<html><p>Select a set of images to use.</p></html>");
 
         actorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(Actor.allNames()));
 
@@ -361,20 +375,17 @@ public class Hangman_GUI extends JFrame {
             editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(editPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(actorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(editPanelLayout.createSequentialGroup()
-                        .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(hardRadioButton)
-                            .addComponent(easyRadioButton)
-                            .addComponent(difficultyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(mediumRadioButton)
-                            .addComponent(actorLabel))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGroup(editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(actorComboBox, 0, 104, Short.MAX_VALUE)
+                    .addComponent(hardRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(easyRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(difficultyLabel)
+                    .addComponent(mediumRadioButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(actorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        editPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {easyRadioButton, hardRadioButton, mediumRadioButton});
+        editPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {actorComboBox, difficultyLabel, easyRadioButton, hardRadioButton, mediumRadioButton});
 
         editPanelLayout.setVerticalGroup(
             editPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,114 +398,14 @@ public class Hangman_GUI extends JFrame {
                 .addComponent(mediumRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(hardRadioButton)
+                .addGap(13, 13, 13)
+                .addComponent(actorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(actorLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(actorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         editPanelLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {easyRadioButton, hardRadioButton, mediumRadioButton});
-
-        loadPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Word Settings"));
-        loadPanel.setToolTipText("");
-
-        loadLabel.setText("<html><p>Select which dictionary to use.</p></html>");
-
-        loadButtonGroup.add(customRadioButton);
-        customRadioButton.setText("Custom (select a file)");
-        customRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                customRadioButtonActionPerformed(evt);
-            }
-        });
-
-        loadButtonGroup.add(defaultRadioButton);
-        defaultRadioButton.setSelected(true);
-        defaultRadioButton.setText("Default (use existing)");
-        defaultRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                defaultRadioButtonActionPerformed(evt);
-            }
-        });
-
-        addButton.setText("Add Word");
-        addButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                addButtonMouseReleased(evt);
-            }
-        });
-        addButton.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                addButtonKeyReleased(evt);
-            }
-        });
-
-        removeButton.setText("Remove Word");
-        removeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout loadPanelLayout = new javax.swing.GroupLayout(loadPanel);
-        loadPanel.setLayout(loadPanelLayout);
-        loadPanelLayout.setHorizontalGroup(
-            loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loadPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(loadPanelLayout.createSequentialGroup()
-                        .addGroup(loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(customRadioButton)
-                            .addComponent(defaultRadioButton)
-                            .addComponent(loadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(addButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(removeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        loadPanelLayout.setVerticalGroup(
-            loadPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loadPanelLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(loadLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(customRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(defaultRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(removeButton)
-                .addContainerGap())
-        );
-
-        updatePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-
-        okButton.setText("OK");
-        okButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout updatePanelLayout = new javax.swing.GroupLayout(updatePanel);
-        updatePanel.setLayout(updatePanelLayout);
-        updatePanelLayout.setHorizontalGroup(
-            updatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(updatePanelLayout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        updatePanelLayout.setVerticalGroup(
-            updatePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(updatePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(okButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout settingsFrameLayout = new javax.swing.GroupLayout(settingsFrame.getContentPane());
         settingsFrame.getContentPane().setLayout(settingsFrameLayout);
@@ -503,105 +414,23 @@ public class Hangman_GUI extends JFrame {
             .addGroup(settingsFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(updatePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(okPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(settingsFrameLayout.createSequentialGroup()
                         .addComponent(wordDisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(loadPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(editPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(editPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         settingsFrameLayout.setVerticalGroup(
             settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsFrameLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(settingsFrameLayout.createSequentialGroup()
-                        .addComponent(loadPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(wordDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(settingsFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(wordDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(editPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(updatePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(okPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-        );
-
-        addFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addFrame.setTitle("Add A Word");
-        addFrame.setAlwaysOnTop(true);
-        addFrame.setLocationByPlatform(true);
-        addFrame.setResizable(false);
-
-        addPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Add a Word"));
-
-        wordField.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                wordFieldKeyReleased(evt);
-            }
-        });
-
-        wordLabel.setText("<html><p>Enter the word you would like to add to the dictionary.</p></html>");
-
-        cancelAddButton.setText("Cancel");
-        cancelAddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelAddButtonActionPerformed(evt);
-            }
-        });
-
-        confirmAddButton.setText("OK");
-        confirmAddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirmAddButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout addPanelLayout = new javax.swing.GroupLayout(addPanel);
-        addPanel.setLayout(addPanelLayout);
-        addPanelLayout.setHorizontalGroup(
-            addPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(addPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(wordField)
-                    .addComponent(wordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(addPanelLayout.createSequentialGroup()
-                        .addComponent(confirmAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 1, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        addPanelLayout.setVerticalGroup(
-            addPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(wordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(wordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(addPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(confirmAddButton)
-                    .addComponent(cancelAddButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout addFrameLayout = new javax.swing.GroupLayout(addFrame.getContentPane());
-        addFrame.getContentPane().setLayout(addFrameLayout);
-        addFrameLayout.setHorizontalGroup(
-            addFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addFrameLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(addPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        addFrameLayout.setVerticalGroup(
-            addFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addFrameLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(addPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1083,12 +912,6 @@ public class Hangman_GUI extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void customRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customRadioButtonActionPerformed
-        fileChooser();
-        String path = fileChooser.getSelectedFile().getAbsolutePath();
-        updateWordList(path);
-    }//GEN-LAST:event_customRadioButtonActionPerformed
-
     private void fileMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_fileMenuItemActionPerformed
@@ -1097,45 +920,10 @@ public class Hangman_GUI extends JFrame {
         showSettingsFrame();
     }//GEN-LAST:event_settingsMenuItemActionPerformed
 
-    private void addButtonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addButtonMouseReleased
-        showAddFrame();
-    }//GEN-LAST:event_addButtonMouseReleased
-
-    private void addButtonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_addButtonKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            showAddFrame();
-        }
-    }//GEN-LAST:event_addButtonKeyReleased
-
-    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-        removeItemFromList();
-    }//GEN-LAST:event_removeButtonActionPerformed
-
-    private void wordFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_wordFieldKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            addItemToList();
-            addFrame.dispose();
-        }
-    }//GEN-LAST:event_wordFieldKeyReleased
-
-    private void confirmAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmAddButtonActionPerformed
-        addItemToList();
-        addFrame.dispose();
-    }//GEN-LAST:event_confirmAddButtonActionPerformed
-
-    private void cancelAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelAddButtonActionPerformed
-        addFrame.dispose();
-    }//GEN-LAST:event_cancelAddButtonActionPerformed
-
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         initGame();
         settingsFrame.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
-
-    private void defaultRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defaultRadioButtonActionPerformed
-        System.out.println(Dictionary.DEFAULT_FILE.getAbsolutePath());
-        updateWordList(Dictionary.DEFAULT_FILE.getAbsolutePath());
-    }//GEN-LAST:event_defaultRadioButtonActionPerformed
 
     private void newWordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newWordButtonActionPerformed
         initGame();
@@ -1240,26 +1028,16 @@ public class Hangman_GUI extends JFrame {
         for (Actor a : Actor.values()) {
             if (a.getName().equals(selected)) {
                 actor = a;
-                break; // Each actor appears only once, so okay to break.
+                break; // Each actor is enumerated only once, so okay to break.
             }
         }
         return actor;
     }
     
     /**
-     * Displays the word adding {@code JFrame}.
-     */
-    private void showAddFrame() {
-        addFrame.setBounds(getX() + 10, getY() + 10, 220, 188);
-        addFrame.setVisible(true);
-    }
-    
-    /**
      * Displays the settings {@code JFrame}.
      */
     private void showSettingsFrame() {
-        // Ick, hard-coded values
-        settingsFrame.setBounds(getX() + 10, getY() + 10, 457, 485);
         settingsFrame.setVisible(true);
     }
     
@@ -1448,6 +1226,7 @@ public class Hangman_GUI extends JFrame {
      * @param quietMode Flag for displaying a message pane.
      */
     private void lostGame(boolean quietMode) {
+        imageLabel.setIcon(game.getActor().getImageArray()[game.maxGuesses() - 1]);
         gamesPlayed++;
         if (!quietMode) {
         gameEnded("Sorry! \"" + StringUtilities.asSentence(game.getCurrentWord())
@@ -1472,78 +1251,12 @@ public class Hangman_GUI extends JFrame {
     }
     
     /**
-     * Allows the user to pick a file whose contents to read and assign to the 
-     * dictionary.
-     */
-    private int fileChooser() {
-        int response = fileChooser.showOpenDialog(null);
-        if (response != javax.swing.JFileChooser.APPROVE_OPTION) {
-            defaultRadioButton.setSelected(true);
-        }
-        return response;
-    }
-    
-    /**
-     * Reinstantiates the game's dictionary with the specified path word 
-     * repository.
-     * 
-     * @param path The location of the file to retrieve.
-     */
-    private void updateWordList(String path) {
-        if (path == null) {
-            showErrorPane("The selected file is empty or unreadable. "
-                    + "Try a different file.",
-                    "File Chooser Error");
-            fileChooser();
-        }
-        else {
-            Dictionary list = new Dictionary(new File(path));
-            System.out.println(list);
-            game = new Hangman(getUserSelectedDifficulty(), getUserSelectedActor(), list);
-            dictionaryList.updateUI();
-        }
-    }
-    
-    /**
-     * Removes a user-specified item from the dictionary.
-     */
-    private void removeItemFromList() {
-        int index = dictionaryList.getSelectedIndex();
-        if (index != -1) {
-            Word w = game.getWords().cacheList().get(index);
-            int response = showConfirmPane("Really remove \"" + w.characters()
-                    + "\" from the dictionary?", "Word Removal");
-            if (response == JFileChooser.APPROVE_OPTION) {
-                game.getWords().cacheList().remove(w);
-                dictionaryList.updateUI();
-            }
-        }
-    }
-    
-    /**
-     * Adds a user-defined item to the dictionary.
-     */
-    private void addItemToList() {
-        // This input will be sanitized from within the Word constructor.
-        String input = wordField.getText();
-        if (!input.isEmpty()) {
-            Word w = new Word(wordField.getText());
-            game.getWords().cacheList().add(w);
-            wordField.setText("");
-            dictionaryList.updateUI();
-        }
-        else {
-            showMessagePane("Oops, make sure to enter some text!", "Add Word Error");
-        }
-    }
-    
-    /**
      * Displays a {@code JOptionPane} confirmation dialog using the given 
      * arguments.
      * 
-     * @param message   The message to display on the pane.
-     * @param title     The title of the pane.
-     * @return          Return the outcome of the user input.
+     * @param message The message to display on the pane.
+     * @param title The title of the pane.
+     * @return The outcome of the user input.
      */
     private static int showConfirmPane(String message, String title) {
         return JOptionPane.showConfirmDialog(null, message, title, 
@@ -1618,18 +1331,11 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JButton aButton;
     private javax.swing.JComboBox actorComboBox;
     private javax.swing.JLabel actorLabel;
-    private javax.swing.JButton addButton;
-    private javax.swing.JFrame addFrame;
-    private javax.swing.JPanel addPanel;
     private javax.swing.JButton bButton;
     private javax.swing.JButton cButton;
-    private javax.swing.JButton cancelAddButton;
-    private javax.swing.JButton confirmAddButton;
     private javax.swing.JLabel currentLabel;
     private javax.swing.JPanel currentPanel;
-    private javax.swing.JRadioButton customRadioButton;
     private javax.swing.JButton dButton;
-    private javax.swing.JRadioButton defaultRadioButton;
     private javax.swing.JList dictionaryList;
     private javax.swing.ButtonGroup difficultyButtonGroup;
     private javax.swing.JLabel difficultyLabel;
@@ -1658,8 +1364,6 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JPanel keyboardPanel;
     private javax.swing.JButton lButton;
     private javax.swing.ButtonGroup loadButtonGroup;
-    private javax.swing.JLabel loadLabel;
-    private javax.swing.JPanel loadPanel;
     private javax.swing.JButton mButton;
     private javax.swing.JRadioButton mediumRadioButton;
     private javax.swing.JMenuBar menuBar;
@@ -1668,10 +1372,10 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JButton newWordButton;
     private javax.swing.JButton oButton;
     private javax.swing.JButton okButton;
+    private javax.swing.JPanel okPanel;
     private javax.swing.JButton pButton;
     private javax.swing.JButton qButton;
     private javax.swing.JButton rButton;
-    private javax.swing.JButton removeButton;
     private javax.swing.JMenuItem resetGameMenuItem;
     private javax.swing.JButton sButton;
     private javax.swing.JFrame settingsFrame;
@@ -1680,14 +1384,11 @@ public class Hangman_GUI extends JFrame {
     private javax.swing.JPanel statisticsPanel;
     private javax.swing.JButton tButton;
     private javax.swing.JButton uButton;
-    private javax.swing.JPanel updatePanel;
     private javax.swing.JButton vButton;
     private javax.swing.JButton wButton;
     private javax.swing.JTextField winRateField;
     private javax.swing.JLabel winRateLabel;
     private javax.swing.JPanel wordDisplayPanel;
-    private javax.swing.JTextField wordField;
-    private javax.swing.JLabel wordLabel;
     private javax.swing.JScrollPane wordScrollPane;
     private javax.swing.JButton xButton;
     private javax.swing.JButton yButton;
