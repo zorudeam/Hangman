@@ -1,7 +1,6 @@
 package language;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +9,10 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import utilities.functions.Utilities;
 
 /**
- * The {@code Dictionary} class stores all parseable tokens from a given file 
+ * The {@code Dictionary} class retrieves all parseable tokens from a given file 
  * and stores them in a dictionary structure. Various operations can be 
  * performed on this map, such as finding the shortest token or the amount of 
  * vowels in any particular string of characters. Additionally, items may be 
@@ -29,16 +26,11 @@ import utilities.functions.Utilities;
 public final class Dictionary {
     
     /**
-     * Points to the location of the file containing the default dictionary.
+     * Stores the resource location of the default dictionary.
      */
-    public static final File DEFAULT_FILE = new File("resources/dictionary.txt");
-    
-    /**
-     * Stores the default testing file. Contains 234,371 words - good for 
-     * difficulty distribution testing.
-     */
-    public static final Dictionary NULL_DICTIONARY = new Dictionary(DEFAULT_FILE);
-    
+    public static final InputStream DEFAULT_STREAM = Dictionary.class
+            .getResourceAsStream("/resources/dictionary.txt");
+
     /**
      * Contains this object's word dictionary. This map is sorted by word 
      * difficulty
@@ -49,7 +41,18 @@ public final class Dictionary {
      * Instantiates a new, empty {@code Dictionary} with no words in its map.
      */
     public Dictionary() {
-        this(null);
+        this(DEFAULT_STREAM);
+    }
+    
+    /**
+     * Instantiates a new {@code Dictionary} with the specified {@code String}
+     * path.
+     * 
+     * @param path The {@code String} path for the {@code File} to read into 
+     *        this object's map.
+     */
+    public Dictionary(String path) {
+        this(Dictionary.class.getResourceAsStream(path));
     }
     
     /**
@@ -59,7 +62,7 @@ public final class Dictionary {
      *
      * @param target The {@code File} to read into this object's map.
      */
-    public Dictionary(File target) {
+    public Dictionary(InputStream target) {
         words = new TreeMap<>();
         easyWords = new ArrayList<>();
         mediumWords = new ArrayList<>();
@@ -75,18 +78,12 @@ public final class Dictionary {
      *
      * @param target The {@code File} to read into this object's map.
      */
-    private void constructDictionary(File target) {
-        try {
-            Scanner input = new Scanner(target.getAbsoluteFile());
+    private void constructDictionary(InputStream target) {
+        try (Scanner input = new Scanner(target)) {
             while(input.hasNext()) {
                 Word w = new Word(input.nextLine());
                 words.put(w, judgeDifficulty(w));
             }
-            input.close();
-        } 
-        catch (FileNotFoundException ex) {
-            Logger.getLogger(Dictionary.class.getName()).log(Level.SEVERE, 
-                    "Could not find file: " + target, ex);
         }
     }
     
@@ -330,7 +327,7 @@ public final class Dictionary {
     @Override
     public String toString() {
         return "Dictionary{"
-                + "Words in this dictionary = " + words
+                + "words = " + words
                 + '}';
     }
 
