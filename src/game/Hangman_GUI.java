@@ -1180,6 +1180,9 @@ public class Hangman_GUI extends JFrame {
         
         String winRate = StringUtilities.doubleAsPercent((double) gamesWon / gamesPlayed);
         winRateField.setText(winRate);
+        String gameInfo = "Games won/played : " + gamesWon + '/' + gamesPlayed + '.';
+        winRateField.setToolTipText(gameInfo);
+        winRateLabel.setToolTipText(gameInfo);
         
         String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
         currentLabel.setToolTipText(cheaterWord);
