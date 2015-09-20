@@ -70,7 +70,7 @@ public class Hangman_GUI extends JFrame {
     private JLabel actorLabel;
     private JButton bButton;
     private JButton cButton;
-    private JLabel currentLabel;
+    private JLabel currentWordLabel;
     private JPanel currentPanel;
     private JButton dButton;
     private JList<Word> dictionaryList;
@@ -346,7 +346,7 @@ public class Hangman_GUI extends JFrame {
         gamePanel = new JPanel();
         imageLabel = new JLabel();
         currentPanel = new JPanel();
-        currentLabel = new JLabel();
+        currentWordLabel = new JLabel();
         statisticsPanel = new JPanel();
         guessesLeftLabel = new JLabel();
         guessesLeftField = new JTextField();
@@ -776,11 +776,11 @@ public class Hangman_GUI extends JFrame {
         currentPanel.setToolTipText("");
         currentPanel.setEnabled(false);
 
-        currentLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        currentLabel.setText("<html><p>Welcome to Hangman. To begin, press "
+        currentWordLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        currentWordLabel.setText("<html><p>Welcome to Hangman. To begin, press "
                 + "<font face = Consolas color=\"black\">File → New Game</font>,"
                 + " or you can just stare at the screen.</p></html>");
-        currentLabel.setEnabled(false);
+        currentWordLabel.setEnabled(false);
 
         GroupLayout currentPanelLayout = new GroupLayout(currentPanel);
         currentPanel.setLayout(currentPanelLayout);
@@ -788,14 +788,14 @@ public class Hangman_GUI extends JFrame {
             currentPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(currentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(currentLabel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
+                .addComponent(currentWordLabel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         currentPanelLayout.setVerticalGroup(
             currentPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(currentPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(currentLabel, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addComponent(currentWordLabel, GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1090,9 +1090,6 @@ public class Hangman_GUI extends JFrame {
      */
     private void doHint() {
         if (game.giveHint()) {
-            if (game.getHintsRemaining() <= 0) {
-                hintButton.setEnabled(false);
-            }
             disableButton(game.lastGuess());
             updateCurrentLabel();
             updateImages();
@@ -1158,8 +1155,8 @@ public class Hangman_GUI extends JFrame {
      */
     private void updateCurrentLabel() {
         String formatted = StringUtilities.delimit(game.getCorrectGuesses(), ' ');
-        currentLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-        currentLabel.setText(formatted);
+        currentWordLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+        currentWordLabel.setText(formatted);
     }
     
     /**
@@ -1190,12 +1187,18 @@ public class Hangman_GUI extends JFrame {
         winRateLabel.setToolTipText(gameInfo);
         
         String cheaterWord = "The current word is " + game.getCurrentWord() + '.';
-        currentLabel.setToolTipText(cheaterWord);
+        currentWordLabel.setToolTipText(cheaterWord);
         
-        int hintsRemaining = game.getHintsRemaining();
         String hintText = "Hint";
-        if (hintsRemaining > 0) {
-            hintText = "Hint (" + hintsRemaining + ")";
+        if (game.correctGuessesToWin() == 1 || game.getGuessesRemaining() == 1) {
+            hintText = "No hints on the last move!";
+            hintButton.setEnabled(false);
+        }
+        else {
+            int hintsRemaining = game.getHintsRemaining();
+            if (hintsRemaining > 0) {
+                hintText = "Hint (" + hintsRemaining + ")";
+            }
         }
         hintButton.setText(hintText);
     }
@@ -1251,7 +1254,7 @@ public class Hangman_GUI extends JFrame {
     private void gameEnded(String message, String title) {
         String actual = StringUtilities.delimit(game.getCurrentWord(), ' ');
         updateStatistics();
-        currentLabel.setText(actual);
+        currentWordLabel.setText(actual);
         setStateOf(keyboardPanel, false);
         giveUpButton.setEnabled(false);
         hintButton.setEnabled(false);
