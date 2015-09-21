@@ -33,8 +33,7 @@ The settings and new game menu.
 ![The settings and new game menu.](images/settings-menu.png)
 
 
-
-Gameplay
+Gameplay  
 ![Gameplay](images/gameplay-won0.png)
 
 
