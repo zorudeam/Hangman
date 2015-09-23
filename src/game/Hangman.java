@@ -24,6 +24,13 @@ public class Hangman {
     private static final char CORRECT_GUESS_DELIMITER = '_';
     
     /**
+     * Stores the maximum amount of hints allowed to any game.
+     * 
+     * @see #hintsLeft
+     */
+    private static final int MAX_HINTS = 3;
+    
+    /**
      * Stores words for this instance.
      */
     private Dictionary words;
@@ -36,7 +43,7 @@ public class Hangman {
     /**
      * Stores the characters have already been guessed.
      */
-    private String alreadyGuessed;
+    private String previouslyGuessed;
     
     /**
      * Stores the characters have already been guessed correctly, (i.e. they 
@@ -47,13 +54,13 @@ public class Hangman {
     /**
      * Stores the amount of character guesses that are left in this game.
      */
-    private int guessesRemaining;
+    private int guessesLeft;
     
     /**
      * Stores the amount of hints remaining in this game. This value is defined
      * by half of the length of the current word.
      */
-    private int hintsRemaining;
+    private int hintsLeft;
     
     /**
      * Stores the current image repository for use in a graphical interface.
@@ -110,10 +117,11 @@ public class Hangman {
         }
         correctGuesses = StringUtilities.createRepeating(currentWord.length(), 
                 CORRECT_GUESS_DELIMITER);
-        alreadyGuessed = "";
-        hintsRemaining = currentWord.length() / 2;
-        guessesRemaining = actor.getImageArray().length - 1;
+        previouslyGuessed = "";
+        guessesLeft = maxGuesses();
         
+        int hints = currentWord.length() / 2;
+        hintsLeft = (hints > MAX_HINTS) ? MAX_HINTS : hints;
     }
     
     /**
@@ -143,8 +151,8 @@ public class Hangman {
      *
      * @return The characters that have already been guessed.
      */
-    public String getAlreadyGuessed() {
-        return alreadyGuessed;
+    public String getPreviouslyGuessed() {
+        return previouslyGuessed;
     }
     
     /**
@@ -155,7 +163,7 @@ public class Hangman {
      */
     public void appendAlreadyGuessed(char guess) {
         char g = sanitizeGuess(guess);
-        alreadyGuessed += g;
+        previouslyGuessed += g;
     }
     
     /**
@@ -194,8 +202,8 @@ public class Hangman {
      * 
      * @return The amount of incorrect guesses remaining for this game.
      */
-    public int getGuessesRemaining() {
-        return guessesRemaining;
+    public int getGuessesLeft() {
+        return guessesLeft;
     }
     
     /**
@@ -204,8 +212,8 @@ public class Hangman {
      * 
      * @return The amount of hints remaining for this game.
      */
-    public int getHintsRemaining() {
-        return hintsRemaining;
+    public int getHintsLeft() {
+        return hintsLeft;
     }
     
     /**
@@ -216,25 +224,25 @@ public class Hangman {
      *         {@code false} otherwise.
      */
     public boolean canGuess() {
-        return guessesRemaining > 0;
+        return guessesLeft > 0;
     }
     
     /**
      * Returns the maximum amount of guesses allowed to this game instance.
      * 
-     * @return The maximum amount of guesses allowed to this game instance.
+     * @return The maximum amount of guesses for this game instance.
      */
     public final int maxGuesses() {
-        return actor.getImageArray().length;
+        return actor.getImageArray().length - 1;
     }
     
     /**
-     * Returns the last character guess for this game.
+     * Returns the last character that was correctly guessed this game.
      * 
-     * @return The last character guess for this game.
+     * @return The last correct character guess.
      */
     public char lastGuess() {
-        return alreadyGuessed.charAt(alreadyGuessed.length() - 1);
+        return previouslyGuessed.charAt(previouslyGuessed.length() - 1);
     }
     
     /**
@@ -251,7 +259,7 @@ public class Hangman {
      *         {@code false} otherwise.
      */
     public boolean hasWon() {
-        return correctGuesses.equals(currentWord) && guessesRemaining > 0;
+        return correctGuesses.equals(currentWord) && guessesLeft > 0;
     }
     
     /**
@@ -316,17 +324,35 @@ public class Hangman {
      */
     public boolean makeGuess(char guess) {
         char g = sanitizeGuess(guess);
-        if (!StringUtilities.contains(alreadyGuessed, g)) {
+        if (!StringUtilities.contains(previouslyGuessed, g)) {
             appendAlreadyGuessed(g);
             if (StringUtilities.contains(currentWord, g)) {
                 insertCorrectGuess(g);
                 return true;
             }
             else {
-                guessesRemaining--;
+                guessesLeft--;
             }
         }
         return false;
+    }
+    
+    /**
+     * Places the given guess in the set of correct guesses at any and all index
+     * values that it occurs in the current word, all while maintaining these
+     * index values between the two {@code String}s.
+     * 
+     * @param guess The character to add to the set of correct guesses based on 
+     *        its index occurrence in the current word.
+     */
+    private void insertCorrectGuess(char guess) {
+        for (int i = 0; i < currentWord.length(); i++) {
+            if (currentWord.charAt(i) == guess) {
+                correctGuesses = correctGuesses.substring(0, i) 
+                               + guess 
+                               + correctGuesses.substring(i + 1);
+            }
+        }
     }
     
     /**
@@ -337,9 +363,9 @@ public class Hangman {
      * @return {@code true} if the given character has already been guessed, 
      *         {@code false} otherwise
      */
-    public boolean hasAlreadyGuessed(char guess) {
+    public boolean hasGuessed(char guess) {
         sanitizeGuess(guess);
-        return StringUtilities.contains(alreadyGuessed, guess);
+        return StringUtilities.contains(previouslyGuessed, guess);
     }
     
     /**
@@ -349,14 +375,14 @@ public class Hangman {
      * @return {@code true} if a guess has been made this game{@code false} 
      *         otherwise.
      */
-    public boolean hasAlreadyGuessed() {
-        return !alreadyGuessed.isEmpty();
+    public boolean hasGuessed() {
+        return !previouslyGuessed.isEmpty();
     }
     
     /**
      * Gives a hint at the expense of a move (if one is available), returning 
      * {@code true} if a hint was given, {@code false} otherwise. This method 
-     * will guess from the first character in the current word that has not 
+     * always guesses the first character in the current word that has not 
      * already been guessed.
      * 
      * <p> The formal requirements for this method are delineated as follows:
@@ -378,15 +404,13 @@ public class Hangman {
      * @return {@code true} if a hint was given, {@code false} otherwise.
      */
     public boolean giveHint() {
-        if (canGuess() && !hasWon()) {
-            if (hintsRemaining > 0 && guessesRemaining > 1) {
-                char guess = getTheHint();
-                insertCorrectGuess(guess);
-                appendAlreadyGuessed(guess);
-                guessesRemaining--;
-                hintsRemaining--;
-                return true;
-            }
+        if ((!hasWon() && hintsLeft > 0 && guessesLeft > 1)) {
+            char guess = getTheHint();
+            insertCorrectGuess(guess);
+            appendAlreadyGuessed(guess);
+            guessesLeft--;
+            hintsLeft--;
+            return true;
         }
         return false;
     }
@@ -406,24 +430,6 @@ public class Hangman {
             }
         }
         throw new IllegalStateException("Called getTheHint() after game ended.");
-    }
-    
-    /**
-     * Places the given guess in the set of correct guesses at any and all index
-     * values that it occurs in the current word, all while maintaining these
-     * index values between the two {@code String}s.
-     * 
-     * @param guess The character to add to the set of correct guesses based on 
-     *        its index occurrence in the current word.
-     */
-    private void insertCorrectGuess(char guess) {
-        for (int i = 0; i < currentWord.length(); i++) {
-            if (currentWord.charAt(i) == guess) {
-                correctGuesses = correctGuesses.substring(0, i) 
-                               + guess 
-                               + correctGuesses.substring(i + 1);
-            }
-        }
     }
     
 }
