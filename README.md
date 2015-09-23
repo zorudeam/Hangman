@@ -2,13 +2,13 @@
 A playable version of the game "hangman" with a fully-functional user interface.
 
 ### How to Run
-Download the .jar file from [here](https://github.com/OliverAbdulrahim/Hangman/blob/master/dist/Hangman.jar?raw=true) and run the file (you'll need Java 8 or later to run this). Or, if you prefer to run from the console, type:
+Download the .jar file from [here](https://github.com/OliverAbdulrahim/Hangman/blob/master/dist/Hangman.jar?raw=true) and run the file (you'll need Java 8 or later for it to work). Or, if you prefer to run from the console, type:
 ```
 java -jar "<location of Hangman.jar>"
 ```
 
 # About
-I initially made this as a console-based game in early 2015 for AP Computer Science class and later added a user interface using the NetBeans GUI builder. In September 2015, I looked back at the program and winced at some of bad code, so I rewrote almost the entire thing, adding and removing some features along the way.
+I initially made this as a console-based game in early 2015 for AP Computer Science class and later added a user interface using the NetBeans GUI builder. In September 2015, I looked back at the program and winced at some of the bad code, so I rewrote almost the entire thing, adding and removing some features along the way.
 
 ### Features
   - Input: 
