@@ -84,7 +84,7 @@ public final class Word
      * @param c The {@code char} to sanitize.
      * @return A sanitized version of the given {@code char}.
      */
-    public static char sanitizeWord(char c) {
+    public static char sanitizeCharacter(char c) {
         return Character.toLowerCase(c);
     }
     
