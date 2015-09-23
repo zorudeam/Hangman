@@ -43,6 +43,3 @@ Gameplay - Won the game!
 
 Gameplay - Lost the game!  
 ![Gameplay - Lost the game!](images/gameplay-lost0.png)
-
-# Licensing or Whatever
-I really don't know what to put here.
