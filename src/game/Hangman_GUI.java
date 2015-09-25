@@ -71,7 +71,7 @@ public class Hangman_GUI extends JFrame {
     private JButton bButton;
     private JButton cButton;
     private JLabel currentWordLabel;
-    private JPanel currentPanel;
+    private JPanel currentWordPanel;
     private JButton dButton;
     private JList<Word> dictionaryList;
     private ButtonGroup difficultyButtonGroup;
@@ -123,8 +123,8 @@ public class Hangman_GUI extends JFrame {
     private JButton wButton;
     private JTextField winRateField;
     private JLabel winRateLabel;
-    private JPanel wordDisplayPanel;
-    private JScrollPane wordScrollPane;
+    private JPanel dictionaryDisplayPanel;
+    private JScrollPane dictionaryScrollPane;
     private JButton xButton;
     private JButton yButton;
     private JButton zButton;
@@ -305,8 +305,8 @@ public class Hangman_GUI extends JFrame {
         settingsFrame = new JFrame();
         okPanel = new JPanel();
         okButton = new JButton();
-        wordDisplayPanel = new JPanel();
-        wordScrollPane = new JScrollPane();
+        dictionaryDisplayPanel = new JPanel();
+        dictionaryScrollPane = new JScrollPane();
         dictionaryList = new JList<>();
         editPanel = new JPanel();
         difficultyLabel = new JLabel();
@@ -345,7 +345,7 @@ public class Hangman_GUI extends JFrame {
         mButton = new JButton();
         gamePanel = new JPanel();
         imageLabel = new JLabel();
-        currentPanel = new JPanel();
+        currentWordPanel = new JPanel();
         currentWordLabel = new JLabel();
         statisticsPanel = new JPanel();
         guessesLeftLabel = new JLabel();
@@ -400,27 +400,27 @@ public class Hangman_GUI extends JFrame {
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        wordDisplayPanel.setBorder(BorderFactory.createTitledBorder("Dictionary Words"));
-        wordDisplayPanel.setToolTipText("");
+        dictionaryDisplayPanel.setBorder(BorderFactory.createTitledBorder("Dictionary Words"));
+        dictionaryDisplayPanel.setToolTipText("");
 
         dictionaryList.setFont(new Font("Consolas", 0, 11));
         dictionaryList.setToolTipText(NumberFormat.getInstance().format(game.getWords().size()) + " words in this dictionary.");
-        wordScrollPane.setViewportView(dictionaryList);
+        dictionaryScrollPane.setViewportView(dictionaryList);
 
-        GroupLayout wordDisplayPanelLayout = new GroupLayout(wordDisplayPanel);
-        wordDisplayPanel.setLayout(wordDisplayPanelLayout);
+        GroupLayout wordDisplayPanelLayout = new GroupLayout(dictionaryDisplayPanel);
+        dictionaryDisplayPanel.setLayout(wordDisplayPanelLayout);
         wordDisplayPanelLayout.setHorizontalGroup(
             wordDisplayPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(wordDisplayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(wordScrollPane, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
+                .addComponent(dictionaryScrollPane, GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                 .addContainerGap())
         );
         wordDisplayPanelLayout.setVerticalGroup(
             wordDisplayPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(wordDisplayPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(wordScrollPane)
+                .addComponent(dictionaryScrollPane)
                 .addContainerGap())
         );
 
@@ -493,7 +493,7 @@ public class Hangman_GUI extends JFrame {
                 .addGroup(settingsFrameLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addComponent(okPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(settingsFrameLayout.createSequentialGroup()
-                        .addComponent(wordDisplayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dictionaryDisplayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(editPanel, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -503,7 +503,7 @@ public class Hangman_GUI extends JFrame {
             .addGroup(settingsFrameLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(settingsFrameLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(wordDisplayPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dictionaryDisplayPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(editPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(okPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -772,9 +772,9 @@ public class Hangman_GUI extends JFrame {
                 .addContainerGap())
         );
 
-        currentPanel.setBorder(BorderFactory.createTitledBorder("Current Word"));
-        currentPanel.setToolTipText("");
-        currentPanel.setEnabled(false);
+        currentWordPanel.setBorder(BorderFactory.createTitledBorder("Current Word"));
+        currentWordPanel.setToolTipText("");
+        currentWordPanel.setEnabled(false);
 
         currentWordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         currentWordLabel.setText("<html><p>Welcome to Hangman. To begin, press "
@@ -782,8 +782,8 @@ public class Hangman_GUI extends JFrame {
                 + " or you can just stare at the screen.</p></html>");
         currentWordLabel.setEnabled(false);
 
-        GroupLayout currentPanelLayout = new GroupLayout(currentPanel);
-        currentPanel.setLayout(currentPanelLayout);
+        GroupLayout currentPanelLayout = new GroupLayout(currentWordPanel);
+        currentWordPanel.setLayout(currentPanelLayout);
         currentPanelLayout.setHorizontalGroup(
             currentPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(currentPanelLayout.createSequentialGroup()
@@ -941,7 +941,7 @@ public class Hangman_GUI extends JFrame {
                         .addComponent(gamePanel, GroupLayout.PREFERRED_SIZE, 225, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addComponent(currentPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(currentWordPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(statisticsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addComponent(keyboardPanel, GroupLayout.PREFERRED_SIZE, 478, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -952,7 +952,7 @@ public class Hangman_GUI extends JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(currentPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(currentWordPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(statisticsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addComponent(gamePanel, GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
