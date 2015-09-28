@@ -271,22 +271,33 @@ public final class Dictionary {
      *         difficulty
      */
     protected Word getWordOf(List<Word> list, WordProperties difficulty) {
-        if (list.isEmpty()) {
-            words.forEach((Word key, WordProperties value) -> {
-                if (value == difficulty) {
-                    list.add(key);
-                }
-            });
-        }
-        if (!list.isEmpty()) {
+        if (hasWordOf(difficulty)) {
+            if (list.isEmpty()) {
+                words.forEach((Word key, WordProperties value) -> {
+                    if (value == difficulty) {
+                        list.add(key);
+                    }
+                });
+            }
             cacheList = new ArrayList<>(list);
             return list.get(Utilities.r.nextInt(list.size()));
         }
         // If the list is still empty, then there are no words of the given
         // difficulty.
-        throw new IllegalStateException("There are no words of the given "
-                + "difficulty \"" + difficulty + "\" contained within this "
-                + "dictionary.");
+        throw new NoSuchWordException("Could not retrieve word.", difficulty);
+    }
+    
+    /**
+     * Returns {@code true} if this object contains at least one word of the
+     * given difficulty, {@code false} otherwise.
+     * 
+     * @param difficulty The difficulty to test.
+     * @return {@code true} if this object contains at least one word of the
+     *         given difficulty, {@code false} otherwise.
+     */
+    private boolean hasWordOf(WordProperties difficulty) {
+        return words.entrySet().stream()
+                .anyMatch((entry) -> (entry.getValue() == difficulty));
     }
     
     /**
