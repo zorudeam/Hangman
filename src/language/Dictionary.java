@@ -4,11 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
 import utilities.functions.Utilities;
 
 /**
@@ -23,19 +19,70 @@ import utilities.functions.Utilities;
  * 
  * @author Oliver Abdulrahim
  */
-public final class Dictionary {
+public class Dictionary {
     
     /**
      * Stores the resource location of the default dictionary.
      */
     public static final InputStream DEFAULT_STREAM = Dictionary.class
             .getResourceAsStream("/resources/dictionary.txt");
-
+    
     /**
-     * Contains this object's word dictionary. This map is sorted by word 
-     * difficulty
+     * Stores the amount of parsable lines in the default stream.
+     * 
+     * @see #DEFAULT_STREAM
      */
-    private final Map<Word, WordProperties> words;
+    private static final int DEFAULT_STREAM_CONTENTS = 235_886;
+    
+    /**
+     * Contains this object's word dictionary. This object ordered by word 
+     * difficulty.
+     */
+    private final List<Word> words;
+    
+    /**
+     * Stores the previously used difficulty, or {@link Difficulty#MEDIUM} if 
+     * there has not been a word previously retrieved by this object.
+     */
+    private Difficulty difficultyCache; 
+    
+    /**
+     * Stores the index value for the last easy word stored by this object. This
+     * value is guaranteed to be the least of the pivots defined by this class.
+     * 
+     * <p> If this value is equal to {@code -1}, then there are no words of the
+     * given difficulty contained within this dictionary
+     * 
+     * @see #lastMediumIndex
+     * @see #lastHardIndex
+     */
+    private int lastEasyIndex;
+    
+    /**
+     * Stores the index value for the last medium word stored by this object. 
+     * This value is guaranteed to be greater than the easy pivot and less than 
+     * the hard pivot defined by this class.
+     * 
+     * <p> If this value is equal to {@code -1}, then there are no words of the
+     * given difficulty contained within this dictionary
+     * 
+     * @see #lastEasyIndex
+     * @see #lastHardIndex
+     */
+    private int lastMediumIndex;
+    
+    /**
+     * Stores the index value for the last hard word stored by this object. This
+     * value is guaranteed to be the greatest of the pivots defined by this 
+     * class.
+     * 
+     * <p> If this value is equal to {@code -1}, then there are no words of the
+     * given difficulty contained within this dictionary
+     * 
+     * @see #lastEasyIndex
+     * @see #lastMediumIndex
+     */
+    private int lastHardIndex;
     
     /**
      * Instantiates a new, empty {@code Dictionary} with no words in its map.
@@ -63,10 +110,12 @@ public final class Dictionary {
      * @param target The {@code File} to read into this object's map.
      */
     public Dictionary(InputStream target) {
-        words = new TreeMap<>();
-        easyWords = new ArrayList<>();
-        mediumWords = new ArrayList<>();
-        hardWords = new ArrayList<>();
+        // TODO : Handle ArrayList resize better
+        words = new ArrayList<>(DEFAULT_STREAM_CONTENTS);
+        difficultyCache = Difficulty.MEDIUM;
+        lastEasyIndex = -1;
+        lastMediumIndex = -1;
+        lastHardIndex = -1;
         if (target != null) {
             constructDictionary(target);
         }
@@ -82,7 +131,7 @@ public final class Dictionary {
         try (Scanner input = new Scanner(target)) {
             while(input.hasNext()) {
                 Word w = new Word(input.nextLine());
-                words.put(w, judgeDifficulty(w));
+                insert(w);
             }
         }
     }
@@ -95,18 +144,141 @@ public final class Dictionary {
      * @return An enumerated property depending on the difficulty of the given 
      *         {@code Word}.
      */
-    public static WordProperties judgeDifficulty(Word w) {
+    public static Difficulty judgeDifficulty(Word w) {
+        Difficulty difficulty = Difficulty.HARD;
         if (isEasyWord(w)) {
-            return WordProperties.EASY_WORD;
+            difficulty = Difficulty.EASY;
         }
         else if (isMediumWord(w)) {
-            return WordProperties.MEDIUM_WORD;
+            difficulty = Difficulty.MEDIUM;
         }
-        else {
-            return WordProperties.HARD_WORD;
-        }
+        return difficulty;
     }
     
+// Collection Operations    
+    
+    /**
+     * Inserts the given word in order, depending on its difficulty, into this
+     * dictionary.
+     * 
+     * @param w The word to insert.
+     */
+    protected void insert(Word w) {
+        // Interesting type inference in case statements - did not know that 
+        // Java inferred types for enum switch statements.
+        int index = -1;
+        System.out.println(judgeDifficulty(w));
+        switch (judgeDifficulty(w)) {
+            case EASY:
+                lastEasyIndex++;
+                index = lastEasyIndex;
+                break;
+            case MEDIUM:
+                lastMediumIndex++;
+                index = lastMediumIndex;
+                break;
+            case HARD:
+                lastHardIndex++;
+                index = words.size() - lastHardIndex;
+                break;
+            // No default case needed, judgeDifficulty(Word) always returns a 
+            // Difficulty object
+        }
+        words.add(index, w);
+    }
+    
+    public static void main(String[] args) {
+        Dictionary test = new Dictionary();
+    }
+    
+    /**
+     * Removes a given word from this dictionary, returning {@code true} if the
+     * word was removed, {@code false} if not, (i.e. the given word does not 
+     * exist in this dictionary).
+     * 
+     * @param w The word to remove.
+     * @return {@code true} if the word was removed, {@code false} otherwise.
+     */
+    protected boolean remove(Word w) {
+        boolean removed = words.remove(w);
+        if (removed) {
+            switch (judgeDifficulty(w)) {
+                case EASY:
+                    lastEasyIndex--;
+                    break;
+                case MEDIUM:
+                    lastMediumIndex--;
+                    break;
+                case HARD:
+                    lastHardIndex--;
+                    break;
+                // No default case needed since judgeDifficulty(Word) always 
+                // returns a Difficulty object
+            }
+        }
+        return removed;
+    }
+    
+    /**
+     * Returns a list containing all words of the given difficulty. This method
+     * assumes that the given difficulty
+     * 
+     * @param difficulty The difficulty of list to retrieve.
+     * @return A list containing all words of the given difficulty.
+     */
+    protected List<Word> getListOf(Difficulty difficulty) {
+        if (!hasWordOf(difficulty)) {
+            throw new NoSuchWordException("Could not retrieve word.", difficulty);
+        }
+        int fromIndex = -1;
+        int toIndex = fromIndex;
+        switch (difficulty) {
+            case EASY:
+                fromIndex = 0;
+                toIndex = lastEasyIndex;
+                break;
+            case MEDIUM:
+                fromIndex = lastEasyIndex;
+                toIndex = lastEasyIndex + lastMediumIndex;
+                break;
+            case HARD:
+                fromIndex = words.size() - lastHardIndex;
+                toIndex = words.size();
+                break;
+        }
+        // Add 1 to avoid the case that from == to, which would result in an
+        // empty SubList (toIndex is exclusive in ArrayList method 
+        // subList(fromIndex:int, toIndex:int))
+        return new ArrayList<>(words.subList(fromIndex, toIndex + 1));
+    }
+    
+    /**
+     * Returns a list containing all words of the previously used difficulty.
+     * 
+     * @return A list containing all words of the previously used difficulty.
+     */
+    public List<Word> cacheList() {
+        return Collections.unmodifiableList(getListOf(difficultyCache));
+    }
+    
+    /**
+     * Returns a list containing all the words of this dictionary.
+     * 
+     * @return A list containing all the words of this dicitonary.
+     */
+    public List<Word> getWords() {
+        return Collections.unmodifiableList(words);
+    }
+    
+    /**
+     * Returns the amount of words currently contained within this object.
+     * 
+     * @return The amount of words currently contained within this object.
+     */
+    public int size() {
+        return words.size();
+    }
+
 // Difficulty tuning variables
 
     /**
@@ -129,25 +301,7 @@ public final class Dictionary {
      */
     private static final int MEDIUM_LENGTH_THRESHOLD = 5;
     
-    /**
-     * Caches the easy words contained within this object.
-     */
-    private List<Word> easyWords;
-    
-    /**
-     * Caches the medium words contained within this object.
-     */
-    private List<Word> mediumWords;
-    
-    /**
-     * Caches the hard words contained within this object.
-     */
-    private List<Word> hardWords;
-    
-    /**
-     * Stores a cache of the previously used list.
-     */
-    private List<Word> cacheList;
+// Difficulty and Dictionary Operations
     
     /**
      * Determines if a given word is "easy" in difficulty. Words that are longer
@@ -187,104 +341,62 @@ public final class Dictionary {
         return !isEasyWord(w) && !isMediumWord(w);
     }
     
-// Collection operations
-    
-    /**
-     * Adds a given {@code Word} into this object. If the given {@code Word} 
-     * already exists in the map, this method does nothing.
-     * 
-     * @param w The {@code Word} to add.
-     * @throws NullPointerException If the given word is {@code null}.
-     */
-    public void add(Word w) {
-        Objects.requireNonNull(w);
-        words.put(w, judgeDifficulty(w));
-    }
-    
-    /**
-     * Removes the specified word from this object's map.
-     * 
-     * @param w The object to remove.
-     */
-    public void remove(Word w) {
-        words.remove(w);
-    }
-    
-    /**
-     * Returns the amount of words currently contained within this object.
-     * 
-     * @return The amount of words currently contained within this object.
-     */
-    public int size() {
-        return words.size();
-    }
-    
-    /**
-     * Returns a set containing all entries mapped to this object.
-     * 
-     * @return A set of all entries in this object.
-     */
-    public Set<Map.Entry<Word, WordProperties>> entrySet() {
-        return words.entrySet();
-    }
-    
-    /**
-     * Returns a set containing all keys mapped to this object.
-     * 
-     * @return A set of all keys in this object.
-     */
-    public Set<Word> keySet() {
-        return words.keySet();
-    }
-    
-    /**
-     * Returns a list containing all words of the previously used difficulty.
-     * 
-     * @return A cache of the previously used difficulty list.
-     */
-    public List<Word> cacheList() {
-        return Collections.unmodifiableList(cacheList);
-    }
-    
     /**
      * Returns a random {@code Word} from this object's {@code map}.
      * 
      * @return A random {@code String} from this object's {@code map}.
      */
     public Word getAnyWord() {
-        List<Word> list = new ArrayList<>(words.keySet());
-        return list.get(Utilities.r.nextInt(words.size()));
+        if (!words.isEmpty()) {
+            return words.get(Utilities.r.nextInt(words.size()));
+        }
+        throw new IllegalStateException("There are no words in this dictionary.");
     }
     
     /**
      * Returns a randomly selected word of the given difficulty.
      * 
-     * <p> This method populates the given list if it is empty. Then it 
-     * retrieves a randomly selected element from it. in the case that there are
-     * no elements of the specified difficulty contained within this object, 
-     * this method throws an {@code IllegalStateExecption}.
+     * <p> In the case that there are no elements of the specified difficulty 
+     * contained within this object, this method throws an 
+     * {@code NoSuchWordException}.
      * 
-     * @param list The list to populate with elements, if it is empty.
      * @param difficulty The difficulty of the word to return.
      * @return A randomly selected word of the given difficulty.
-     * @throws IllegalStateException If there are no words of the given 
-     *         difficulty
      */
-    protected Word getWordOf(List<Word> list, WordProperties difficulty) {
-        if (hasWordOf(difficulty)) {
-            if (list.isEmpty()) {
-                words.forEach((Word key, WordProperties value) -> {
-                    if (value == difficulty) {
-                        list.add(key);
-                    }
-                });
-            }
-            cacheList = new ArrayList<>(list);
-            return list.get(Utilities.r.nextInt(list.size()));
+    protected Word getWordOf(Difficulty difficulty) {
+        requireWordOf(difficulty);
+        int from = -1;
+        int to = from;
+        switch (difficulty) {
+            case EASY:
+                from = 0;
+                to = lastEasyIndex;
+                break;
+            case MEDIUM:
+                from = lastEasyIndex;
+                to = lastMediumIndex;
+                break;
+            case HARD:
+                from = lastHardIndex;
+                to = words.size();
+                break;
         }
-        // If the list is still empty, then there are no words of the given
-        // difficulty.
-        throw new NoSuchWordException("Could not retrieve word.", difficulty);
+        return words.get(Utilities.randomInteger(from, to));
+    }
+
+    /**
+     * Requires that a word of a given difficulty can be retrieved from this
+     * dictionary, throwing a {@code NoSuchWordException} if there are no words
+     * of the given difficulty stored in this object.
+     * 
+     * @param difficulty The difficulty to test.
+     * @throws NoSuchWordException If there are no words of the given 
+     *         difficulty.
+     */
+    private void requireWordOf(Difficulty difficulty) {
+        if (!hasWordOf(difficulty)) {
+             throw new NoSuchWordException("Could not retrieve word.", difficulty);
+        }
     }
     
     /**
@@ -295,9 +407,20 @@ public final class Dictionary {
      * @return {@code true} if this object contains at least one word of the
      *         given difficulty, {@code false} otherwise.
      */
-    private boolean hasWordOf(WordProperties difficulty) {
-        return words.entrySet().stream()
-                .anyMatch((entry) -> (entry.getValue() == difficulty));
+    private boolean hasWordOf(Difficulty difficulty) {
+        boolean hasWordOf = false;
+        switch (difficulty) {
+            case EASY:
+                hasWordOf = lastEasyIndex > -1;
+                break;
+            case MEDIUM:
+                hasWordOf = lastMediumIndex > -1;
+                break;
+            case HARD:
+                hasWordOf = lastHardIndex > -1;
+                break;
+        }
+        return hasWordOf;
     }
     
     /**
@@ -307,7 +430,7 @@ public final class Dictionary {
      * @return A randomly selected word of easy difficulty.
      */
     public Word getEasyWord() {
-        return getWordOf(easyWords, WordProperties.EASY_WORD);
+        return getWordOf(Difficulty.EASY);
     }
     
     /**
@@ -317,7 +440,7 @@ public final class Dictionary {
      * @return A randomly selected word of medium difficulty.
      */
     public Word getMediumWord() {
-        return getWordOf(mediumWords, WordProperties.MEDIUM_WORD);
+        return getWordOf(Difficulty.MEDIUM);
     }
     
     /**
@@ -327,7 +450,7 @@ public final class Dictionary {
      * @return A randomly selected word of hard difficulty.
      */
     public Word getHardWord() {
-        return getWordOf(hardWords, WordProperties.HARD_WORD);
+        return getWordOf(Difficulty.HARD);
     }
     
     /**
@@ -337,9 +460,10 @@ public final class Dictionary {
      */
     @Override
     public String toString() {
+        // TODO : Format toString by difficulty
         return "Dictionary{"
                 + "words = " + words
                 + '}';
     }
-
+    
 }
