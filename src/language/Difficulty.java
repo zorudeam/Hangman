@@ -9,29 +9,29 @@ import java.util.EnumSet;
  * 
  * @author Oliver Abdulrahim
  */
-public enum WordProperties {
+public enum Difficulty {
     
 // Difficulty properties    
     
     /**
      * Defines a {@code Word} with easy difficulty.
      */
-    EASY_WORD,
+    EASY,
     
     /**
      * Defines a {@code Word} with medium difficulty.
      */
-    MEDIUM_WORD,
+    MEDIUM,
     
     /**
      * Defines a {@code Word} with hard difficulty.
      */
-    HARD_WORD;
+    HARD;
     
     /**
      * Provides for a set of all properties enumerated in this class.
      */
-    public static final EnumSet<WordProperties> ALL = 
-            EnumSet.allOf(WordProperties.class);
+    public static final EnumSet<Difficulty> ALL = 
+            EnumSet.allOf(Difficulty.class);
     
 }
