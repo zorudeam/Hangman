@@ -2,6 +2,7 @@ package language;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -206,7 +207,11 @@ public class Dictionary {
      * @return The amount of words currently contained within this object.
      */
     public int size() {
-        return words.size();
+        int size = words.values()
+                        .stream()
+                        .mapToInt(List :: size)
+                        .sum(); // Nice terminal operation dude.
+        return size;
     }
     
     /**
@@ -225,6 +230,15 @@ public class Dictionary {
      */
     public Set<Difficulty> keySet() {
         return words.keySet();
+    }
+    
+    /**
+     * Returns a collection containing the lists mapped to this object.
+     * 
+     * @return A collection containing the lists mapped to this object.
+     */
+    public Collection<List<Word>> values() {
+        return words.values();
     }
     
     /**
@@ -316,7 +330,8 @@ public class Dictionary {
      * @return A random {@code Word} from this object.
      */
     public Word getAnyWord() {
-        Difficulty d = Difficulty.ALL.stream()
+        Difficulty d = Difficulty.ALL
+                                 .stream()
                                  .findAny() // Terminal operation
                                  .get();
         difficultyCache = d;
