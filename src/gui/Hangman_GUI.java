@@ -1,5 +1,7 @@
-package game;
+package gui;
 
+import game.Actor;
+import game.Hangman;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -48,8 +50,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+import language.Difficulty;
 import language.Word;
-import language.WordProperties;
 import utilities.functions.StringUtilities;
 
 /**
@@ -1104,13 +1106,13 @@ public class Hangman_GUI extends JFrame {
      * 
      * @return The currently selected difficulty.
      */
-    private WordProperties getUserSelectedDifficulty() {
-        WordProperties difficulty = WordProperties.HARD_WORD;
+    private Difficulty getUserSelectedDifficulty() {
+        Difficulty difficulty = Difficulty.HARD;
         if (easyRadioButton.isSelected()) {
-            difficulty = WordProperties.EASY_WORD;
+            difficulty = Difficulty.EASY;
         } 
         else if (mediumRadioButton.isSelected()) {
-            difficulty = WordProperties.MEDIUM_WORD;
+            difficulty = Difficulty.MEDIUM;
         }
         return difficulty;
     }
@@ -1143,7 +1145,7 @@ public class Hangman_GUI extends JFrame {
      * Updates the game with the currently given set of user settings.
      */
     private void updateGameSettings() {
-        WordProperties difficulty = getUserSelectedDifficulty();
+        Difficulty difficulty = getUserSelectedDifficulty();
         Actor actor = getUserSelectedActor();
         game.resetGame(difficulty);
         game.setActor(actor);
