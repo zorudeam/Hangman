@@ -34,4 +34,9 @@ public enum Difficulty {
     public static final EnumSet<Difficulty> ALL = 
             EnumSet.allOf(Difficulty.class);
     
+    /**
+     * Stores the default difficulty value of medium.
+     */
+    public static final Difficulty DEFAULT = MEDIUM;
+    
 }
