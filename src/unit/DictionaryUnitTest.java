@@ -1,10 +1,8 @@
 package unit;
 
 import java.util.Date;
-import java.util.Map;
 import language.Dictionary;
-import language.Word;
-import language.WordProperties;
+import language.Difficulty;
 
 /**
  * Contains some unit testing for the {@link language.Dictionary} class.
@@ -36,21 +34,15 @@ public class DictionaryUnitTest {
     void countWords(boolean quietMode) {
         System.out.println("Working...");
         start = new Date();
-        for (Map.Entry<Word, WordProperties> entry : dictionary.entrySet()) {
-            if (Dictionary.isEasyWord(entry.getKey())) {
-                easyCount++;
-            }
-            else if (Dictionary.isMediumWord(entry.getKey())) {
-                mediumCount++;
-            }
-            else if (Dictionary.isHardWord(entry.getKey())) {
-                hardCount++;
-            }
-            if (!quietMode) {
-                System.out.println(entry.getKey() + "=" + entry.getValue());
-            }
+        if (!quietMode) {
+            System.out.println(dictionary.getListOf(Difficulty.EASY));
+            System.out.println(dictionary.getListOf(Difficulty.MEDIUM));
+            System.out.println(dictionary.getListOf(Difficulty.HARD));
         }
         end = new Date();
+        easyCount = dictionary.getListOf(Difficulty.EASY).size();
+        mediumCount = dictionary.getListOf(Difficulty.MEDIUM).size();
+        hardCount = dictionary.getListOf(Difficulty.HARD).size();
         System.out.println("Done!");
     }
     
@@ -72,7 +64,7 @@ public class DictionaryUnitTest {
         System.out.println("Medium count..........: " + mediumCount);
         System.out.println("Hard count............: " + hardCount);
         int sum = easyCount + mediumCount + hardCount;
-        System.out.println("Expected/Actual total...: " + dictionary.entrySet().size() + '/' + sum);
+        System.out.println("Expected/Actual total...: " + dictionary.size() + '/' + sum);
     }
     
     void reset() {
