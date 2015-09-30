@@ -1,7 +1,7 @@
 package game;
 
 import language.Dictionary;
-import language.WordProperties;
+import language.Difficulty;
 import utilities.functions.StringUtilities;
 
 /**
@@ -13,6 +13,8 @@ import utilities.functions.StringUtilities;
  * construction.
  * 
  * @author Oliver Abdulrahim
+ * @see language.Dictionary
+ * @see language.Word
  */
 public class Hangman {
     
@@ -72,7 +74,7 @@ public class Hangman {
      * ({@link WordProperties#MEDIUM_WORD}).
      */
     public Hangman() {
-        this(WordProperties.MEDIUM_WORD, Actor.HUMAN, new Dictionary());
+        this(Difficulty.MEDIUM, Actor.HUMAN, new Dictionary());
     }
     
     /**
@@ -82,7 +84,7 @@ public class Hangman {
      * @param actor The actor for this game.
      * @param words The dictionary for this game.
      */
-    public Hangman(WordProperties difficulty, Actor actor, Dictionary words) {
+    public Hangman(Difficulty difficulty, Actor actor, Dictionary words) {
         this.words = words;
         this.actor = actor;
         resetGame(difficulty);
@@ -97,22 +99,22 @@ public class Hangman {
      *        is either {@code null} or an invalid property, defaults to 
      *        {@link WordProperties#MEDIUM_WORD}.
      */
-    public final void resetGame(WordProperties difficulty) {
+    public final void resetGame(Difficulty difficulty) {
         switch(difficulty) {
-            case EASY_WORD: {
+            case EASY: {
                 currentWord = words.getEasyWord().characters();
                 break;
             }
-            case MEDIUM_WORD: {
+            case MEDIUM: {
                 currentWord = words.getMediumWord().characters();
                 break;
             }
-            case HARD_WORD: {
+            case HARD: {
                 currentWord = words.getHardWord().characters();
                 break;
             }
             default: {
-                currentWord = words.getMediumWord().characters();
+                currentWord = words.getAnyWord().characters();
             }
         }
         correctGuesses = StringUtilities.createRepeating(currentWord.length(), 
