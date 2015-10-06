@@ -1,15 +1,15 @@
 package language;
 
 import java.io.InputStream;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 import utilities.functions.Utilities;
 
 /**
@@ -24,7 +24,9 @@ import utilities.functions.Utilities;
  * 
  * @author Oliver Abdulrahim
  */
-public class Dictionary {
+public class Dictionary
+    extends AbstractCollection<Word>
+{
     
     /**
      * Stores the resource location of the default dictionary.
@@ -156,49 +158,82 @@ public class Dictionary {
 // Collection operations
     
     /**
-     * Inserts the given word in order, depending on its difficulty, into this
-     * dictionary.
+     * Returns {@code true} if this dictionary contains no words, {@code false}
+     * otherwise.
      * 
-     * @param w The word to internalAdd.
+     * @return {@code true} if this object contains no words, {@code false}
+     *         otherwise.
      */
-    protected void internalAdd(Word w) {
+    @Override
+    public boolean isEmpty() {
+        return size() == 0;
+    }       
+    
+    /**
+     * Returns {@code true} if this dictionary contains the given word, 
+     * {@code false} otherwise.
+     * 
+     * @param o The object to search for in this object.
+     * @return {@code true} if this object contains the given word, 
+     *         {@code false} otherwise.
+     */
+    @Override
+    public boolean contains(Object o) {
+        boolean contains = false;
+        if (o instanceof Word) {
+            final Word w = (Word) o;
+            words.values().forEach((List<Word> wordList) -> {
+                wordList.stream().anyMatch((word) -> word == w);
+            });
+        }
+        return contains;
+    }
+    
+    /**
+     * Returns an iterator over the words contained within this dictionary. 
+     * 
+     * <p> The iterator returned by this method is ordered by word difficulty 
+     * and is backed by the data stored by this dictionary, so changes to the 
+     * dictionary are reflected on the iterator, and vice versa.
+     * 
+     * @return An iterator over the words contained within this object.
+     */
+    @Override
+    public Iterator<Word> iterator() {
+        return getAllWords().iterator();
+    }
+
+    /**
+     * Inserts into this dictionary the given {@code Word}, taking into account
+     * its difficulty, returning {@code true} if the given word was inserted 
+     * into this object, {@code false} otherwise.
+     * 
+     * @param w The {@code Word} to add.
+     * @return {@code true} if the given word was inserted into this object,
+     *         {@code false} otherwise.
+     */
+    @Override
+    public boolean add(Word w) {
         List<Word> peers = getListOf(judgeDifficulty(w));
-        peers.add(w);
+        return peers.add(w);
     }
     
     /**
      * Removes a given word from this dictionary, returning {@code true} if the
-     * word was removed, {@code false} if not, (i.e. the given word does not 
+     * word was removed, {@code false} otherwise (i.e. the given word does not 
      * exist in this dictionary).
      * 
-     * @param w The word to remove.
+     * @param o The object to remove from this dictionary.
      * @return {@code true} if the word was removed, {@code false} otherwise.
      */
-    protected boolean internalRemove(Word w) {
-        List<Word> peers = getListOf(judgeDifficulty(w));
-        return peers.remove(w);
-    }
-    
-    /**
-     * Adds a given {@code Word} into this object.
-     * 
-     * @param w The {@code Word} to add.
-     * @throws NullPointerException If the given word is {@code null}.
-     */
-    public void add(Word w) {
-        Objects.requireNonNull(w);
-        internalAdd(w);
-    }
-    
-    /**
-     * Removes the specified word from this object.
-     * 
-     * @param w The object to remove.
-     * @throws NullPointerException If the given word is {@code null}.
-     */
-    public void remove(Word w) {
-        Objects.requireNonNull(w);
-        internalRemove(w);
+    @Override
+    public boolean remove(Object o) {
+        if (o instanceof Word) {
+            final Word w = (Word) o;
+            List<Word> peers = getListOf(judgeDifficulty(w));
+            return peers.remove(w);
+        }
+        return false;
     }
     
     /**
@@ -206,6 +241,7 @@ public class Dictionary {
      * 
      * @return The amount of words currently contained within this object.
      */
+    @Override
     public int size() {
         int size = words.values()
                         .stream()
@@ -215,35 +251,8 @@ public class Dictionary {
     }
     
     /**
-     * Returns a set containing all entries mapped to this object.
-     * 
-     * @return A set of all entries in this object.
-     */
-    public Set<Map.Entry<Difficulty, List<Word>>> entrySet() {
-        return words.entrySet();
-    }
-    
-    /**
-     * Returns a set containing all keys mapped to this object.
-     * 
-     * @return A set of all keys in this object.
-     */
-    public Set<Difficulty> keySet() {
-        return words.keySet();
-    }
-    
-    /**
-     * Returns a collection containing the lists mapped to this object.
-     * 
-     * @return A collection containing the lists mapped to this object.
-     */
-    public Collection<List<Word>> values() {
-        return words.values();
-    }
-    
-    /**
-     * Returns a list containing all words contained within this object of the 
-     * given difficulty.
+     * Returns a list containing all words of the given difficulty that are 
+     * contained within this dictionary.
      * 
      * @param difficulty The difficulty of list to retrieve.
      * @return A list containing all words of the given difficulty.
@@ -262,6 +271,19 @@ public class Dictionary {
      */
     public List<Word> cacheList() {
         return Collections.unmodifiableList(getListOf(difficultyCache));
+    }
+    
+    /**
+     * Returns a list containing all the words stored within this dictionary.
+     * 
+     * @return A list containing all the words of this dictionary.
+     */
+    public List<Word> getAllWords() {
+        List<Word> allWords = new ArrayList<>();
+        words.values()
+             .stream()
+             .forEach((wordList) -> allWords.addAll(wordList));
+        return allWords;
     }
     
 // Difficulty tuning variables
@@ -325,54 +347,6 @@ public class Dictionary {
     }
     
     /**
-     * Selects and returns a random {@code Word} from this object.
-     * 
-     * @return A random {@code Word} from this object.
-     */
-    public Word getAnyWord() {
-        Difficulty d = Difficulty.ALL
-                                 .stream()
-                                 .findAny() // Terminal operation
-                                 .get();
-        difficultyCache = d;
-        return getWordOf(d);
-    }
-    
-    /**
-     * Returns a randomly selected word of the given difficulty.
-     * 
-     * <p> This method populates the given list if it is empty. Then it 
-     * retrieves a randomly selected element from it. in the case that there are
-     * no elements of the specified difficulty contained within this object, 
-     * this method throws a {@code NoSuchWordException}.
-     * 
-     * @param difficulty The difficulty of the word to return.
-     * @return A randomly selected word of the given difficulty.
-     * @throws NoSuchWordException If there are no words of the given 
-     *         difficulty
-     */
-    protected Word getWordOf(Difficulty difficulty) {
-        if (hasWordOf(difficulty)) {
-            List<Word> wordsOf = getListOf(difficulty);
-            difficultyCache = difficulty;
-            return wordsOf.get(Utilities.r.nextInt(wordsOf.size()));
-        }
-        throw new NoSuchWordException("Could not retrieve word.", difficulty);
-    }
-    
-    /**
-     * Returns {@code true} if this object contains at least one word of the
-     * given difficulty, {@code false} otherwise.
-     * 
-     * @param difficulty The difficulty to test.
-     * @return {@code true} if this object contains at least one word of the
-     *         given difficulty, {@code false} otherwise.
-     */
-    private boolean hasWordOf(Difficulty difficulty) {
-        return words.containsKey(difficulty) && !words.get(difficulty).isEmpty();
-    }
-    
-    /**
      * Returns a randomly selected word of easy difficulty mapped to this 
      * object.
      * 
@@ -401,6 +375,56 @@ public class Dictionary {
     public Word getHardWord() {
         return getWordOf(Difficulty.HARD);
     }
+    
+    /**
+     * Selects and returns a random {@code Word} from this object.
+     * 
+     * @return A random {@code Word} from this object.
+     */
+    public Word getAnyWord() {
+        Difficulty d = Difficulty.ALL
+                                 .stream()
+                                 .findAny() // Terminal operation
+                                 .get();
+        difficultyCache = d;
+        return getWordOf(d);
+    }
+    
+    /**
+     * Returns {@code true} if this object contains at least one word of the
+     * given difficulty, {@code false} otherwise.
+     * 
+     * @param difficulty The difficulty to test.
+     * @return {@code true} if this object contains at least one word of the
+     *         given difficulty, {@code false} otherwise.
+     */
+    private boolean hasWordOf(Difficulty difficulty) {
+        return words.containsKey(difficulty) && !words.get(difficulty).isEmpty();
+    }
+    
+    /**
+     * Returns a randomly selected word of the given difficulty.
+     * 
+     * <p> This method populates the given list if it is empty. Then it 
+     * retrieves a randomly selected element from it. in the case that there are
+     * no elements of the specified difficulty contained within this object, 
+     * this method throws a {@code NoSuchWordException}.
+     * 
+     * @param difficulty The difficulty of the word to return.
+     * @return A randomly selected word of the given difficulty.
+     * @throws NoSuchWordException If there are no words of the given 
+     *         difficulty
+     */
+    protected Word getWordOf(Difficulty difficulty) {
+        if (hasWordOf(difficulty)) {
+            List<Word> wordsOf = getListOf(difficulty);
+            difficultyCache = difficulty;
+            return wordsOf.get(Utilities.r.nextInt(wordsOf.size()));
+        }
+        throw new NoSuchWordException("Could not retrieve word.", difficulty);
+    }
+    
+// Utility methods   
     
     /**
      * Returns a formatted {@code String} containing this object's map of words.

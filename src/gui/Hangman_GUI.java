@@ -23,7 +23,6 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
-import javafx.scene.control.ColorPicker;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -263,7 +262,7 @@ public class Hangman_GUI extends JFrame {
             
             @Override
             public Word get(int index) {
-                return game.getWords().cacheList().get(index);
+                return getList().get(index);
             }
             
             @Override
@@ -278,7 +277,7 @@ public class Hangman_GUI extends JFrame {
             
             @Override
             public Word remove(int index) {
-                return game.getWords().cacheList().remove(index);
+                return getList().remove(index);
             }
 
             @Override
@@ -294,6 +293,10 @@ public class Hangman_GUI extends JFrame {
             @Override
             public void addElement(Word element) {
                 add(0, element);
+            }
+            
+            private List<Word> getList() {
+                return game.getWords().cacheList();
             }
         });
     }
@@ -1334,7 +1337,7 @@ public class Hangman_GUI extends JFrame {
         
         } catch (ClassNotFoundException | InstantiationException 
                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(ColorPicker.class.getName())
+            Logger.getLogger(Hangman_GUI.class.getName())
                     .log(Level.SEVERE, 
                             "Error with look and feel settings. "
                           + "Check if look and feels are installed correctly",

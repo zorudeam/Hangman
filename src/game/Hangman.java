@@ -1,7 +1,10 @@
 package game;
 
+import java.util.Collection;
+import java.util.Collections;
 import language.Dictionary;
 import language.Difficulty;
+import language.Word;
 import utilities.functions.StringUtilities;
 
 /**
