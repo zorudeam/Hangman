@@ -182,9 +182,7 @@ public class Dictionary
         boolean contains = false;
         if (o instanceof Word) {
             final Word w = (Word) o;
-            words.values().forEach((List<Word> wordList) -> {
-                wordList.stream().anyMatch((word) -> word == w);
-            });
+            contains = getAllWords().stream().anyMatch(word -> word == w);
         }
         return contains;
     }
