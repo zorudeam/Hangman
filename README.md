@@ -1,4 +1,4 @@
-# Hangman
+# Hangman [![Build Status](https://travis-ci.org/OliverAbdulrahim/Hangman.svg?branch=master)](https://travis-ci.org/OliverAbdulrahim/Hangman)
 A playable version of the game "hangman" with a fully-functional user interface.
 
 ### How to Run
