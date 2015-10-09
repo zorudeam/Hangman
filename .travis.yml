@@ -1,0 +1,10 @@
+language: java
+
+jdk:
+	- oraclejdk8
+
+before_script: ant clean
+
+script: ant compile
+
+after_script: ant build
