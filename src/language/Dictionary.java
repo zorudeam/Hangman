@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 import utilities.functions.Utilities;
 
 /**
@@ -39,21 +38,6 @@ public class Dictionary
      * difficulty
      */
     private final Map<Difficulty, List<Word>> words;
-    
-    /**
-     * Stores all words considered to be "easy" contained within this object.
-     */
-    private List<Word> easyWords;
-    
-    /**
-     * Stores all words considered to be "medium" contained within this object.
-     */
-    private List<Word> mediumWords;
-    
-    /**
-     * Stores all words considered to be "hard" contained within this object.
-     */
-    private List<Word> hardWords;
     
     /**
      * Stores the difficulty of the last word that was successfully retrieved
@@ -94,9 +78,6 @@ public class Dictionary
      */
     public Dictionary(InputStream target) {
         words = new TreeMap<>();
-        easyWords = new ArrayList<>();
-        mediumWords = new ArrayList<>();
-        hardWords = new ArrayList<>();
         difficultyCache = Difficulty.DEFAULT;
         if (target != null) {
             constructDictionary(target);
@@ -111,6 +92,9 @@ public class Dictionary
      */
     private void constructDictionary(InputStream target) {
         try (Scanner input = new Scanner(target)) {
+            List<Word> easyWords = new ArrayList<>();
+            List<Word> mediumWords = new ArrayList<>();
+            List<Word> hardWords = new ArrayList<>();
             while(input.hasNext()) {
                 Word w = new Word(input.nextLine());
                 // Interesting type inference in case statements - did not know 
@@ -129,10 +113,10 @@ public class Dictionary
                     // returns a Difficulty object
                 }
             }
+            words.put(Difficulty.EASY, easyWords);
+            words.put(Difficulty.MEDIUM, mediumWords);
+            words.put(Difficulty.HARD, hardWords);
         }
-        words.put(Difficulty.EASY, easyWords);
-        words.put(Difficulty.MEDIUM, mediumWords);
-        words.put(Difficulty.HARD, hardWords);
     }
     
     /**
@@ -257,6 +241,7 @@ public class Dictionary
      */
     public List<Word> getListOf(Difficulty difficulty) {
         if (!hasWordOf(difficulty)) {
+            difficultyCache = Difficulty.DEFAULT;
             throw new NoSuchWordException("Could not retrieve word.", difficulty);
         }
         return Collections.unmodifiableList(words.get(difficulty));
@@ -281,7 +266,7 @@ public class Dictionary
         words.values()
              .stream()
              .forEach((wordList) -> allWords.addAll(wordList));
-        return allWords;
+        return Collections.unmodifiableList(allWords);
     }
     
 // Difficulty tuning variables
@@ -297,12 +282,14 @@ public class Dictionary
     private static final int EASY_LENGTH_THRESHOLD = 7;
     
     /**
-     * Minimum amount of vowels for a medium word.
+     * Minimum amount of vowels for a medium word. This value is always less 
+     * than the {@link #EASY_VOWEL_THRESHOLD}.
      */
     private static final int MEDIUM_VOWEL_THRESHOLD = 3;
     
     /**
-     * Minimum length for a medium word.
+     * Minimum length for a medium word. This value is always less than the
+     * {@link #EASY_LENGTH_THRESHOLD}.
      */
     private static final int MEDIUM_LENGTH_THRESHOLD = 5;
     
@@ -431,13 +418,18 @@ public class Dictionary
      */
     @Override
     public String toString() {
-        return "Dictionary {"
-                + "\n  EASY   = " + easyWords
-                + "\n  MEDIUM = " + mediumWords
-                + "\n  HARD   = " + hardWords
-                + "\n  difficultyCache = " + difficultyCache
-                + '\n' 
-                + '}';
+        StringBuilder sb = new StringBuilder("Dictionary {\n");
+        for (Difficulty d : Difficulty.ALL) {
+            if (words.containsKey(d)) {
+                sb.append("    ")
+                  .append(d)
+                  .append(" = ")
+                  .append(words.get(d))
+                  .append('\n');
+            }
+        }
+        sb.append('}');
+        return sb.toString();
     }
 
 }
