@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import utilities.functions.Utilities;
 
 /**
@@ -26,13 +27,37 @@ import utilities.functions.Utilities;
 public class Dictionary
     extends AbstractCollection<Word>
 {
-    
+
     /**
      * Stores the resource location of the default dictionary.
      */
     public static final InputStream DEFAULT_STREAM = Dictionary.class
             .getResourceAsStream("/resources/dictionary.txt");
+ 
+// Difficulty tuning variables
 
+    /**
+     * Minimum amount of vowels for an easy word.
+     */
+    private static final int EASY_VOWEL_THRESHOLD = 4;
+    
+    /**
+     * Minimum length for an easy word.
+     */
+    private static final int EASY_LENGTH_THRESHOLD = 7;
+    
+    /**
+     * Minimum amount of vowels for a medium word. This value is always less 
+     * than the {@link #EASY_VOWEL_THRESHOLD}.
+     */
+    private static final int MEDIUM_VOWEL_THRESHOLD = 3;
+    
+    /**
+     * Minimum length for a medium word. This value is always less than the
+     * {@link #EASY_LENGTH_THRESHOLD}.
+     */
+    private static final int MEDIUM_LENGTH_THRESHOLD = 5;
+    
     /**
      * Contains this object's word dictionary. This map is sorted by word 
      * difficulty
@@ -91,37 +116,23 @@ public class Dictionary
      * @param target The {@code File} to read into this object's map.
      */
     private void constructDictionary(InputStream target) {
+        Difficulty.ALL.stream().forEach(d -> words.put(d, new ArrayList<>()));
         try (Scanner input = new Scanner(target)) {
-            List<Word> easyWords = new ArrayList<>();
-            List<Word> mediumWords = new ArrayList<>();
-            List<Word> hardWords = new ArrayList<>();
             while(input.hasNext()) {
+                // No need to sanitize input here, Word(String) constructor
+                // already does that
                 Word w = new Word(input.nextLine());
-                // Interesting type inference in case statements - did not know 
-                // that Java inferred types for enum switch statements.
-                switch (judgeDifficulty(w)) {
-                    case EASY:
-                        easyWords.add(w);
-                        break;
-                    case MEDIUM:
-                        mediumWords.add(w);
-                        break;
-                    case HARD:
-                        hardWords.add(w);
-                        break;
-                    // No default case needed, judgeDifficulty(Word) always 
-                    // returns a Difficulty object
-                }
+                words.get(judgeDifficulty(w)).add(w);
             }
-            words.put(Difficulty.EASY, easyWords);
-            words.put(Difficulty.MEDIUM, mediumWords);
-            words.put(Difficulty.HARD, hardWords);
         }
     }
     
     /**
      * Returns an enumerated property depending on the difficulty of the given 
      * {@code Word}.
+     * 
+     * <p> This implementation always returns a difficulty and ignores the
+     * {@link Difficulty#DEFAULT} enumeration.
      * 
      * @param w The word to judge the difficulty of.
      * @return An enumerated property depending on the difficulty of the given 
@@ -225,10 +236,11 @@ public class Dictionary
      */
     @Override
     public int size() {
+        // This finds the sum of the sizes of all the lists mapped to words
         int size = words.values()
-                        .stream()
-                        .mapToInt(List :: size)
-                        .sum(); // Nice terminal operation dude.
+                .stream()
+                .mapToInt(List :: size)
+                .sum();
         return size;
     }
     
@@ -268,31 +280,7 @@ public class Dictionary
              .forEach((wordList) -> allWords.addAll(wordList));
         return Collections.unmodifiableList(allWords);
     }
-    
-// Difficulty tuning variables
-
-    /**
-     * Minimum amount of vowels for an easy word.
-     */
-    private static final int EASY_VOWEL_THRESHOLD = 4;
-    
-    /**
-     * Minimum length for an easy word.
-     */
-    private static final int EASY_LENGTH_THRESHOLD = 7;
-    
-    /**
-     * Minimum amount of vowels for a medium word. This value is always less 
-     * than the {@link #EASY_VOWEL_THRESHOLD}.
-     */
-    private static final int MEDIUM_VOWEL_THRESHOLD = 3;
-    
-    /**
-     * Minimum length for a medium word. This value is always less than the
-     * {@link #EASY_LENGTH_THRESHOLD}.
-     */
-    private static final int MEDIUM_LENGTH_THRESHOLD = 5;
-    
+   
     /**
      * Determines if a given word is "easy" in difficulty. Words that are longer
      * in length and have more vowels are generally considered easy words.
@@ -367,10 +355,7 @@ public class Dictionary
      * @return A random {@code Word} from this object.
      */
     public Word getAnyWord() {
-        Difficulty d = Difficulty.ALL
-                                 .stream()
-                                 .findAny() // Terminal operation
-                                 .get();
+        Difficulty d = Difficulty.ALL.stream().findAny().get();
         difficultyCache = d;
         return getWordOf(d);
     }
@@ -418,18 +403,13 @@ public class Dictionary
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Dictionary {\n");
-        for (Difficulty d : Difficulty.ALL) {
-            if (words.containsKey(d)) {
-                sb.append("    ")
-                  .append(d)
-                  .append(" = ")
-                  .append(words.get(d))
-                  .append('\n');
-            }
-        }
-        sb.append('}');
-        return sb.toString();
+        return "Dictionary {\n\t" 
+            + Difficulty.ALL
+                .stream()
+                .filter(d -> words.containsKey(d))
+                .map(d -> d.toString() + " = " + words.get(d))
+                .collect(Collectors.joining("\n\t"))
+            + "\n}";
     }
 
 }
