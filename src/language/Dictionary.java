@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 
 /**
  * The {@code Dictionary} class stores all parseable tokens from a given file 
- * and maps the contents to their respective "difficulty." This provides for a 
- * structure suitable for use in a word game.
+ * and maps the contents to their respective "difficulty" depending on their
+ * character contents. This provides for a structure suitable for use in a word 
+ * game.
  * 
  * <p> This {@code Collection} implements all imposed methods. Notable 
  * operations include:
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
  * are converted to objects of the {@link language.Word} class. See the 
  * {@link Word#Word(java.lang.String)} constructor for more detailed information
  * on what this entails.
+ * 
  * @author Oliver Abdulrahim
  * @see language.Word The type of object stored in this <code>Collection</code>.
  * @see language.NoSuchWordException Thrown to indicate that an object of this
