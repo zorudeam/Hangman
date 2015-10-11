@@ -6,6 +6,9 @@ import utilities.functions.StringUtilities;
  * The {@code Word} class provides for a structure for words in the context of a
  * playable word game.
  * 
+ * <p> Objects of this class are <em>immutable</em>; their properties cannot be
+ * changed after creation.
+ * 
  * @author Oliver Abdulrahim
  */
 public final class Word 
@@ -39,19 +42,22 @@ public final class Word
     }
     
     /**
-     * Constructs a {@code Word} with random characters and the specified 
+     * Constructs a {@code Word} with random alpha characters and the specified 
      * length.
      * 
      * @param length The length of the {@code Word}.
      */
     public Word(int length) {
-        this(randomAlphaString(length));
+        this(StringUtilities.randomAlphaString(length));
     }
     
     /**
      * Constructs a {@code Word} with the specified characters.
      * 
+     * <p> This constructor "sanitizes" the given word
+     * 
      * @param characters The characters to use to create this {@code Word}.
+     * @see #sanitizeWord(java.lang.String) 
      */
     public Word(String characters) {
         this.characters = sanitizeWord(characters);
@@ -60,7 +66,7 @@ public final class Word
     /**
      * Constructs an exact copy of the given {@code Word}.
      * 
-     * @param other The word whose attributes to copy.
+     * @param other The word whose characters to copy.
      */
     public Word(Word other) {
         this(other.characters);
@@ -72,9 +78,15 @@ public final class Word
      * 
      * @param str The {@code String} to sanitize.
      * @return A sanitized version of the given {@code String}.
+     * @see #sanitizeCharacter(char) Applied to each character in the given 
+     *      <code>String</code>.
      */
-    public static String sanitizeWord(String str) {
-        return str.replaceAll("\\s+", "").toLowerCase();
+    public static final String sanitizeWord(String str) {
+        String sanitized = "";
+        for (char c : str.replaceAll("\\s+", "").toCharArray()) {
+            sanitized += sanitizeCharacter(c);
+        }
+        return sanitized;
     }
     
     /**
@@ -84,19 +96,8 @@ public final class Word
      * @param c The {@code char} to sanitize.
      * @return A sanitized version of the given {@code char}.
      */
-    public static char sanitizeCharacter(char c) {
+    public static final char sanitizeCharacter(char c) {
         return Character.toLowerCase(c);
-    }
-    
-    /**
-     * Generates a {@code String} containing random characters with the 
-     * specified length.
-     * 
-     * @param length The amount of characters in the word to generate.
-     * @return A {@code String} with random characters of the specified length.
-     */
-    private static String randomAlphaString(int length) {
-        return StringUtilities.random('a', 'z', length);
     }
     
     /**
@@ -139,8 +140,8 @@ public final class Word
      */
     public int vowelCount() {
         int amount = 0;
-        for (int i = 0; i < characters.length(); i++) {
-            if (isVowel(characters.charAt(i))) {
+        for (char c : characters.toCharArray()) {
+            if (isVowel(c)) {
                 amount++;
             }
         }
@@ -159,8 +160,8 @@ public final class Word
         char[] vowels = {
             'a', 'e', 'i', 'o', 'u'
         };
-        for (int i = 0; i < vowels.length; i++) {
-            if (key == vowels[i]) {
+        for (char vowel : vowels) {
+            if (key == vowel) {
                 return true;
             }
         }
@@ -196,6 +197,25 @@ public final class Word
     @Override
     public int compareTo(Word other) {
         return this.characters().compareTo(other.characters());
+    }
+    
+    /**
+     * Compares a given object to this one for equality, returning {@code true}
+     * if and only if the given object is of type Word and has identical 
+     * characters to this one, {@code false} otherwise.
+     * 
+     * @param o The object to test against this one for equality.
+     * @return {@code true} if the given object is equal to this one, 
+     *         {@code false} otherwise.
+     * @see #compareTo(language.Word)
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof Word)) {
+            return false;
+        }
+        final Word other = (Word) o;
+        return this.compareTo(other) == 0;
     }
     
 }
