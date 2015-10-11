@@ -4,9 +4,7 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -28,7 +26,7 @@ public final class StringUtilities {
      * Don't let anyone instantiate this class.
      */
     private StringUtilities() {
-    
+        throw new AssertionError();
     }
     
     /**
@@ -425,7 +423,7 @@ public final class StringUtilities {
      * @return A formatted version of the given {@code String}.
      */
     public static String formattedToString(String str) {
-        String sanitized = str.replace(" ", "");
+        String sanitized = str.replaceAll("\\s+", "");
         StringBuilder formatted = new StringBuilder(sanitized.length() * 3);
         for (int i = 0; i < sanitized.length(); i++) {
             formatted.append(sanitized.charAt(i))
@@ -479,15 +477,11 @@ public final class StringUtilities {
      * @return A reduced version of the given {@code String}.
      */
     public static String reduceToUniques(String str) {
-        Set<Character> uniques = new LinkedHashSet<>();
-        for (char c : str.toCharArray()) {
-            uniques.add(c);
-        }
-        StringBuilder sb = new StringBuilder();
-        uniques.stream().forEach((character) -> {
-            sb.append(character);
-        });
-        return sb.toString();
+        return str.chars()
+                .distinct()
+                .collect(StringBuilder :: new, StringBuilder :: appendCodePoint, 
+                         StringBuilder :: append)
+                .toString();
     }
     
     /**
@@ -508,4 +502,16 @@ public final class StringUtilities {
         return false;
     }
     
+    /**
+     * Generates a {@code String} containing random characters with the 
+     * specified length.
+     * 
+     * @param length The amount of characters in the word to generate.
+     * @return A {@code String} with random characters of the specified length.
+     */
+    public static final String randomAlphaString(int length) {
+        return StringUtilities.random('a', 'z', length);
+    }
+    
 }
+
