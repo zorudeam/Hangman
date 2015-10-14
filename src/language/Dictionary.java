@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * on what this entails.
  * 
  * @author Oliver Abdulrahim
+ * @see language.Difficulty The difficulties that are mapped in this collection.
  * @see language.Word The type of object stored in this <code>Collection</code>.
  * @see language.NoSuchWordException Thrown to indicate that an object of this
  *      class does not contain a word of a given difficulty.
@@ -146,28 +147,30 @@ public class Dictionary
     }
     
 // Difficulty tuning variables
-
+    
     /**
-     * Minimum amount of vowels for an easy word.
+     * Minimum length for an easy word. This value must be greater 
+     * than the {@link #MEDIUM_LENGTH_THRESHOLD}.
+     */
+    private static final int EASY_LENGTH_THRESHOLD = 7;
+    
+    /**
+     * Minimum amount of vowels for an easy word. This value must be greater 
+     * than the {@link #MEDIUM_VOWEL_THRESHOLD}.
      */
     private static final int EASY_VOWEL_THRESHOLD = 4;
     
     /**
-     * Minimum length for an easy word.
+     * Minimum length for a medium word. This value is always less than the
+     * {@link #EASY_LENGTH_THRESHOLD}.
      */
-    private static final int EASY_LENGTH_THRESHOLD = 7;
+    private static final int MEDIUM_LENGTH_THRESHOLD = EASY_LENGTH_THRESHOLD - 2;
     
     /**
      * Minimum amount of vowels for a medium word. This value is always less 
      * than the {@link #EASY_VOWEL_THRESHOLD}.
      */
     private static final int MEDIUM_VOWEL_THRESHOLD = EASY_VOWEL_THRESHOLD - 1;
-    
-    /**
-     * Minimum length for a medium word. This value is always less than the
-     * {@link #EASY_LENGTH_THRESHOLD}.
-     */
-    private static final int MEDIUM_LENGTH_THRESHOLD = EASY_VOWEL_THRESHOLD - 2;
     
 // Dictionary operations (static)
     
