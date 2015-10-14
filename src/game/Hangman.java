@@ -106,7 +106,7 @@ public final class Hangman {
      * @param d The difficulty setting to use for this game.
      */
     public final void resetGame(Difficulty d) {
-        currentWord = words.getWordOf(d).characters();
+        currentWord = words.randomWordOf(d).characters();
         int length = currentWord.length();
         correctGuesses = StringUtilities.createRepeating(length, GUESS_DELIMITER);
         previouslyGuessed = "";

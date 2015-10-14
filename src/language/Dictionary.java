@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
  * operations include:
  *   <ul> 
  *     <li> {@link #add(language.Word) The add operation}, which in this 
- *          implementation, inserts a word into this object based on its 
+ *          implementation inserts a word into the collection based on its 
  *          difficulty.
  *     <li> {@link #remove(java.lang.Object) The remove operation}, which in 
- *          this implementation, removes a word from this object based on its
+ *          this implementation removes a word from the collection based on its
  *          difficulty.
- *     <li> {@link #size() The size method}, which in this implementation, 
+ *     <li> {@link #size() The size method}, which in this implementation
  *          returns the total amount of words across all mapped difficulties
  *          contained within this object.
  *   </ul>
@@ -53,10 +53,10 @@ public class Dictionary
             .getResourceAsStream("/resources/dictionary.txt");
     
     /**
-     * Contains this object's word dictionary. This map is sorted by word 
-     * difficulty.
+     * Contains this object's word dictionary, grouping difficulty enumerations
+     * as provided by {@link Difficulty} with all words that match them.
      */
-    private final Map<Difficulty, List<Word>> words;
+    protected final Map<Difficulty, List<Word>> words;
     
     /**
      * Stores the difficulty of the last word that was successfully retrieved
@@ -95,8 +95,8 @@ public class Dictionary
      * @param other The object to copy to this one.
      */
     public Dictionary(Dictionary other) {
-        this.difficultyCache = other.difficultyCache;
         this.words = new TreeMap<>(other.words);
+        this.difficultyCache = other.difficultyCache;
     }
     
     /**
@@ -116,7 +116,8 @@ public class Dictionary
     
     /**
      * Each token in the given {@code InputStream} is parsed and placed into the
-     * map in a line-by-line basis using a {@code Scanner} implementation.
+     * map based on the difficulty in a line-by-line basis using a 
+     * {@code Scanner} implementation.
      *
      * @param target The {@code File} to read into this object's map.
      */
@@ -247,11 +248,11 @@ public class Dictionary
      * @throws NoSuchWordException If there are no words of the given difficulty
      *         contained within this object.
      */
-    public List<Word> getListOf(Difficulty d) {
+    public List<Word> listOf(Difficulty d) {
         if (!hasWordOf(d)) {
             throw new NoSuchWordException("Could not retrieve word.", d);
         }
-        return Collections.unmodifiableList(internalGetListOf(d));
+        return Collections.unmodifiableList(internalListOf(d));
     }
     
     /**
@@ -260,16 +261,16 @@ public class Dictionary
      * of the given difficulty.
      * 
      * <p> This method is identical to the 
-     * {@link #getListOf(language.Difficulty)} except that it does not throw a
+     * {@link #listOf(language.Difficulty)} except that it does not throw a
      * {@code NoSuchWordException} in the case that there is no word of the
      * given difficulty or if the list containing words of the given difficulty 
      * is empty.
      * 
      * @param d The difficulty of list to retrieve.
      * @return A list containing all words of the given difficulty.
-     * @see #getListOf(language.Difficulty)
+     * @see #listOf(language.Difficulty)
      */
-    protected List<Word> internalGetListOf(Difficulty d) {
+    protected List<Word> internalListOf(Difficulty d) {
         return words.get(d);
     }
     
@@ -285,7 +286,7 @@ public class Dictionary
      * @return A cache of the previously used difficulty list.
      */
     public List<Word> cacheList() {
-        List<Word> lastUsed = internalGetListOf(difficultyCache);
+        List<Word> lastUsed = internalListOf(difficultyCache);
         return Collections.unmodifiableList(lastUsed);
     }
     
@@ -300,7 +301,7 @@ public class Dictionary
      * 
      * @return A view-only list containing all the words of this dictionary.
      */
-    public List<Word> getAllWords() {
+    public List<Word> allWords() {
         List<Word> allWords = words.values()
                 .stream()
                 .flatMap(List :: stream)
@@ -314,8 +315,8 @@ public class Dictionary
      * 
      * @return A randomly selected word of easy difficulty.
      */
-    public Word getEasyWord() {
-        return getWordOf(Difficulty.EASY);
+    public final Word randomEasyWord() {
+        return randomWordOf(Difficulty.EASY);
     }
     
     /**
@@ -324,8 +325,8 @@ public class Dictionary
      * 
      * @return A randomly selected word of medium difficulty.
      */
-    public Word getMediumWord() {
-        return getWordOf(Difficulty.MEDIUM);
+    public final Word getMediumWord() {
+        return randomWordOf(Difficulty.MEDIUM);
     }
     
     /**
@@ -334,8 +335,8 @@ public class Dictionary
      * 
      * @return A randomly selected word of hard difficulty.
      */
-    public Word getHardWord() {
-        return getWordOf(Difficulty.HARD);
+    public final Word randomHardWord() {
+        return randomWordOf(Difficulty.HARD);
     }
     
     /**
@@ -343,12 +344,12 @@ public class Dictionary
      * 
      * @return A random {@code Word} from this object.
      */
-    public Word getAnyWord() {
+    public Word randomWord() {
         Difficulty d = words.keySet()
                 .stream()
                 .findAny()
                 .get();
-        return getWordOf(d);
+        return randomWordOf(d);
     }
     
     /**
@@ -363,10 +364,10 @@ public class Dictionary
      * @throws NoSuchWordException If there are no words of the given difficulty
      *         contained within this object.
      */
-    public Word getWordOf(Difficulty d) {
+    public Word randomWordOf(Difficulty d) {
         if (hasWordOf(d)) {
             difficultyCache = d;
-            List<Word> wordsOf = internalGetListOf(d);
+            List<Word> wordsOf = internalListOf(d);
             int index = ThreadLocalRandom.current().nextInt(wordsOf.size());
             return wordsOf.get(index);
         }
@@ -400,7 +401,7 @@ public class Dictionary
         boolean contains = false;
         if (o instanceof Word) {
             final Word w = (Word) o;
-            contains = getAllWords().stream().anyMatch(word -> word == w);
+            contains = allWords().stream().anyMatch(word -> word == w);
         }
         return contains;
     }
@@ -425,7 +426,7 @@ public class Dictionary
      */
     @Override
     public Iterator<Word> iterator() {
-        return getAllWords().iterator();
+        return allWords().iterator();
     }
 
     /**
@@ -441,7 +442,7 @@ public class Dictionary
     public boolean add(Word w) {
         // No need to test this value against anything, judgeDifficulty(Word)
         // always returns a Difficulty enumeration
-        List<Word> peers = internalGetListOf(judgeDifficulty(w));
+        List<Word> peers = internalListOf(judgeDifficulty(w));
         return peers.add(w);
     }
     
@@ -458,7 +459,7 @@ public class Dictionary
     public boolean remove(Object o) {
         if (o instanceof Word) {
             final Word w = (Word) o;
-            List<Word> peers = internalGetListOf(judgeDifficulty(w));
+            List<Word> peers = internalListOf(judgeDifficulty(w));
             return peers.remove(w);
         }
         return false;
