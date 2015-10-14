@@ -3,6 +3,10 @@ language: java
 jdk:
   - oraclejdk8
 
+branches:
+  only:
+    - build
+
 before_script: ant clean
 
 script: ant compile
