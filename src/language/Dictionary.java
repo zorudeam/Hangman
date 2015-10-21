@@ -306,7 +306,7 @@ public class Dictionary
     public List<Word> allWords() {
         List<Word> allWords = words.values()
                 .stream()
-                .flatMap(List:: stream)
+                .flatMap(List :: stream)
                 .collect(Collectors.toList());
         return Collections.unmodifiableList(allWords);
     }
@@ -476,7 +476,7 @@ public class Dictionary
         // the difficulty keys in this object.
         return words.values()
                 .stream()
-                .mapToInt(List:: size)
+                .mapToInt(List :: size)
                 .sum();
     }
 
