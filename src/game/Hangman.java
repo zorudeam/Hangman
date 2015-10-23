@@ -4,88 +4,89 @@ import language.Dictionary;
 import language.Difficulty;
 import language.Word;
 import utilities.functions.StringUtilities;
+import javax.swing.ImageIcon;
 
 /**
- * The {@code Hangman} class contains the logic for a game of "Hangman." Game 
- * operations, such as updating the game board, are executed through methods 
+ * The {@code Hangman} class contains the logic for a game of "Hangman." Game
+ * operations, such as updating the game board, are executed through methods
  * contained within this class.
- * 
- * <p> This class allows for the selection of word difficulty during 
+ *
+ * <p> This class allows for the selection of word difficulty during
  * construction.
- * 
+ *
  * @author Oliver Abdulrahim
  * @see language.Dictionary
  * @see language.Word
  */
 public final class Hangman {
-    
+
     /**
-     * The place-holding delimiter for the {@code String} that stores correct 
+     * The place-holding delimiter for the {@code String} that stores correct
      * guesses. Characters that have not been guessed correctly are represented
-     * by this character in the same index value within the 
+     * by this character in the same index value within the
      * {@link #correctGuesses} object as in the {@link #currentWord} for this
      * instance.
-     * 
+     *
      * @see #correctGuesses
      */
     private static final char GUESS_DELIMITER = '_';
-    
+
     /**
      * Stores the maximum amount of hints allowed to any game.
-     * 
+     *
      * @see #hintsLeft
      */
     private static final int MAX_HINTS = 3;
-    
+
     /**
      * Stores words that are randomly selected for guessing for this instance.
      */
     private Dictionary words;
-    
+
     /**
      * Stores the word that is being guessed.
      */
     private String currentWord;
-    
+
     /**
      * Stores the characters have already been guessed. This {@code String}
-     * stores all guesses, including those that are incorrect as well as those 
+     * stores all guesses, including those that are incorrect as well as those
      * that are correct.
      */
     private String previouslyGuessed;
-    
+
     /**
-     * Stores the characters have already been guessed correctly, (i.e. they 
-     * exist in {@link #currentWord}). In other words, this {@code String} 
-     * stores the union between the current word and the characters that have 
+     * Stores the characters have already been guessed correctly, (i.e. they
+     * exist in {@link #currentWord}). In other words, this {@code String}
+     * stores the union between the current word and the characters that have
      * already been guessed.
      */
     private String correctGuesses;
-    
+
     /**
      * Stores the amount of character guesses that are left in this game.
      */
     private int guessesLeft;
-    
+
     /**
      * Stores the amount of hints remaining in this game. This value is defined
      * by half of the length of the current word.
      */
     private int hintsLeft;
-    
+
     /**
      * Stores the current image repository for use in a graphical interface.
      */
     private Actor actor;
-    
+
     /**
-     * Initializes a new game with medium difficulty 
+     * Initializes a new game with medium difficulty
      * ({@link Difficulty#MEDIUM}).
      */
     public Hangman() {
         this(Difficulty.MEDIUM, Actor.HUMAN, new Dictionary());
     }
-    
+
     /**
      * Initializes a new game with the given attributes.
      *
@@ -98,7 +99,7 @@ public final class Hangman {
         this.actor = actor;
         resetGame(difficulty);
     }
-    
+
     /**
      * Initializes a new game with the given difficulty. This method resets all
      * game-related attributes to their default state.
@@ -110,17 +111,17 @@ public final class Hangman {
         int length = currentWord.length();
         correctGuesses = StringUtilities.createRepeating(length, GUESS_DELIMITER);
         previouslyGuessed = "";
-        
+
         guessesLeft = maxGuesses();
         int hints = length / 2;
         hintsLeft = (hints > MAX_HINTS) ? MAX_HINTS : hints;
     }
-    
+
     /**
-     * Returns a "sanitized" version a given character guess. This 
+     * Returns a "sanitized" version a given character guess. This
      * implementation changes the given character to lowercase and assumes that
      * is it alphabetic.
-     * 
+     *
      * @param guess The character to sanitize.
      * @return A sanitized version of the given character.
      * @see Word#sanitizeCharacter(char)
@@ -128,9 +129,9 @@ public final class Hangman {
     private static char sanitizeGuess(char guess) {
         return Word.sanitizeCharacter(guess);
     }
-    
+
 // Getters and setters (yay, encapsulation)
-    
+
     /**
      * Returns the current word for this game instance.
      *
@@ -139,7 +140,7 @@ public final class Hangman {
     public String getCurrentWord() {
         return currentWord;
     }
-    
+
     /**
      * Returns a {@code String} containing all the characters that have already
      * been guessed in this game.
@@ -149,51 +150,51 @@ public final class Hangman {
     public String getPreviouslyGuessed() {
         return previouslyGuessed;
     }
-    
+
     /**
      * Returns a {@code String} containing all the characters that have been
      * guessed correctly in this game instance.
-     * 
+     *
      * @return The characters that have already been guessed correctly.
      */
     public String getCorrectGuesses() {
         return correctGuesses;
     }
-    
+
     /**
      * Returns a copy of dictionary for this game instance.
-     * 
+     *
      * @return The dictionary for this instance.
      */
     public Dictionary getWords() {
         return new Dictionary(words);
     }
-    
+
     /**
      * Returns the amount of incorrect guesses remaining for this game.
-     * 
+     *
      * @return The amount of incorrect guesses remaining for this game.
      */
     public int getGuessesLeft() {
         return guessesLeft;
     }
-    
+
     /**
      * Returns the amount of hints remaining for this game.
-     * 
+     *
      * @return The amount of hints remaining for this game.
      */
     public int getHintsLeft() {
         return hintsLeft;
     }
-    
+
     /**
-     * Returns the actor for this game instance.
+     * Returns the images of this game instance.
      *
-     * @return The actor for this instance.
+     * @return The images of this instance.
      */
-    public Actor getActor() {
-        return actor;
+    public ImageIcon[] images() {
+        return actor.getImageArray();
     }
     
     /**
