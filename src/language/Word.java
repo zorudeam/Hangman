@@ -16,16 +16,16 @@ public final class Word
 {
 
     /**
-     * Supplies a default word length argument in the case that no length is 
-     * provided during construction.
-     */
-    public static final int DEFAULT_WORD_LENGTH = 5;
-    
-    /**
      * Null object that provides predictable behavior.
      */
     public static final Word NULL_WORD = new Word("Hello World!");
-    
+
+    /**
+     * Supplies a default word length argument in the case that no length is 
+     * provided during construction.
+     */
+    private static final int DEFAULT_WORD_LENGTH = 5;
+
     /**
      * Stores the characters represented by this {@code Word}.
      */
@@ -69,7 +69,7 @@ public final class Word
      * @param other The word whose characters to copy.
      */
     public Word(Word other) {
-        this(other.characters);
+        this.characters = other.characters;
     }
     
     /**
@@ -81,14 +81,14 @@ public final class Word
      * @see #sanitizeCharacter(char) Applied to each character in the given 
      *      <code>String</code>.
      */
-    public static final String sanitizeWord(String str) {
+    public static String sanitizeWord(String str) {
         String sanitized = "";
         for (char c : str.replaceAll("\\s+", "").toCharArray()) {
             sanitized += sanitizeCharacter(c);
         }
         return sanitized;
     }
-    
+
     /**
      * "Sanitizes" and returns a given {@code char} by converting it to 
      * lowercase.
@@ -96,7 +96,7 @@ public final class Word
      * @param c The {@code char} to sanitize.
      * @return A sanitized version of the given {@code char}.
      */
-    public static final char sanitizeCharacter(char c) {
+    public static char sanitizeCharacter(char c) {
         return Character.toLowerCase(c);
     }
     
