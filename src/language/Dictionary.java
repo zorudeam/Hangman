@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -123,7 +124,12 @@ public class Dictionary
      * @param target The {@code File} to read into this object's map.
      */
     private void constructDictionary(InputStream target) {
-        Difficulty.ALL.stream().forEach(d -> words.put(d, new ArrayList<>()));
+        // Unfortunately, ArrayList has multiple constructors, so can't use a
+        // member reference for the value mapper :(
+        Map<Difficulty, List<Word>> empty = Difficulty.ALL
+                .stream()
+                .collect(Collectors.toMap(Function.identity(), d -> new ArrayList<>()));
+        words.putAll(empty);
         try (Scanner input = new Scanner(target)) {
             while(input.hasNext()) {
                 // No need to sanitize input here, the Word(String) constructor
@@ -347,7 +353,10 @@ public class Dictionary
      * @return A random {@code Word} from this object.
      */
     public Word randomWord() {
-        Difficulty d = words.keySet().stream().findAny().get();
+        Difficulty d = words.keySet()
+                .stream()
+                .findAny()
+                .get();
         return randomWordOf(d);
     }
 
