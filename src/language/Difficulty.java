@@ -1,6 +1,7 @@
 package language;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  * {@code Difficulty} is an enumeration of properties which define how objects 
@@ -14,8 +15,6 @@ import java.util.EnumSet;
  * @author Oliver Abdulrahim
  */
 public enum Difficulty {
-    
-// Difficulty properties    
     
     /**
      * Defines a {@code Word} with easy difficulty.
@@ -40,7 +39,7 @@ public enum Difficulty {
     /**
      * Provides for a set of all properties enumerated in this class.
      */
-    public static final EnumSet<Difficulty> ALL = // Pryda 10 VOL III is out
+    public static final Set<Difficulty> ALL = // Pryda 10 VOL III is out
             EnumSet.allOf(Difficulty.class);
     
 }
