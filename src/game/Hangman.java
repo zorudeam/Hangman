@@ -80,15 +80,15 @@ public final class Hangman {
     
     /**
      * Initializes a new game with medium difficulty 
-     * ({@link WordProperties#MEDIUM_WORD}).
+     * ({@link Difficulty#MEDIUM}).
      */
     public Hangman() {
         this(Difficulty.MEDIUM, Actor.HUMAN, new Dictionary());
     }
     
     /**
-     * Initializes a new game with the difficulty setting and actor given.
-     * 
+     * Initializes a new game with the given attributes.
+     *
      * @param difficulty The difficulty for this game.
      * @param actor The actor for this game.
      * @param words The dictionary for this game.
@@ -282,7 +282,7 @@ public final class Hangman {
      * 
      * @param guess The character to test.
      * @return {@code true} if the given character has already been guessed, 
-     *         {@code false} otherwise
+     *         {@code false} otherwise.
      */
     public boolean hasGuessed(char guess) {
         sanitizeGuess(guess);
@@ -311,18 +311,17 @@ public final class Hangman {
      * a formulaic approach to either reject or accept the guess. Guesses are 
      * processed in the following way: 
      *   <ol> 
-     *     <li> Sanitize the guess to ensure that it is uniform in case and 
+     *     <li> Sanitizes the guess to ensure that it is uniform in case and
      *          formatting with this instance's current word. 
-     *     <li> Test if the guess has already been made and return {@code false}
-     *          if it has.
-     *     <li> Add the word to the set of already guessed characters.
-     *     <li> Test if the guess is in the current word.
+     *     <li> Tests if the guess has already been made, returning
+     *          {@code false} if it has.
+     *     <li> Otherwise, adds the word to the set of already guessed characters.
+     *     <li> Tests if the guess is in the current word.
      *       <ul>
-     *          <li> If the given character is in the current word, update the 
-     *               set of already guessed characters and return {@code true}.
-     *          <li> If the given character is not in the current word, 
-     *               decrement the amount of guesses remaining and return
-     *               {@code false}.
+     *          <li> If the given character is in the current word, updates the
+     *               set of already guessed characters and returns {@code true}.
+     *          <li> Otherwise, decrements the amount of guesses remaining and
+     *               returns {@code false}.
      *       </ul>
      *   </ol>
      * 
@@ -336,7 +335,7 @@ public final class Hangman {
      *   </ul>
      * 
      * @param guess The character to attempt to guess for.
-     * @return {@code true} if the guess was completed, {@code false} otherwise.
+     * @return {@code true} if the guess was correct, {@code false} otherwise.
      */
     public boolean makeGuess(char guess) {
         char g = sanitizeGuess(guess);
@@ -398,8 +397,8 @@ public final class Hangman {
     public boolean giveHint() {
         if ((!hasWon() && hintsLeft > 0 && guessesLeft > 1)) {
             char guess = getTheHint();
-            insertCorrectGuess(guess);
             appendAlreadyGuessed(guess);
+            insertCorrectGuess(guess);
             guessesLeft--;
             hintsLeft--;
             return true;
