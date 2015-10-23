@@ -1,12 +1,12 @@
 package game;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 /**
  * The {@code Actor} enumeration is a structure for constant values relating to 
@@ -57,7 +57,7 @@ public enum Actor {
      * @param name The name of this actor.
      * @param images The images associated with this actor.     
      */
-    private Actor(String name, ImageIcon[] images) {
+    Actor(String name, ImageIcon[] images) {
         this.name = name;
         this.images = images;
     }
@@ -103,7 +103,7 @@ public enum Actor {
      * 
      * @return A {@code String} array of the names of every enumerated type.
      */
-    public static final String[] allNames() {
+    public static String[] allNames() {
         String[] names = new String[Actor.values().length];
         for (int i = 0; i < names.length; i++) {
             names[i] = Actor.values()[i].getName();
