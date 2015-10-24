@@ -1,8 +1,8 @@
-# Hangman [![Build Status](https://travis-ci.org/OliverAbdulrahim/Hangman.svg?branch=master)](https://travis-ci.org/OliverAbdulrahim/Hangman)
+# Hangman [![Build Status](https://travis-ci.org/OliverAbdulrahim/Hangman.svg?branch=build)](https://travis-ci.org/OliverAbdulrahim/Hangman)
 A playable version of the game "hangman" with a fully-functional user interface.
 
 ### How to Run
-Download the .jar file from [here](https://github.com/OliverAbdulrahim/Hangman/blob/master/dist/Hangman.jar?raw=true) and run the file (you'll need Java 8 or later for it to work). Or, if you prefer to run from the console, type:
+Download the .jar file from [here](https://github.com/OliverAbdulrahim/Hangman/blob/master/target/Hangman-1.0.jar?raw=true) and run the file (you'll need Java 8 or later for it to work). Or, if you prefer to run from the console, type:
 ```
 java -jar "<location of Hangman.jar>"
 ```
@@ -30,16 +30,16 @@ Here are some images of gameplay!
 
 
 The settings and new game menu.  
-![The settings and new game menu.](images/settings-menu.png)
+![The settings and new game menu.](src/main/resources/images/settings-menu.png)
 
 
 Gameplay  
-![Gameplay](images/gameplay-won0.png)
+![Gameplay](src/main/resources/images/gameplay-won0.png)
 
 
 Gameplay - Won the game!  
-![Gameplay - Won the game!](images/gameplay-won1.png)
+![Gameplay - Won the game!](src/main/resources/images/gameplay-won1.png)
 
 
 Gameplay - Lost the game!  
-![Gameplay - Lost the game!](images/gameplay-lost0.png)
+![Gameplay - Lost the game!](src/main/resources/images/gameplay-lost0.png)
