@@ -6,9 +6,3 @@ jdk:
 branches:
   only:
     - build
-
-before_script: ant clean
-
-script: ant compile
-
-after_script: ant build
