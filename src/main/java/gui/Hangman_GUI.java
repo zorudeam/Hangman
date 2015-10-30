@@ -408,7 +408,7 @@ public final class Hangman_GUI
     // currentWordPanel setup
         currentWordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         currentWordLabel.setText("<html><p>Welcome to Hangman. To begin, press "
-                + "<font face = Consolas color=\"black\">File â†’ New Game</font>,"
+                + "<font face = Consolas color=\"black\">File → New Game</font>,"
                 + " or you can just stare at the screen.</p></html>");
         // Set all three sizes to prevent resizing
         final Dimension dim = new Dimension(215, 55);
@@ -456,23 +456,22 @@ public final class Hangman_GUI
         hintButton.setText("Hint");
         hintButton.addActionListener(e -> doHint());
 
-
-        /* Layout for gameOperationsPanel should look something like the 
-         * following:
-         *        â•­â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•®
-         *        â”‚â”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â– â– â– â– â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
-         *        â”‚â”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”‚
-         *        â•°â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•¯
-         *   Character/Item     Representation
-         *     - solid line     panel edges
-         *     - â”ˆ              padding
-         *     - â–               component
-         */
+         /* Layout for gameOperationsPanel should look something like the 
+          * following:
+-         *        ╭─────────────────────╮
+-         *        │┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈│
+-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
+-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
+-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
+-         *        │┈┈ ■■■■■■■■■■■■■■■ ┈┈│
+-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
+-         *        │┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈│
+-         *        ╰─────────────────────╯
+          *   Character/Item     Representation
+          *     - solid line     panel edges
+-         *     - ┈              padding
+-         *     - ■              component
+          */
         Component[][] operationMembers = {
             {guessedLabel, guessedField}, 
             {guessesLeftLabel, guessesLeftField},
