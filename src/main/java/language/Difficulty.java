@@ -32,7 +32,7 @@ public enum Difficulty {
     HARD,
     
     /**
-     * Defines a {@code Word} with default difficultly.
+     * Defines a default difficultly.
      */
     DEFAULT;
     
