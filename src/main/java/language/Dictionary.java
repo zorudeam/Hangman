@@ -146,7 +146,7 @@ public class Dictionary
         return words.containsKey(d) && !words.get(d).isEmpty();
     }
 
-/* Difficulty tuning variables */
+// Difficulty tuning variables
 
     /**
      * Minimum length for an easy word. This value must be greater
@@ -172,7 +172,7 @@ public class Dictionary
      */
     private static final int MEDIUM_VOWEL_THRESHOLD = EASY_VOWEL_THRESHOLD - 1;
 
-/* Dictionary operations (static) */
+// Dictionary operations (static)
 
     /**
      * Determines if a given word is "easy" in difficulty. Words that are longer
@@ -234,7 +234,7 @@ public class Dictionary
         return d;
     }
 
-/* Dictionary operations (non-static) */
+// Dictionary operations (non-static)
 
     /**
      * Returns an unmodifiable list containing all words of the given difficulty
@@ -376,7 +376,7 @@ public class Dictionary
         throw new NoSuchWordException("Could not retrieve word.", d);
     }
 
-/* Collection operations */
+/// Collection operations
 
     /**
      * Returns {@code true} if this dictionary contains no words, {@code false}
@@ -483,7 +483,7 @@ public class Dictionary
                 .sum();
     }
 
-/* Utility methods */
+// Utility methods
 
     /**
      * Returns {@code String} containing all words mapped to this object,
@@ -501,5 +501,5 @@ public class Dictionary
                 .collect(Collectors.joining("\n    "))
             + "\n}";
     }
-
+    
 }
