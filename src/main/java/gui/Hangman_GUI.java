@@ -15,7 +15,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
@@ -60,7 +59,7 @@ import utilities.StringUtilities;
  * @author Oliver Abdulrahim
  */
 public final class Hangman_GUI
-    extends javax.swing.JFrame
+    extends JFrame
 {
 
     /**
@@ -237,7 +236,7 @@ public final class Hangman_GUI
             // Has 26 JButton objects for each character [A-Z] added in initComponents()
 
     private JFrame settingsFrame;
-        private JPanel dictionaryDisplayPanel;
+        private JPanel dictionaryPanel;
             private JScrollPane dictionaryScrollPane;
                 private JList<Word> dictionaryList;
         private JPanel gameOptionsPanel;
@@ -324,6 +323,8 @@ public final class Hangman_GUI
      */
     private void initComponents() {
         GroupLayout layout;
+        GridBagConstraints c;
+        
         menuBar = new JMenuBar();
         fileMenu = new JMenu();
         newGameMenuItem = new JMenuItem();
@@ -354,7 +355,7 @@ public final class Hangman_GUI
 
         settingsFrame = new JFrame();
 
-        dictionaryDisplayPanel = new JPanel();
+        dictionaryPanel = new JPanel();
         dictionaryScrollPane = new JScrollPane();
         dictionaryList = new JList<>();
 
@@ -407,7 +408,7 @@ public final class Hangman_GUI
     // currentWordPanel setup
         currentWordLabel.setHorizontalAlignment(SwingConstants.CENTER);
         currentWordLabel.setText("<html><p>Welcome to Hangman. To begin, press "
-                + "<font face = Consolas color=\"black\">File → New Game</font>,"
+                + "<font face = Consolas color=\"black\">File â†’ New Game</font>,"
                 + " or you can just stare at the screen.</p></html>");
         // Set all three sizes to prevent resizing
         final Dimension dim = new Dimension(215, 55);
@@ -458,21 +459,21 @@ public final class Hangman_GUI
 
         /* Layout for gameOperationsPanel should look something like the 
          * following:
-         *        ╭─────────────────────╮
-         *        │┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈│
-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
-         *        │┈┈ ■■■■■■■■■■■■■■■ ┈┈│
-         *        │┈┈ ■■■■■■ ┈ ■■■■■■ ┈┈│
-         *        │┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈│
-         *        ╰─────────────────────╯
+         *        â•­â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•®
+         *        â”‚â”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â– â– â– â– â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆ â– â– â– â– â– â–  â”ˆ â– â– â– â– â– â–  â”ˆâ”ˆâ”‚
+         *        â”‚â”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”ˆâ”‚
+         *        â•°â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•¯
          *   Character/Item     Representation
          *     - solid line     panel edges
-         *     - ┈              padding
-         *     - ■              component
+         *     - â”ˆ              padding
+         *     - â–               component
          */
-        Component[][] members = {
+        Component[][] operationMembers = {
             {guessedLabel, guessedField}, 
             {guessesLeftLabel, guessesLeftField},
             {winRateLabel, winRateField},
@@ -485,19 +486,17 @@ public final class Hangman_GUI
         final int horizontalFill = 57;
         final int fromEdge = 11;
         final int between = 4;
-        final int memberRows = members.length;
-        GridBagConstraints c;
+        final int memberRows = operationMembers.length;
         Insets i;
         for (int y = 0; y < memberRows; y++) {
-            for (int x = 0; x < members[y].length; x++) {
+            for (int x = 0; x < operationMembers[y].length; x++) {
                 c = new GridBagConstraints();
                 c.fill = GridBagConstraints.HORIZONTAL;
-                c.anchor = GridBagConstraints.CENTER;
                 c.gridx = x;
                 c.gridy = y;
                 i = new Insets(0, fromEdge, between, between);
                 // Special case for hintButton, needs to span two columns
-                if (members[y][x].equals(hintButton)) {
+                if (operationMembers[y][x].equals(hintButton)) {
                     i = new Insets(between, fromEdge, between, fromEdge);
                     c.gridwidth = 2;
                 }
@@ -508,14 +507,14 @@ public final class Hangman_GUI
                     else if (y == memberRows - 1) {
                         i.bottom = fromEdge;
                     }
-                    if (x == members[y].length - 1) {
+                    if (x == operationMembers[y].length - 1) {
                         i.left = 0;
                         i.right = fromEdge;
                         c.ipadx = horizontalFill;
                     }
                 }
                 c.insets = i;
-                gameOperationsPanel.add(members[y][x], c);
+                gameOperationsPanel.add(operationMembers[y][x], c);
             }
         }
         
@@ -548,6 +547,23 @@ public final class Hangman_GUI
             }
         }
         
+        settingsFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        settingsFrame.setTitle("Settings");
+        settingsFrame.setLocationByPlatform(true);
+        settingsFrame.setMinimumSize(new Dimension(374, 309));
+        settingsFrame.setResizable(false);
+        settingsFrame.setType(Window.Type.POPUP);
+
+        okButton.setText("OK");
+        okButton.setPreferredSize(new Dimension(100, 23));
+        okButton.addActionListener(e -> {
+            newGame();
+            settingsFrame.dispose();
+        });
+
+        okPanel.add(okButton);
+        okPanel.setBorder(BorderFactory.createTitledBorder(""));
+
         dictionaryList.setModel(new DefaultListModel<Word>() {
             private static final long serialVersionUID = 938467039846L;
             private List<Word> getList() {
@@ -562,46 +578,13 @@ public final class Hangman_GUI
                 return getList().get(i);
             }
         });
-        
-        settingsFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        settingsFrame.setTitle("Settings");
-        settingsFrame.setLocationByPlatform(true);
-        settingsFrame.setMinimumSize(new Dimension(374, 309));
-        settingsFrame.setResizable(false);
-        settingsFrame.setType(Window.Type.POPUP);
-
-        okPanel.setBorder(BorderFactory.createTitledBorder(""));
-
-        okButton.setText("OK");
-        okButton.addActionListener(e -> {
-            newGame();
-            settingsFrame.dispose();
-        });
-
-        layout = new GroupLayout(okPanel);
-        okPanel.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addGap(113, 113, 113)
-                                .addComponent(okButton, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(okButton)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        dictionaryDisplayPanel.setBorder(BorderFactory.createTitledBorder("Dictionary Words"));
-
         dictionaryList.setFont(new Font("Consolas", 0, 11));
-        dictionaryList.setToolTipText(NumberFormat.getInstance().format(game.getWords().size()) + " words in this dictionary.");
+        dictionaryList.setToolTipText(dictionaryList.getModel().getSize() + " words in this dictionary.");
         dictionaryScrollPane.setViewportView(dictionaryList);
 
-        layout = new GroupLayout(dictionaryDisplayPanel);
-        dictionaryDisplayPanel.setLayout(layout);
+        dictionaryPanel.setBorder(BorderFactory.createTitledBorder("Dictionary Words"));
+        layout = new GroupLayout(dictionaryPanel);
+        dictionaryPanel.setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -616,8 +599,6 @@ public final class Hangman_GUI
                                 .addComponent(dictionaryScrollPane)
                                 .addContainerGap())
         );
-
-        gameOptionsPanel.setBorder(BorderFactory.createTitledBorder("Game Options"));
 
         difficultyLabel.setText("<html><p>Select word difficulty.</p></html>");
 
@@ -638,6 +619,7 @@ public final class Hangman_GUI
 
         actorComboBox.setModel(new DefaultComboBoxModel<>(Actor.allNames()));
 
+        gameOptionsPanel.setBorder(BorderFactory.createTitledBorder("Game Options"));
         layout = new GroupLayout(gameOptionsPanel);
         gameOptionsPanel.setLayout(layout);
         layout.setHorizontalGroup(
@@ -685,7 +667,7 @@ public final class Hangman_GUI
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                                         .addComponent(okPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addComponent(dictionaryDisplayPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(dictionaryPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(gameOptionsPanel, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -695,7 +677,7 @@ public final class Hangman_GUI
                         .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addComponent(dictionaryDisplayPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dictionaryPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(gameOptionsPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(okPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -1093,6 +1075,9 @@ public final class Hangman_GUI
         System.exit(0);
     }
 
+    /**
+     * Resets all game variables to their default state.
+     */
     private void resetGame() {
         game = new Hangman();
         gamesPlayed = 0;
