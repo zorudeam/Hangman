@@ -2,7 +2,7 @@
 A playable version of the game "hangman" with a fully-functional user interface.
 
 ### How to Run
-Download the .jar file from [here](https://github.com/OliverAbdulrahim/Hangman/blob/master/target/Hangman-1.0.jar?raw=true) and run the file (you'll need Java 8 or later for it to work). Or, if you prefer to run from the console, type:
+Download the latest release from [here](https://github.com/OliverAbdulrahim/Hangman/releases/download/1.0.0/Hangman-1.0.0.jar) and run the file (you'll need Java 8 or later for it to work). Or, if you prefer to run from the console, type:
 ```
 java -jar "<location of Hangman.jar>"
 ```
