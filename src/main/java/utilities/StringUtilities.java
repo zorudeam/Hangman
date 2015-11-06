@@ -2,9 +2,8 @@ package utilities;
 
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -16,17 +15,10 @@ import javax.xml.bind.DatatypeConverter;
 public final class StringUtilities {
     
     /**
-     * Field that provides for a list of messages that may be retrieved randomly
-     * in a message-of-the-day (MoTD) style.
-     */
-    public static final List<String> MESSAGE_LIST = 
-        Collections.unmodifiableList(Arrays.asList(randomStringArray(10, 10)));
-    
-    /**
      * Don't let anyone instantiate this class.
      */
     private StringUtilities() {
-        throw new AssertionError();
+        throw new InstantiationError();
     }
     
     /**
@@ -154,16 +146,6 @@ public final class StringUtilities {
      */
     public static String reverse(String str) {
         return new StringBuilder(str).reverse().toString();
-    }
-    
-    /**
-     * Retrieves a random {@code String} literal from {@link #MESSAGE_LIST} 
-     * field.
-     *
-     * @return The random message from {@link #MESSAGE_LIST} field.
-     */
-    public static String getMessage() {
-        return MESSAGE_LIST.get(Utilities.r.nextInt(MESSAGE_LIST.size()));
     }
     
     /**
@@ -313,7 +295,7 @@ public final class StringUtilities {
      * @return A random {@code char}.
      */
     public static char randomChar(int lower, int upper) {
-        return (char) (Utilities.r.nextInt((upper - lower) + 1) + lower);
+        return (char) ThreadLocalRandom.current().nextInt(lower, upper + 1);
     }
     
     /**
@@ -331,7 +313,7 @@ public final class StringUtilities {
     {
         String[] array = new String[arrayLength];
         for (int i = 0; i < array.length; i++) {
-            array[i] = random(Utilities.r.nextInt(stringLength) + 1);
+            array[i] = random(stringLength);
         }
         return array;
     }
@@ -447,8 +429,8 @@ public final class StringUtilities {
      * "75%"</pre>
      * </blockquote>
      * 
-     * @param fraction
-     * @return 
+     * @param fraction The value to format.
+     * @return A formatted version of the given fraction.
      */
     public static String doubleAsPercent(double fraction) {
         if (Double.isNaN(fraction)) {
