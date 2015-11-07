@@ -106,7 +106,7 @@ public final class Hangman {
      *
      * @param d The difficulty setting to use for this game.
      */
-    public final void resetGame(Difficulty d) {
+    public void resetGame(Difficulty d) {
         currentWord = words.randomWordOf(d).characters();
         int length = currentWord.length();
         correctGuesses = StringUtilities.createRepeating(length,
@@ -117,7 +117,7 @@ public final class Hangman {
         int hints = length / 2;
         hintsLeft = (hints > MAX_HINTS) ? MAX_HINTS : hints;
     }
-
+    
     /**
      * Returns a "sanitized" version a given character guess. This
      * implementation changes the given character to lowercase and assumes that
@@ -131,7 +131,7 @@ public final class Hangman {
         return Word.sanitizeCharacter(guess);
     }
 
-// Getters and setters (yay, encapsulation)
+// Getters and setters
 
     /**
      * Returns the current word for this game instance.
@@ -142,7 +142,7 @@ public final class Hangman {
         return currentWord;
     }
 
-    /**
+/**
      * Returns a {@code String} containing all the characters that have already
      * been guessed in this game.
      *
@@ -218,7 +218,7 @@ public final class Hangman {
         previouslyGuessed += g;
     }
     
-// Game-state methods    
+// Game-state methods
     
     /**
      * Returns {@code true} if this game allows guesses at this point in time,
@@ -231,12 +231,12 @@ public final class Hangman {
         return guessesLeft > 0;
     }
     
-    /**
+/**
      * Returns the maximum amount of guesses allowed to this game instance.
      * 
      * @return The maximum amount of guesses for this game instance.
      */
-    public final int maxGuesses() {
+    public int maxGuesses() {
         return actor.getImageArray().length - 1;
     }
     
@@ -252,7 +252,7 @@ public final class Hangman {
     /**
      * Tests the state of the game, returning {@code true} if the game has been
      * won, {@code false} otherwise.
-     * 
+     *
      * <p> This method tests if the correct guesses are the same as the actual 
      * word and there are greater than zero guesses remaining.
      * 
@@ -302,19 +302,19 @@ public final class Hangman {
         return !previouslyGuessed.isEmpty();
     }
     
-// Gameplay methods   
+// Gameplay methods
     
     /**
      * The entry point for game guesses. Attempts to make the given character
      * guess, returning {@code true} if the guess was made, {@code false} 
      * otherwise.
-     * 
-     * <p> In order to correctly process the given character, this method takes 
-     * a formulaic approach to either reject or accept the guess. Guesses are 
-     * processed in the following way: 
+     *
+     * <p> In order to correctly process the given character, this method takes
+     * a formulaic approach to either reject or accept the guess. Guesses are
+     * processed in the following way:
      *   <ol> 
      *     <li> Sanitizes the guess to ensure that it is uniform in case and
-     *          formatting with this instance's current word. 
+     *          formatting with this instance's current word.
      *     <li> Tests if the guess has already been made, returning
      *          {@code false} if it has.
      *     <li> Otherwise, adds the word to the set of already guessed characters.
@@ -326,8 +326,8 @@ public final class Hangman {
      *               returns {@code false}.
      *       </ul>
      *   </ol>
-     * 
-     * <p> In other words, this method will return {@code true} if and only if 
+     *
+     * <p> In other words, this method will return {@code true} if and only if
      * the guess satisfies all of the following conditions, {@code false} 
      * otherwise:
      *   <ul>
@@ -354,27 +354,27 @@ public final class Hangman {
         return false;
     }
     
-    /**
+/**
      * Places the given guess in the set of correct guesses at any and all index
      * values that it occurs in the current word, all while maintaining these
      * index values between the two {@code String}s.
-     * 
+     *
      * @param guess The character to add to the set of correct guesses based on 
      *        its index occurrence in the current word.
      */
     private void insertCorrectGuess(char guess) {
         for (int i = 0; i < currentWord.length(); i++) {
             if (currentWord.charAt(i) == guess) {
-                correctGuesses = correctGuesses.substring(0, i) 
-                               + guess 
-                               + correctGuesses.substring(i + 1);
+                correctGuesses = correctGuesses.substring(0, i)
+                        + guess
+                        + correctGuesses.substring(i + 1);
             }
         }
     }
     
     /**
-     * Gives a hint at the expense of a move (if one is available), returning 
-     * {@code true} if a hint was given, {@code false} otherwise. This method 
+     * Gives a hint at the expense of a move (if one is available), returning
+     * {@code true} if a hint was given, {@code false} otherwise. This method
      * always guesses the first character in the current word that has not 
      * already been guessed.
      * 
@@ -384,7 +384,7 @@ public final class Hangman {
      *     <li> There is at least one or more hints remaining.
      *     <li> There is at least two or more guesses remaining.
      *   </ol>
-     * 
+     *
      * <p> In other words, this method will perform a hint operation and return 
      * {@code true} if and only if the current state of the game satisfies all
      * of the following conditions, {@code false} otherwise:
