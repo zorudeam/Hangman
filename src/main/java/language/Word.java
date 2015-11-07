@@ -1,6 +1,6 @@
 package language;
 
-import utilities.StringUtilities;
+import functions.StringUtilities;
 
 /**
  * The {@code Word} class provides for a structure for words in the context of a

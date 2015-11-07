@@ -1,5 +1,5 @@
 /*
- * Useful Information:
+ * Data Type Information:
  * 
  * Data Type      Size (bits)           Minimum Value             Maximum Value    
  * boolean                  1                   false                      true    
@@ -26,15 +26,15 @@
  *                                                          instance of
  *                                                                 ...Object
  */
-package utilities;
+package functions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * The {@code Utilities} class contains methods that are small, efficient, and
- * commonly used.
+ * The {@code Utilities} class contains commonly used methods.
  *
  * @author Oliver Abdulrahim
  */
@@ -50,7 +50,7 @@ public class Utilities {
      * Don't let anyone instantiate this class.
      */
     private Utilities() {
-    
+        throw new InstantiationError();
     }
     
     /**
@@ -79,7 +79,7 @@ public class Utilities {
      *         arguments(inclusive).
      */
     public static int randomInteger(int min, int max) {
-        return r.nextInt((max - min) + 1) + min;
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
     /**
@@ -237,6 +237,7 @@ public class Utilities {
      *        merge process.
      * @param toIndex The index to stop sorting in {@code a}.
      * @see #mergeSort(int[]) 
+     * @see #merge(int[], int, int, int[]) 
      */
     private static void finishMerge(int a[], int[] temp, int fromIndex,
             int middleIndex, int toIndex) 
@@ -280,6 +281,7 @@ public class Utilities {
      * @param fromIndex The index to begin sorting in {@code a}.
      * @param toIndex The index to stop sorting in {@code a}.
      * @see #mergeSort(int[])
+     * @see #finishMerge(int[], int, int, int, int[])
      */
     private static void merge(int[] a, int[] temp, int fromIndex, int toIndex) {
         if (fromIndex < toIndex) {
@@ -294,9 +296,9 @@ public class Utilities {
      * Generates and returns a timestamp of the current instant at the time of
      * invocation using the following simple pattern:
      * 
-     * <blockquote><pre>
-     * new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * new SimpleDateFormat("MM/dd/yyyy h:mm:ss a");
+     * }</pre>
      * 
      * @return A timestamp representing the current instant in time.
      */

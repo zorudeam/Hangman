@@ -1,5 +1,6 @@
 package gui;
 
+import functions.StringUtilities;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,7 +15,6 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 import language.Difficulty;
 import language.Word;
-import utilities.StringUtilities;
 
 /**
  * The {@code Hangman_GUI} class provides for a user interface for the

@@ -1,32 +1,23 @@
-package utilities;
+package functions;
 
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.xml.bind.DatatypeConverter;
 
 /**
- * The {@code StringUtilities} class contains methods relating to 
- * {@code String}s that are small, efficient, and commonly used.
+ * The {@code StringUtilities} class contains small methods relating to 
+ * {@code String} objects.
  *
  * @author Oliver Abdulrahim
  */
 public final class StringUtilities {
     
     /**
-     * Field that provides for a list of messages that may be retrieved randomly
-     * in a message-of-the-day (MoTD) style.
-     */
-    public static final List<String> MESSAGE_LIST = 
-        Collections.unmodifiableList(Arrays.asList(randomStringArray(10, 10)));
-    
-    /**
      * Don't let anyone instantiate this class.
      */
     private StringUtilities() {
-        throw new AssertionError();
+        throw new InstantiationError();
     }
     
     /**
@@ -35,15 +26,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * appleify("We are profoundly passionate about music.");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * appleify("We are profoundly passionate about music.");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "We. Are. Profoundly. Passionate. About. Music".</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "We. Are. Profoundly. Passionate. About. Music".
+     * }</pre>
      * 
      * @param str The {@code String} to "appleify."
      * @return The parodied version of the given {@code String}.
@@ -66,6 +57,7 @@ public final class StringUtilities {
     }
     
     private static boolean isAppleProduct(String str) {
+        // Must start with 'i' so can't include Apple Watch
         final String[] appleProducts = { 
             "iPod", "iPhone", "iPad", "iCloud", "iOS"
         };
@@ -96,18 +88,18 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * expand("A B CD");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * expand("A B CD");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
+     * <pre>{@code
      * "A B C D 
      *  B 
      *  C 
-     *  D".</pre>
-     * </blockquote>
+     *  D".
+     * }</pre>
      * 
      * @param str The {@code String} to expand using this algorithm.
      * @return The expanded form of the {@code String} argument.
@@ -128,15 +120,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * normalize("A b CD");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * normalize("A b CD");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "ABCD"</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "ABCD"
+     * }</pre>
      * 
      * @param str The {@code String} to normalize.
      * @return The normalized form of {@code str}.
@@ -154,16 +146,6 @@ public final class StringUtilities {
      */
     public static String reverse(String str) {
         return new StringBuilder(str).reverse().toString();
-    }
-    
-    /**
-     * Retrieves a random {@code String} literal from {@link #MESSAGE_LIST} 
-     * field.
-     *
-     * @return The random message from {@link #MESSAGE_LIST} field.
-     */
-    public static String getMessage() {
-        return MESSAGE_LIST.get(Utilities.r.nextInt(MESSAGE_LIST.size()));
     }
     
     /**
@@ -210,15 +192,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * delimit("abc", " ");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * delimit("abc", " ");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "a b c"</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "a b c"
+     * }</pre>
      * 
      * @param str The {@code String} to format.
      * @param delimiter The {@code String} to insert after each character.
@@ -235,15 +217,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * delimit("abc", ' ');</pre>
-     * </blockquote>
+     * <pre>{@code
+     * delimit("abc", ' ');
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "a b c"</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "a b c"
+     * }</pre>
      * 
      * @param str The {@code String} to format.
      * @param delimiter The {@code char} to insert after each character.
@@ -271,15 +253,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * asSentence("a bC");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * asSentence("a bC");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "A bc"</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "A bc"
+     * }</pre>
      * 
      * @param str The {@code String} to format.
      * @return The formatted {@code String} argument.    
@@ -313,7 +295,7 @@ public final class StringUtilities {
      * @return A random {@code char}.
      */
     public static char randomChar(int lower, int upper) {
-        return (char) (Utilities.r.nextInt((upper - lower) + 1) + lower);
+        return (char) ThreadLocalRandom.current().nextInt(lower, upper + 1);
     }
     
     /**
@@ -331,7 +313,7 @@ public final class StringUtilities {
     {
         String[] array = new String[arrayLength];
         for (int i = 0; i < array.length; i++) {
-            array[i] = random(Utilities.r.nextInt(stringLength) + 1);
+            array[i] = random(stringLength);
         }
         return array;
     }
@@ -370,54 +352,20 @@ public final class StringUtilities {
     }
     
     /**
-     * Generates a discrete, pseudorandom {@code String} object with specified 
-     * {@code length} using a {@link HashSet} implementation. May include 
-     * {@code char} values from {@code 0} to {@code 65535} inclusive with no 
-     * repeating characters. 
-     * 
-     * @param length The length of the {@code String} to generate.
-     * @return A random {@code String} object with the given length.
-     * @throws IllegalArgumentException if the given argument is an invalid
-     *         length.
-     * @see #randomChar()
-     */
-    public static String randomUnique(int length) {
-        if (length <= 0 || length > Character.MAX_VALUE) {
-            String error = "Length argument is " + ((length < 0) 
-                            ? "negative: "  + length + "< 0"
-                            : "too targe: " + length + "> Character.MAX_VALUE");
-            throw new IllegalArgumentException(error);
-        }
-        HashSet<Character> uniques = new HashSet<>(length);
-        StringBuilder sb = new StringBuilder(length);
-        
-        int i = 0;
-        while (i < length) {
-            char rand = randomChar();
-            if (!uniques.contains(rand)) {
-                uniques.add(rand);
-                sb.append(rand);
-                i++;
-            }
-        }
-        return sb.toString();
-    }    
-    
-    /**
      * Returns a formatted version of the given {@code String}, delimiting each
      * character with a comma and space, and the final character with a period.
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * formattedToString("Hello World");</pre>
-     * </blockquote>
+     * <pre>{@code
+     * formattedToString("Hello World");
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "H, e, l, l, o, W, o, r, l, d."</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "H, e, l, l, o, W, o, r, l, d."
+     * }</pre>
      * 
      * @param str The {@code String} to format.
      * @return A formatted version of the given {@code String}.
@@ -437,18 +385,18 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * doubleAsPercent(3 / 4.0d)</pre>
-     * </blockquote>
+     * <pre>{@code
+     * doubleAsPercent(3 / 4.0d)
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * "75%"</pre>
-     * </blockquote>
+     * <pre>{@code
+     * "75%"
+     * }</pre>
      * 
-     * @param fraction
-     * @return 
+     * @param fraction The value to format.
+     * @return A formatted version of the given fraction.
      */
     public static String doubleAsPercent(double fraction) {
         if (Double.isNaN(fraction)) {
@@ -463,15 +411,15 @@ public final class StringUtilities {
      * 
      * <p> As an example, the following call to this method
      * 
-     * <blockquote><pre>
-     * reduceToUniques("Hello World")</pre>
-     * </blockquote>
+     * <pre>{@code
+     * reduceToUniques("Hello World")
+     * }</pre>
      * 
      * would produce the following result: 
      *   
-     * <blockquote><pre>
-     * Helo Wrd</pre>
-     * </blockquote>
+     * <pre>{@code
+     * Helo Wrd
+     * }</pre>
      * 
      * @param str The {@code String} to reduce.
      * @return A reduced version of the given {@code String}.
@@ -509,9 +457,8 @@ public final class StringUtilities {
      * @param length The amount of characters in the word to generate.
      * @return A {@code String} with random characters of the specified length.
      */
-    public static final String randomAlphaString(int length) {
+    public static String randomAlphaString(int length) {
         return StringUtilities.random('a', 'z', length);
     }
     
 }
-

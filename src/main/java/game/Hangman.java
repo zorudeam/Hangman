@@ -1,10 +1,10 @@
 package game;
 
+import functions.StringUtilities;
 import javax.swing.ImageIcon;
 import language.Dictionary;
 import language.Difficulty;
 import language.Word;
-import utilities.StringUtilities;
 
 /**
  * The {@code Hangman} class contains the logic for a game of "Hangman." Game
