@@ -1,6 +1,6 @@
 package language;
 
-import utilities.StringUtilities;
+import functions.StringUtilities;
 
 /**
  * The {@code Word} class provides for a structure for words in the context of a
@@ -216,6 +216,11 @@ public final class Word
         }
         final Word other = (Word) o;
         return this.compareTo(other) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return characters.hashCode();
     }
     
 }

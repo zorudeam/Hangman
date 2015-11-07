@@ -79,7 +79,7 @@ public class Dictionary
 
     /**
      * Instantiates a new {@code Dictionary} with the specified {@code String}
-     * path.
+     * path as a resource.
      *
      * @param path The {@code String} path for the {@code File} to read into
      *        this object's map.
@@ -182,7 +182,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "easy" in
      *         difficulty.
      */
-    public static boolean isEasyWord(Word w) {
+    protected static boolean isEasyWord(Word w) {
         return w.vowelCount() >= EASY_VOWEL_THRESHOLD
                 && w.length() >= EASY_LENGTH_THRESHOLD;
     }
@@ -194,7 +194,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "medium" in
      *         difficulty.
      */
-    public static boolean isMediumWord(Word w) {
+    protected static boolean isMediumWord(Word w) {
         return w.vowelCount() >= MEDIUM_VOWEL_THRESHOLD
                 && w.length() >= MEDIUM_LENGTH_THRESHOLD;
     }
@@ -208,7 +208,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "hard" in
      *         difficulty.
      */
-    public static boolean isHardWord(Word w) {
+    protected static boolean isHardWord(Word w) {
         return !isEasyWord(w) && !isMediumWord(w);
     }
 
@@ -223,7 +223,7 @@ public class Dictionary
      * @return An enumerated property depending on the difficulty of the given
      *         {@code Word}.
      */
-    public static Difficulty judgeDifficulty(Word w) {
+    protected static Difficulty judgeDifficulty(Word w) {
         Difficulty d = Difficulty.HARD;
         if (isEasyWord(w)) {
             d = Difficulty.EASY;
@@ -376,7 +376,7 @@ public class Dictionary
         throw new NoSuchWordException("Could not retrieve word.", d);
     }
 
-/// Collection operations
+// Collection operations
 
     /**
      * Returns {@code true} if this dictionary contains no words, {@code false}
@@ -403,7 +403,9 @@ public class Dictionary
         boolean contains = false;
         if (o instanceof Word) {
             Word w = (Word) o;
-            contains = allWords().stream().anyMatch(word -> word.equals(w));
+            contains = allWords()
+                    .stream()
+                    .anyMatch(word -> word.equals(w));
         }
         return contains;
     }
