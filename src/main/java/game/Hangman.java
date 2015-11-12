@@ -16,7 +16,6 @@ import language.Word;
  *
  * @author Oliver Abdulrahim
  * @see language.Dictionary
- * @see language.Word
  */
 public final class Hangman {
 
@@ -84,7 +83,7 @@ public final class Hangman {
      * ({@link Difficulty#MEDIUM}).
      */
     public Hangman() {
-        this(Difficulty.MEDIUM, Actor.HUMAN, new Dictionary());
+        this(Difficulty.MEDIUM, Actor.HUMAN);
     }
 
     /**
@@ -92,10 +91,9 @@ public final class Hangman {
      *
      * @param difficulty The difficulty for this game.
      * @param actor The actor for this game.
-     * @param words The dictionary for this game.
      */
-    public Hangman(Difficulty difficulty, Actor actor, Dictionary words) {
-        this.words = words;
+    public Hangman(Difficulty difficulty, Actor actor) {
+        this.words = new Dictionary();
         this.actor = actor;
         resetGame(difficulty);
     }
@@ -106,7 +104,7 @@ public final class Hangman {
      *
      * @param d The difficulty setting to use for this game.
      */
-    public final void resetGame(Difficulty d) {
+    public void resetGame(Difficulty d) {
         currentWord = words.randomWordOf(d).characters();
         int length = currentWord.length();
         correctGuesses = StringUtilities.createRepeating(length,
@@ -131,7 +129,7 @@ public final class Hangman {
         return Word.sanitizeCharacter(guess);
     }
 
-// Getters and setters (yay, encapsulation)
+// Getters and setters
 
     /**
      * Returns the current word for this game instance.
@@ -236,7 +234,7 @@ public final class Hangman {
      * 
      * @return The maximum amount of guesses for this game instance.
      */
-    public final int maxGuesses() {
+    public int maxGuesses() {
         return actor.getImageArray().length - 1;
     }
     
