@@ -1,11 +1,9 @@
 package language;
 
 import java.io.InputStream;
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,18 +16,15 @@ import java.util.stream.Collectors;
  * character contents. This provides for a structure suitable for use in a word
  * game.
  *
- * <p> This {@code Collection} implements all imposed methods. Notable
- * operations include:
+ * <p> This class contains collection-like methods. Notable operations include:
  *   <ul>
- *     <li> {@link #add(Word) The add operation}, which in this
- *          implementation inserts a word into the collection based on its
+ *     <li> {@link #add(Word) The add operation}, which inserts a word into the 
+ *          object based on its difficulty.
+ *     <li> {@link #remove(java.lang.Object) The remove operation}, which 
+ *          removes a word from the object based on its
  *          difficulty.
- *     <li> {@link #remove(java.lang.Object) The remove operation}, which in
- *          this implementation removes a word from the collection based on its
- *          difficulty.
- *     <li> {@link #size() The size method}, which in this implementation
- *          returns the total amount of words across all mapped difficulties
- *          contained within this object.
+ *     <li> {@link #size() The size method}, which returns the total amount of 
+ *          words across all mapped difficulties contained within this object.
  *   </ul>
  *
  * <p> All parsed tokens contained an object of this class are converted to
@@ -38,14 +33,13 @@ import java.util.stream.Collectors;
  * on what this entails.
  *
  * @author Oliver Abdulrahim
- * @see language.Difficulty The difficulties that are mapped in this collection.
- * @see Word The type of object stored in this {@code Collection}.
+ * @see language.Difficulty The difficulties that are mapped to {@code Word} 
+ *      objects within this object.
+ * @see Word The type of object stored by this class.
  * @see language.NoSuchWordException Thrown to indicate that an object of this
  *      class does not contain a word of a given difficulty.
  */
-public class Dictionary
-    extends AbstractCollection<Word>
-{
+public class Dictionary {
 
     /**
      * Stores the resource location of the default dictionary.
@@ -57,7 +51,7 @@ public class Dictionary
      * Contains this object's word dictionary, grouping difficulty enumerations
      * as provided by {@link Difficulty} with all words that match them.
      */
-    protected final Map<Difficulty, List<Word>> words;
+    private final Map<Difficulty, List<Word>> words;
 
     /**
      * Stores the difficulty of the last word that was successfully retrieved
@@ -142,7 +136,7 @@ public class Dictionary
      * @return {@code true} if this object contains at least one word of the
      *         given difficulty, {@code false} otherwise.
      */
-    private boolean hasWordOf(Difficulty d) {
+    protected boolean hasWordOf(Difficulty d) {
         return words.containsKey(d) && !words.get(d).isEmpty();
     }
 
@@ -182,7 +176,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "easy" in
      *         difficulty.
      */
-    public static boolean isEasyWord(Word w) {
+    protected static boolean isEasyWord(Word w) {
         return w.vowelCount() >= EASY_VOWEL_THRESHOLD
                 && w.length() >= EASY_LENGTH_THRESHOLD;
     }
@@ -194,7 +188,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "medium" in
      *         difficulty.
      */
-    public static boolean isMediumWord(Word w) {
+    protected static boolean isMediumWord(Word w) {
         return w.vowelCount() >= MEDIUM_VOWEL_THRESHOLD
                 && w.length() >= MEDIUM_LENGTH_THRESHOLD;
     }
@@ -208,7 +202,7 @@ public class Dictionary
      * @return {@code true} if the given word is considered to be "hard" in
      *         difficulty.
      */
-    public static boolean isHardWord(Word w) {
+    protected static boolean isHardWord(Word w) {
         return !isEasyWord(w) && !isMediumWord(w);
     }
 
@@ -223,7 +217,7 @@ public class Dictionary
      * @return An enumerated property depending on the difficulty of the given
      *         {@code Word}.
      */
-    public static Difficulty judgeDifficulty(Word w) {
+    protected static Difficulty judgeDifficulty(Word w) {
         Difficulty d = Difficulty.HARD;
         if (isEasyWord(w)) {
             d = Difficulty.EASY;
@@ -346,7 +340,7 @@ public class Dictionary
      *
      * @return A random {@code Word} from this object.
      */
-    public Word randomWord() {
+    public final Word randomWord() {
         Difficulty d = words.keySet()
                 .stream()
                 .findAny()
@@ -376,7 +370,7 @@ public class Dictionary
         throw new NoSuchWordException("Could not retrieve word.", d);
     }
 
-/// Collection operations
+// "Collection" operations
 
     /**
      * Returns {@code true} if this dictionary contains no words, {@code false}
@@ -385,7 +379,6 @@ public class Dictionary
      * @return {@code true} if this object contains no words, {@code false}
      *         otherwise.
      */
-    @Override
     public boolean isEmpty() {
         return size() == 0;
     }
@@ -398,37 +391,15 @@ public class Dictionary
      * @return {@code true} if this object contains the given word,
      *         {@code false} otherwise.
      */
-    @Override
     public boolean contains(Object o) {
         boolean contains = false;
         if (o instanceof Word) {
-            Word w = (Word) o;
-            contains = allWords().stream().anyMatch(word -> word.equals(w));
+            final Word w = (Word) o;
+            contains = allWords()
+                    .stream()
+                    .anyMatch(word -> word.equals(w));
         }
         return contains;
-    }
-
-    /**
-     * Returns an iterator over the words contained within this dictionary.
-     *
-     * <p> The iterators returned by this method are view-only; in other words,
-     * modification of the backing structure is not supported. Any attempts to
-     * perform such operations will result in an
-     * {@code UnsupportedOperationException}.
-     *
-     * <p> Supported {@code Iterator} operations include:
-     *   <ul>
-     *     <li> {@link Iterator#forEachRemaining(java.util.function.Consumer)}
-     *     <li> {@link Iterator#next() (java.util.function.Consumer)}
-     *     <li> {@link Iterator#hasNext()}
-     *   </ul>
-     *
-     * @return A view-only iterator over all the words contained within this
-     *         object.
-     */
-    @Override
-    public Iterator<Word> iterator() {
-        return allWords().iterator();
     }
 
     /**
@@ -440,7 +411,6 @@ public class Dictionary
      * @return {@code true} if the given word was inserted into this object,
      *         {@code false} otherwise.
      */
-    @Override
     public boolean add(Word w) {
         // No need to test this value against anything, judgeDifficulty(Word)
         // always returns a Difficulty enumeration
@@ -457,7 +427,6 @@ public class Dictionary
      * @param o The object to remove from this dictionary.
      * @return {@code true} if the word was removed, {@code false} otherwise.
      */
-    @Override
     public boolean remove(Object o) {
         if (o instanceof Word) {
             Word w = (Word) o;
@@ -473,7 +442,6 @@ public class Dictionary
      *
      * @return The amount of words currently contained within this object.
      */
-    @Override
     public int size() {
         // Need to find the summation of the sizes of each list value mapped to
         // the difficulty keys in this object.
