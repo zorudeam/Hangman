@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -101,7 +102,7 @@ public class Dictionary {
      *
      * @param target The {@code File} to read into this object's map.
      */
-    public Dictionary(InputStream target) {
+    private Dictionary(InputStream target) {
         words = new EnumMap<>(Difficulty.class);
         difficultyCache = Difficulty.DEFAULT;
         if (target != null) {
@@ -117,11 +118,15 @@ public class Dictionary {
      * @param target The {@code File} to read into this object's map.
      */
     private void constructDictionary(InputStream target) {
-        Difficulty.ALL.stream().forEach(d -> words.put(d, new ArrayList<>()));
+        Map<Difficulty, List<Word>> upstream = Difficulty.ALL
+                .stream()
+                .collect(Collectors.toMap(Function.identity(), d -> new ArrayList<>()));
+        words.putAll(upstream);
+        // Need a Path object to use Files.lines() :(
         try (Scanner input = new Scanner(target)) {
             while(input.hasNext()) {
-                // No need to sanitize input here, the Word(String) constructor
-                // already does that.
+                // No need to sanitize the String here, the Word(String) 
+                // constructor already does that.
                 Word w = new Word(input.nextLine());
                 add(w);
             }
@@ -288,7 +293,7 @@ public class Dictionary {
 
     /**
      * Returns an unmodifiable list containing all the words stored within this
-     * dictionary.`
+     * dictionary.
      *
      * <p> The lists returned by this method are view-only; in other words,
      * modification of the backing structure is not supported. Any attempts to
@@ -387,19 +392,14 @@ public class Dictionary {
      * Returns {@code true} if this dictionary contains the given word,
      * {@code false} otherwise.
      *
-     * @param o The object to search for in this object.
+     * @param w The word to search for in this object.
      * @return {@code true} if this object contains the given word,
      *         {@code false} otherwise.
      */
-    public boolean contains(Object o) {
-        boolean contains = false;
-        if (o instanceof Word) {
-            final Word w = (Word) o;
-            contains = allWords()
-                    .stream()
-                    .anyMatch(word -> word.equals(w));
-        }
-        return contains;
+    public boolean contains(Word w) {
+        return allWords()
+                .stream()
+                .anyMatch(word -> word.equals(w));
     }
 
     /**
@@ -424,16 +424,12 @@ public class Dictionary {
      * the given object is not of type {@code Word} or does not exist in this
      * dictionary).
      *
-     * @param o The object to remove from this dictionary.
+     * @param w The word to remove from this dictionary.
      * @return {@code true} if the word was removed, {@code false} otherwise.
      */
-    public boolean remove(Object o) {
-        if (o instanceof Word) {
-            Word w = (Word) o;
-            List<Word> peers = internalListOf(judgeDifficulty(w));
-            return peers.remove(w);
-        }
-        return false;
+    public boolean remove(Word w) {
+        List<Word> peers = internalListOf(judgeDifficulty(w));
+        return peers.remove(w);
     }
 
     /**
