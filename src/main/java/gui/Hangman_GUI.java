@@ -38,7 +38,7 @@ public final class Hangman_GUI
      * @param container The component whose components to retrieve.
      * @return All components within a given container.
      */
-    public static List<Component> getAllComponents(Container container) {
+    private static List<Component> getAllComponents(Container container) {
         Component[] components = container.getComponents();
         List<Component> compList = new ArrayList<>();
         for (Component c : components) {
@@ -71,7 +71,7 @@ public final class Hangman_GUI
      *        of.
      * @param state The state to set every {@code Component} to.
      */
-    public static void setStateOf(Container container, boolean state) {
+    private static void setStateOf(Container container, boolean state) {
         applyTo(container, component -> component.setEnabled(state));
     }
     
@@ -236,7 +236,7 @@ public final class Hangman_GUI
      *
      * @param state The state to set every {@code Component} to.
      */
-    public void setStateOfAll(boolean state) {
+    private void setStateOfAll(boolean state) {
         applyToAll((component) -> component.setEnabled(state));
     }
 
