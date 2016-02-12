@@ -6,51 +6,53 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * The {@code Dictionary} class stores all parseable tokens from a given file
- * and maps the contents to their respective "difficulty" depending on their
- * character contents. This provides for a structure suitable for use in a word
- * game.
+ * The {@code Dictionary} class contains an associative grouping of
+ * {@link Word Word} objects by their {@link Difficulty}. This provides for a
+ * structure suitable for use in a word game.
  *
  * <p> This class contains collection-like methods. Notable operations include:
  *   <ul>
- *     <li> {@link #add(Word) The add operation}, which inserts a word into the 
+ *     <li> {@link #add(Word) The add operation}, which inserts a word into the
  *          object based on its difficulty.
- *     <li> {@link #remove(java.lang.Object) The remove operation}, which 
+ *     <li> {@link #remove(Word) The remove operation}, which
  *          removes a word from the object based on its
  *          difficulty.
- *     <li> {@link #size() The size method}, which returns the total amount of 
+ *     <li> {@link #size() The size method}, which returns the total amount of
  *          words across all mapped difficulties contained within this object.
  *   </ul>
  *
  * <p> All parsed tokens contained an object of this class are converted to
  * objects of the {@link Word} class. See the
- * {@link Word#Word(java.lang.String)} constructor for more detailed information
- * on what this entails.
+ * {@link Word#Word(java.lang.String) Word(String} constructor for a more
+ * detailed specification.
  *
  * @author Oliver Abdulrahim
- * @see language.Difficulty The difficulties that are mapped to {@code Word} 
- *      objects within this object.
+ * @see Difficulty The difficulties that are mapped to {@code Word} objects
+ *      within this object.
  * @see Word The type of object stored by this class.
- * @see language.NoSuchWordException Thrown to indicate that an object of this
- *      class does not contain a word of a given difficulty.
+ * @see NoSuchWordException Thrown to indicate that an object of this class does
+ *      not contain a word of a given difficulty.
  */
-public class Dictionary {
+public final class Dictionary {
 
     /**
      * Stores the resource location of the default dictionary.
      */
-    public static final InputStream DEFAULT_STREAM = Dictionary.class
+    private static final InputStream DEFAULT_STREAM = Dictionary.class
             .getResourceAsStream("/dictionary.txt");
 
     /**
-     * Contains this object's word dictionary, grouping difficulty enumerations
-     * as provided by {@link Difficulty} with all words that match them.
+     * Contains this object's word dictionary, grouping words of similar
+     * difficulty (as specified in {@link Difficulty}) in {@code List}s.
      */
     private final Map<Difficulty, List<Word>> words;
 
@@ -73,7 +75,7 @@ public class Dictionary {
     }
 
     /**
-     * Instantiates a new {@code Dictionary} with the specified {@code String}
+     * Constructs a {@code Dictionary} with the specified {@code String}
      * path.
      *
      * @param path The {@code String} path for the {@code File} to read into
@@ -84,9 +86,9 @@ public class Dictionary {
     }
 
     /**
-     * Creates a new {@code Dictionary} that is a shallow copy of the given one.
-     * This constructor copies, but does not clone, each of the individual
-     * words mapped to the given object.
+     * Constructs a {@code Dictionary} that is a shallow copy of the given one.
+     * This constructor copies, but does not clone, each of the individual words
+     * mapped to the given object.
      *
      * @param other The object to copy to this one.
      */
@@ -96,36 +98,39 @@ public class Dictionary {
     }
 
     /**
-     * Instantiates a new {@code Dictionary} and fills this object's map with
-     * the contents of the specified {@code File}. Each token in the file is
-     * parsed and placed into the map in a line-by-line basis.
+     * Constructs a {@code Dictionary} using the contents of the given
+     * {@code InputStream}. Each token in the stream is parsed and placed into
+     * the map in a line-by-line basis.
      *
-     * @param target The {@code File} to read into this object's map.
+     * @param is The {@code InputStream} containing the words to read into this
+     *        object.
      */
-    private Dictionary(InputStream target) {
+    private Dictionary(InputStream is) {
         words = new EnumMap<>(Difficulty.class);
         difficultyCache = Difficulty.DEFAULT;
-        if (target != null) {
-            constructDictionary(target);
-        }
+        Optional.ofNullable(is)
+                .ifPresent(this :: constructDictionary);
     }
 
     /**
-     * Each token in the given {@code InputStream} is parsed and placed into the
-     * map based on the difficulty in a line-by-line basis using a
-     * {@code Scanner} implementation.
+     * Pareses each token in the given {@code InputStream} and places them into
+     * this object's {@link #words} based on their difficulty in a line-by-line
+     * basis using a {@code Scanner} implementation.
      *
      * @param target The {@code File} to read into this object's map.
      */
     private void constructDictionary(InputStream target) {
-        Map<Difficulty, List<Word>> upstream = Difficulty.ALL
+        Map<Difficulty, List<Word>> empty = Difficulty.ALL
                 .stream()
-                .collect(Collectors.toMap(Function.identity(), d -> new ArrayList<>()));
-        words.putAll(upstream);
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        d -> new ArrayList<>())
+                );
+        words.putAll(empty);
         // Need a Path object to use Files.lines() :(
         try (Scanner input = new Scanner(target)) {
             while(input.hasNext()) {
-                // No need to sanitize the String here, the Word(String) 
+                // No need to sanitize the String here, the Word(String)
                 // constructor already does that.
                 Word w = new Word(input.nextLine());
                 add(w);
@@ -134,14 +139,15 @@ public class Dictionary {
     }
 
     /**
-     * Returns {@code true} if this object contains at least one word of the
-     * given difficulty, {@code false} otherwise.
+     * Tests if this object contains words of the specified difficulty,
+     * returning {@code true} if this object contains at least one word matching
+     * the given object, {@code false} otherwise.
      *
      * @param d The difficulty to test.
      * @return {@code true} if this object contains at least one word of the
-     *         given difficulty, {@code false} otherwise.
+     *         specified difficulty, {@code false} otherwise.
      */
-    protected boolean hasWordOf(Difficulty d) {
+    private boolean hasWordOf(Difficulty d) {
         return words.containsKey(d) && !words.get(d).isEmpty();
     }
 
@@ -174,40 +180,49 @@ public class Dictionary {
 // Dictionary operations (static)
 
     /**
-     * Determines if a given word is "easy" in difficulty. Words that are longer
-     * in length and have more vowels are generally considered easy words.
+     * Determines if the given word is "easy" in difficulty, returning
+     * {@code true} if the specified object is such a word, {@code false}
+     * otherwise.
+     *
+     * <p> Words that are longer in length and have more vowels are generally
+     * considered easy words.
      *
      * @param w The {@code Word} to test for difficulty.
      * @return {@code true} if the given word is considered to be "easy" in
-     *         difficulty.
+     *         difficulty, {@code false} otherwise.
      */
-    protected static boolean isEasyWord(Word w) {
+    private static boolean isEasyWord(Word w) {
         return w.vowelCount() >= EASY_VOWEL_THRESHOLD
                 && w.length() >= EASY_LENGTH_THRESHOLD;
     }
 
     /**
-     * Determines if a given word is "medium" in difficulty.
+     * Determines if the given word is "medium" in difficulty, returning
+     * {@code true} if the specified object is such a word, {@code false}
+     * otherwise.
+     *
+     * <p> Words that are medium in length and contain fewer vowels are
+     * generally considered medium words.
      *
      * @param w The {@code Word} to test for difficulty.
      * @return {@code true} if the given word is considered to be "medium" in
-     *         difficulty.
+     *         difficulty, {@code false} otherwise.
      */
-    protected static boolean isMediumWord(Word w) {
+    private static boolean isMediumWord(Word w) {
         return w.vowelCount() >= MEDIUM_VOWEL_THRESHOLD
                 && w.length() >= MEDIUM_LENGTH_THRESHOLD;
     }
 
     /**
-     * Determines if a given word is "hard" in difficulty. Words that are short
-     * in length and contain mostly consonants are generally considered hard
-     * words.
+     * Determines if the given word is "hard" in difficulty, returning
+     * {@code true} if the specified object is such a word, {@code false}
+     * otherwise.
      *
      * @param w The {@code String} to test for difficulty.
      * @return {@code true} if the given word is considered to be "hard" in
-     *         difficulty.
+     *         difficulty, {@code false} otherwise.
      */
-    protected static boolean isHardWord(Word w) {
+    private static boolean isHardWord(Word w) {
         return !isEasyWord(w) && !isMediumWord(w);
     }
 
@@ -216,19 +231,22 @@ public class Dictionary {
      * {@code Word}.
      *
      * <p> This implementation always returns a difficulty and ignores the
-     * {@link Difficulty#DEFAULT} enumeration.
+     * {@link Difficulty#DEFAULT default enumeration}.
      *
      * @param w The word to judge the difficulty of.
      * @return An enumerated property depending on the difficulty of the given
      *         {@code Word}.
      */
-    protected static Difficulty judgeDifficulty(Word w) {
-        Difficulty d = Difficulty.HARD;
+    private static Difficulty judgeDifficulty(Word w) {
+        Difficulty d;
         if (isEasyWord(w)) {
             d = Difficulty.EASY;
         }
         else if (isMediumWord(w)) {
             d = Difficulty.MEDIUM;
+        }
+        else {
+            d = Difficulty.HARD;
         }
         return d;
     }
@@ -271,7 +289,7 @@ public class Dictionary {
      * @return A list containing all words of the given difficulty.
      * @see #listOf(language.Difficulty)
      */
-    protected final List<Word> internalListOf(Difficulty d) {
+    private List<Word> internalListOf(Difficulty d) {
         return words.get(d);
     }
 
@@ -316,7 +334,7 @@ public class Dictionary {
      *
      * @return A randomly selected word of easy difficulty.
      */
-    public final Word randomEasyWord() {
+    public Word randomEasyWord() {
         return randomWordOf(Difficulty.EASY);
     }
 
@@ -326,7 +344,7 @@ public class Dictionary {
      *
      * @return A randomly selected word of medium difficulty.
      */
-    public final Word getMediumWord() {
+    public Word getMediumWord() {
         return randomWordOf(Difficulty.MEDIUM);
     }
 
@@ -336,7 +354,7 @@ public class Dictionary {
      *
      * @return A randomly selected word of hard difficulty.
      */
-    public final Word randomHardWord() {
+    public Word randomHardWord() {
         return randomWordOf(Difficulty.HARD);
     }
 
@@ -345,16 +363,16 @@ public class Dictionary {
      *
      * @return A random {@code Word} from this object.
      */
-    public final Word randomWord() {
+    public Word randomWord() {
         Difficulty d = words.keySet()
                 .stream()
-                .findAny()
-                .get();
+                .findFirst()
+                .orElse(Difficulty.DEFAULT);
         return randomWordOf(d);
     }
 
     /**
-     * Returns a randomly selected word of the given difficulty.
+     * Returns a randomly-selected word of the given difficulty.
      *
      * <p> In the case that there are no elements of the specified difficulty
      * contained within this object, this method throws a
@@ -437,6 +455,10 @@ public class Dictionary {
      * across all mapped difficulties.
      *
      * @return The amount of words currently contained within this object.
+     * @implNote Can also perform a reduction directly using
+     *           {@link Stream#reduce(Object, BinaryOperator) a reduction}, but
+     *           this implementation uses a more clear mapping operation
+     *           followed by a summation.
      */
     public int size() {
         // Need to find the summation of the sizes of each list value mapped to
@@ -453,8 +475,8 @@ public class Dictionary {
      * Returns {@code String} containing all words mapped to this object,
      * formatted to their difficulty.
      *
-     * @return A formatted {@code String} containing the words belonging to
-     *          this object.
+     * @return A formatted {@code String} containing the words belonging to this
+     *         object.
      */
     @Override
     public String toString() {
@@ -465,5 +487,5 @@ public class Dictionary {
                 .collect(Collectors.joining("\n    "))
             + "\n}";
     }
-    
+
 }
