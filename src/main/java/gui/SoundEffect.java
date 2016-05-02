@@ -56,7 +56,9 @@ public class SoundEffect {
     public void start() {
         if(!isMute){
         sound.stop();
+            if(this!=music){
         sound.setMicrosecondPosition(0);
+            }
         sound.start();
         }
     }
