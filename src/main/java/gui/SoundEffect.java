@@ -6,32 +6,25 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SoundEffect {
 
-    private static ArrayList list;
-
-    public static boolean isMute;
-    public static SoundEffect winSound;
-    public static SoundEffect loseSound;
-    public static SoundEffect music;
+    private Thread thread;
+    private static boolean isMute;
+    private static SoundEffect music;
 
     //audio of each object stored here
     private Clip sound;
-    private String path;
 
 
     public SoundEffect(String path) {
         this(path, false);
     }
 
-    public SoundEffect(String path, boolean isRepeating) {
+    private SoundEffect(String path, boolean isRepeating) {
         sound = getClip(path, isRepeating);
-        this.path = path;
-        registerSoundEffect(this);
     }
 
     private static Clip getClip(String path, boolean isRepeating) {
@@ -49,26 +42,38 @@ public class SoundEffect {
                 | UnsupportedAudioFileException ex)
         {
             Logger.getLogger(Hangman_GUI.class.getName()).log(Level.SEVERE,"", ex);
+            System.out.println("Probably wrong path.");
         }
         return c;
     }
 
     public void start() {
-        if(!isMute){
-        sound.stop();
-            if(this!=music){
-        sound.setMicrosecondPosition(0);
+        if (!isMute) {
+            if (this != music) {
+                thread = new Thread(() -> {
+                    sound.start();
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    do {
+                        if (isMute) {
+                            sound.stop();
+                        }
+                    }while(sound.isActive());
+                });
+                thread.start();
+
+            } else {
+                this.sound.loop(Clip.LOOP_CONTINUOUSLY);
+                sound.start();
             }
-        sound.start();
         }
     }
 
     public static void stop(SoundEffect effect) {
-        if (list!=null) {
-            if (list.contains(effect)) {
-                effect.stop();
-            }
-        }
+        effect.stop();
     }
 
     private void stop() {
@@ -76,44 +81,25 @@ public class SoundEffect {
     }
 
     public static void mute() {
-        if (list!=null) {
             try {
                 isMute = true;
-                winSound.stop();
-                loseSound.stop();
-                music.stop();
+                music.sound.stop();
             } catch (Exception ex) {System.out.println("I don't know why would this happen anyways.");}
-
-        }
     }
 
     public static void unmute () {
-        if (list!=null)
             try {
                 isMute = false;
-                music.start();
+                music.sound.start();
             } catch (Exception ex) {System.out.println("I don't know why would this happen anyways.");}
         }
-
-    //must be called before using any other method
-    public static void initialiseSoundList(){
-
-        if (list == null) {
-            list = new ArrayList();
-            winSound = new SoundEffect("/music/applause.wav");
-            loseSound = new SoundEffect("/music/scream_females.wav");
-            music = new SoundEffect("/music/nyan_cat.wav", true);
-        }
+    public static void setMusic(String path){
+        music = new SoundEffect(path, true);
     }
-
-    private static void registerSoundEffect(SoundEffect e){
-        if (list!=null) {
-            list.add(e);
-        }
-        else {
-            initialiseSoundList();
-            list.add(e);
-        }
-
+    public static SoundEffect getMusic(){
+        return music;
+    }
+    public static boolean isMute(){
+        return isMute;
     }
 }
